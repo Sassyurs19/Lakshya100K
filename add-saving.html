@@ -9,8 +9,16 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+        <div style="text-align: center;">
+            <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary); margin-bottom: 1rem;"></i>
+            <p style="color: var(--text-secondary);">Loading...</p>
+        </div>
+    </div>
+
     <a href="#main-content" class="skip-to-content">Skip to main content</a>
-    <nav class="navbar">
+    <nav class="navbar" id="navbar" style="display: none;">
         <a href="dashboard.html" class="navbar-brand">Lakshya ₹100K</a>
         <button class="hamburger" id="hamburger">
             <span></span>
@@ -35,7 +43,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="main-content" id="main-content">
+    <main class="main-content" id="main-content" style="display: none;">
         <div class="card" style="max-width: 600px; margin: 0 auto;">
             <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
                 <a href="dashboard.html" class="btn btn-secondary btn-sm">
@@ -127,18 +135,24 @@
     </style>
 
     <script type="module">
-        import { onAuthStateChange, logoutUser, getCurrentUser, initializeAuthGuard } from './js/auth.js';
+        import { onAuthStateChange, logoutUser, getCurrentUser } from './js/auth.js';
         import { addSaving } from './js/database.js';
         // import { uploadSavingImage } from './js/storage.js'; // Disabled for now - coming soon
         import { showToast } from './js/utils.js';
 
-        initializeAuthGuard();
+        const loadingScreen = document.getElementById('loadingScreen');
+        const navbar = document.getElementById('navbar');
+        const mainContent = document.getElementById('main-content');
 
-        // Check authentication
+        // Wait for Firebase auth state to resolve
         onAuthStateChange((user) => {
+            loadingScreen.style.display = 'none';
+            
             if (!user) {
                 window.location.href = 'login.html';
             } else {
+                navbar.style.display = 'block';
+                mainContent.style.display = 'block';
                 // Set default date and time
                 const now = new Date();
                 document.getElementById('dateInput').value = now.toISOString().split('T')[0];

@@ -9,7 +9,15 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="auth-container">
+    <!-- Loading Screen -->
+    <div id="loadingScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+        <div style="text-align: center;">
+            <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary); margin-bottom: 1rem;"></i>
+            <p style="color: var(--text-secondary);">Loading...</p>
+        </div>
+    </div>
+
+    <div class="auth-container" id="authContainer" style="display: none;">
         <div class="auth-card">
             <div class="auth-header">
                 <h1>Create Account</h1>
@@ -71,10 +79,24 @@
     </div>
 
     <script type="module">
-        import { registerUser, initializeAuthGuard } from './js/auth.js';
+        import { registerUser, onAuthStateChange } from './js/auth.js';
         import { showToast } from './js/utils.js';
         
-        initializeAuthGuard();
+        const loadingScreen = document.getElementById('loadingScreen');
+        const authContainer = document.getElementById('authContainer');
+
+        // Wait for Firebase auth state to resolve
+        onAuthStateChange((user) => {
+            loadingScreen.style.display = 'none';
+            
+            if (user) {
+                // User is authenticated, redirect to dashboard
+                window.location.href = 'dashboard.html';
+            } else {
+                // User is not authenticated, show signup form
+                authContainer.style.display = 'flex';
+            }
+        });
 
         function togglePassword(fieldId) {
             const input = document.getElementById(fieldId);
@@ -132,10 +154,11 @@
             });
             
             if (result.success) {
-                showToast('Account created successfully!', 'success');
+                showToast('Account created successfully! Redirecting...', 'success');
+                // Wait for Firebase to confirm auth state before redirect
                 setTimeout(() => {
                     window.location.href = 'dashboard.html';
-                }, 1000);
+                }, 500);
             } else {
                 showToast(result.error, 'error');
                 submitBtn.disabled = false;

@@ -9,8 +9,16 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+        <div style="text-align: center;">
+            <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary); margin-bottom: 1rem;"></i>
+            <p style="color: var(--text-secondary);">Loading...</p>
+        </div>
+    </div>
+
     <a href="#main-content" class="skip-to-content">Skip to main content</a>
-    <nav class="navbar">
+    <nav class="navbar" id="navbar" style="display: none;">
         <a href="dashboard.html" class="navbar-brand">Lakshya ₹100K</a>
         <div class="navbar-center">
             <a href="dashboard.html" class="nav-link">Dashboard</a>
@@ -41,7 +49,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="main-content" id="main-content">
+    <main class="main-content" id="main-content" style="display: none;">
         <h2 style="margin-bottom: 2rem;">Achievements</h2>
         
         <!-- Summary Card -->
@@ -82,11 +90,13 @@
     </style>
 
     <script type="module">
-        import { onAuthStateChange, logoutUser, getCurrentUser, initializeAuthGuard } from './js/auth.js';
+        import { onAuthStateChange, logoutUser, getCurrentUser } from './js/auth.js';
         import { calculateStatistics, getUserAchievements } from './js/database.js';
         import { showToast } from './js/utils.js';
 
-        initializeAuthGuard();
+        const loadingScreen = document.getElementById('loadingScreen');
+        const navbar = document.getElementById('navbar');
+        const mainContent = document.getElementById('main-content');
 
         const achievements = [
             { id: 'first_saving', name: 'First Saving', icon: 'fa-crosshairs', threshold: 1, description: 'Add your first saving' },
@@ -101,11 +111,15 @@
             { id: 'one_hundred_thousand', name: '₹100,000', icon: 'fa-flag-checkered', threshold: 100000, description: 'Reach your goal!' }
         ];
 
-        // Check authentication
+        // Wait for Firebase auth state to resolve
         onAuthStateChange((user) => {
+            loadingScreen.style.display = 'none';
+            
             if (!user) {
                 window.location.href = 'login.html';
             } else {
+                navbar.style.display = 'block';
+                mainContent.style.display = 'block';
                 loadAchievements(user);
             }
         });

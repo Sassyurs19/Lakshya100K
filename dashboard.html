@@ -9,8 +9,16 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+        <div style="text-align: center;">
+            <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary); margin-bottom: 1rem;"></i>
+            <p style="color: var(--text-secondary);">Loading...</p>
+        </div>
+    </div>
+
     <a href="#main-content" class="skip-to-content">Skip to main content</a>
-    <nav class="navbar">
+    <nav class="navbar" id="navbar" style="display: none;">
         <a href="dashboard.html" class="navbar-brand">Lakshya ₹100K</a>
         <div class="navbar-center">
             <a href="dashboard.html" class="nav-link active">Dashboard</a>
@@ -40,7 +48,7 @@
         </div>
     </nav>
 
-    <main class="main-content" id="main-content">
+    <main class="main-content" id="main-content" style="display: none;">
         <div style="margin-bottom: 2rem;">
             <h1 style="margin-bottom: 0.5rem;" id="greeting">Good Morning</h1>
             <div style="color: var(--text-secondary); font-size: 0.875rem;" id="username">@username</div>
@@ -131,15 +139,24 @@
     </style>
 
     <script type="module">
-        import { onAuthStateChange, logoutUser, initializeAuthGuard } from './js/auth.js';
+        import { onAuthStateChange, logoutUser } from './js/auth.js';
         import { getUserDocument, calculateStatistics, getUserSavings } from './js/database.js';
+        
+        const loadingScreen = document.getElementById('loadingScreen');
+        const navbar = document.getElementById('navbar');
+        const mainContent = document.getElementById('main-content');
 
-        initializeAuthGuard();
-
+        // Wait for Firebase auth state to resolve
         onAuthStateChange((user) => {
+            loadingScreen.style.display = 'none';
+            
             if (!user) {
+                // User is not authenticated, redirect to login
                 window.location.href = 'login.html';
             } else {
+                // User is authenticated, show dashboard
+                navbar.style.display = 'block';
+                mainContent.style.display = 'block';
                 loadDashboard(user);
             }
         });

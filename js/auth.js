@@ -15,7 +15,9 @@ import {
     signOut, 
     onAuthStateChanged,
     sendPasswordResetEmail,
-    updateProfile
+    updateProfile,
+    setPersistence,
+    browserLocalPersistence
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { auth } from './firebase-config.js';
 import { getUserByUsername, getUserByEmail, createUserDocument, updateUserDocument } from './database.js';
@@ -77,6 +79,20 @@ function validatePassword(password) {
         return { isValid: false, message: 'Password must contain at least one number' };
     }
     return { isValid: true, message: 'Password is valid' };
+}
+
+/**
+ * Set session persistence to LOCAL (persists across browser restarts)
+ * @returns {Promise}
+ */
+export async function setAuthPersistence() {
+    try {
+        await setPersistence(auth, browserLocalPersistence);
+        return { success: true };
+    } catch (error) {
+        console.error('Error setting auth persistence:', error);
+        return { success: false, error: error.message };
+    }
 }
 
 /**
@@ -173,6 +189,8 @@ export async function registerUser({ fullName, username, email, password, confir
  */
 export async function loginUser(identifier, password) {
     try {
+        // Set persistence before login
+        await setAuthPersistence();
         let email = identifier.toLowerCase();
 
         // Check if identifier is a username (doesn't contain @)
@@ -310,56 +328,33 @@ function isPublicPage() {
 }
 
 /**
- * Protect authenticated pages - redirect to login if not authenticated
+ * Protect authenticated pages - DEPRECATED - use onAuthStateChange instead
+ * This function is kept for backward compatibility but should not be used
+ * @deprecated Use onAuthStateChange for proper auth state handling
  */
 export function protectAuthenticatedPages() {
-    const user = getCurrentUser();
-    const currentPage = getCurrentPage();
-    
-    // If not authenticated and trying to access protected page
-    if (!user && !isPublicPage()) {
-        window.location.href = 'login.html';
-        return false;
-    }
-    
+    console.warn('protectAuthenticatedPages is deprecated. Use onAuthStateChange instead.');
+    // Do nothing - let onAuthStateChange handle auth state
     return true;
 }
 
 /**
- * Redirect authenticated users from public pages to dashboard
+ * Redirect authenticated users from public pages - DEPRECATED
+ * This function is kept for backward compatibility but should not be used
+ * @deprecated Use onAuthStateChange for proper auth state handling
  */
 export function redirectAuthenticatedUsers() {
-    const user = getCurrentUser();
-    const currentPage = getCurrentPage();
-    
-    // If authenticated and on public page (except 404)
-    if (user && isPublicPage() && currentPage !== '404.html') {
-        window.location.href = 'dashboard.html';
-        return true;
-    }
-    
+    console.warn('redirectAuthenticatedUsers is deprecated. Use onAuthStateChange instead.');
+    // Do nothing - let onAuthStateChange handle auth state
     return false;
 }
 
 /**
- * Initialize authentication guard
- * Handles page protection based on authentication state
+ * Initialize authentication guard - DEPRECATED
+ * This function caused redirect loops by using getCurrentUser() too early
+ * @deprecated Use onAuthStateChange for proper auth state handling
  */
 export function initializeAuthGuard() {
-    const user = getCurrentUser();
-    const currentPage = getCurrentPage();
-    
-    if (user) {
-        // User is authenticated
-        if (isPublicPage() && currentPage !== '404.html') {
-            // Redirect to dashboard if on public page
-            window.location.href = 'dashboard.html';
-        }
-    } else {
-        // User is not authenticated
-        if (!isPublicPage()) {
-            // Redirect to login if on protected page
-            window.location.href = 'login.html';
-        }
-    }
+    console.warn('initializeAuthGuard is deprecated. Use onAuthStateChange instead.');
+    // Do nothing - let onAuthStateChange handle auth state
 }
