@@ -32,6 +32,7 @@
             <div class="dropdown" id="menuDropdown">
                 <div class="dropdown-toggle" id="menuToggle">
                     <div class="avatar" id="userAvatar">U</div>
+                    <span class="username-display" id="usernameDisplay">@username</span>
                 </div>
                 <div class="dropdown-menu">
                     <a href="profile.html" class="dropdown-item">
@@ -59,71 +60,130 @@
 
     <main class="main-content" id="main-content" style="display: none;">
         <div class="dashboard-header">
-            <h1 id="greeting">Good Morning</h1>
-            <div class="subtitle" id="username">@username</div>
+            <h1 id="greeting">Good Evening,</h1>
+            <p class="subtitle" id="username">@username</p>
+            <p class="motivational-text">Every rupee saved today builds tomorrow.</p>
         </div>
 
         <div class="grid grid-4" style="margin-bottom: 2rem;">
-            <div class="card">
-                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Current Saved</div>
-                <div style="font-size: 1.5rem; font-weight: 600;" id="savedAmount">₹0</div>
+            <div class="stat-card">
+                <div class="icon icon-blue">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <div>
+                    <div class="label">Total Saved</div>
+                    <div class="value" id="savedAmount">₹0</div>
+                </div>
             </div>
-            <div class="card">
-                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Remaining</div>
-                <div style="font-size: 1.5rem; font-weight: 600;" id="remainingAmount">₹100,000</div>
+            <div class="stat-card">
+                <div class="icon icon-green">
+                    <i class="fas fa-bullseye"></i>
+                </div>
+                <div>
+                    <div class="label">Remaining</div>
+                    <div class="value" id="remainingAmount">₹100,000</div>
+                </div>
             </div>
-            <div class="card">
-                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Goal</div>
-                <div style="font-size: 1.5rem; font-weight: 600;" id="goalAmount">₹100,000</div>
+            <div class="stat-card">
+                <div class="icon icon-purple">
+                    <i class="fas fa-flag"></i>
+                </div>
+                <div>
+                    <div class="label">Goal</div>
+                    <div class="value" id="goalAmount">₹100,000</div>
+                </div>
             </div>
-            <div class="card">
-                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Today's Saving</div>
-                <div style="font-size: 1.5rem; font-weight: 600;" id="todaySaving">₹0</div>
+            <div class="stat-card">
+                <div class="icon icon-orange">
+                    <i class="fas fa-calendar-day"></i>
+                </div>
+                <div>
+                    <div class="label">Today's Saving</div>
+                    <div class="value" id="todaySaving">₹0</div>
+                </div>
             </div>
         </div>
 
         <div class="grid grid-4" style="margin-bottom: 2rem;">
-            <div class="card">
-                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Monthly Saving</div>
-                <div style="font-size: 1.5rem; font-weight: 600;" id="monthlySaving">₹0</div>
+            <div class="stat-card">
+                <div class="icon icon-blue">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div>
+                    <div class="label">Monthly Saving</div>
+                    <div class="value" id="monthlySaving">₹0</div>
+                </div>
             </div>
-            <div class="card">
-                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Average Saving</div>
-                <div style="font-size: 1.5rem; font-weight: 600;" id="averageSaving">₹0</div>
+            <div class="stat-card">
+                <div class="icon icon-green">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <div>
+                    <div class="label">Average Saving</div>
+                    <div class="value" id="averageSaving">₹0</div>
+                </div>
             </div>
-            <div class="card">
-                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Current Streak</div>
-                <div style="font-size: 1.5rem; font-weight: 600;" id="currentStreak">0 days</div>
+            <div class="stat-card">
+                <div class="icon icon-purple">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <div>
+                    <div class="label">Current Streak</div>
+                    <div class="value" id="currentStreak">0 days</div>
+                </div>
             </div>
-            <div class="card">
-                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Longest Streak</div>
-                <div style="font-size: 1.5rem; font-weight: 600;" id="longestStreak">0 days</div>
+            <div class="stat-card">
+                <div class="icon icon-orange">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div>
+                    <div class="label">Longest Streak</div>
+                    <div class="value" id="longestStreak">0 days</div>
+                </div>
             </div>
         </div>
 
         <div class="grid grid-2" style="margin-bottom: 2rem;">
-            <div class="card">
-                <h3 style="margin-bottom: 1.5rem;">Goal Progress</h3>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                    <div style="font-size: 2rem; font-weight: 600; color: var(--success);" id="progressPercent">0%</div>
-                </div>
-                <div style="height: 8px; background: var(--bg-tertiary); border-radius: 4px; overflow: hidden; margin-bottom: 1rem;">
-                    <div id="progressBar" style="height: 100%; background: var(--success); width: 0%; transition: width 0.3s ease;"></div>
-                </div>
-                <div style="color: var(--text-secondary); font-size: 0.875rem;">
-                    <span id="savedAmountSmall">₹0</span> of <span id="goalAmountSmall">₹100,000</span>
+            <div class="card progress-card">
+                <h3 style="margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">Goal Progress</h3>
+                <div style="display: flex; align-items: center; gap: var(--spacing-xl);">
+                    <div class="progress-ring">
+                        <svg width="120" height="120" viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="54" fill="none" stroke="var(--bg-tertiary)" stroke-width="8"/>
+                            <circle id="progressRing" cx="60" cy="60" r="54" fill="none" stroke="var(--success)" stroke-width="8" 
+                                stroke-linecap="round" stroke-dasharray="339.292" stroke-dashoffset="339.292" 
+                                transform="rotate(-90 60 60)" style="transition: stroke-dashoffset 1s ease;"/>
+                        </svg>
+                        <div class="progress-text">
+                            <span id="progressPercent">0%</span>
+                        </div>
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="margin-bottom: var(--spacing-md);">
+                            <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: var(--spacing-xs);">Saved</div>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); font-family: 'Playfair Display', serif;" id="savedAmountSmall">₹0</div>
+                        </div>
+                        <div style="margin-bottom: var(--spacing-md);">
+                            <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: var(--spacing-xs);">Remaining</div>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); font-family: 'Playfair Display', serif;" id="remainingAmountSmall">₹100,000</div>
+                        </div>
+                        <div>
+                            <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: var(--spacing-xs);">Goal</div>
+                            <div style="font-size: 1.25rem; font-weight: 600; color: var(--text-primary);" id="goalAmountSmall">₹100,000</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="card">
-                <h3 style="margin-bottom: 1.5rem;">Recent Savings</h3>
+                <h3 style="margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">Recent Savings</h3>
                 <div id="recentSavings">
                     <div class="empty-state">
                         <div class="empty-state-icon">
                             <i class="fas fa-receipt"></i>
                         </div>
                         <h3 class="empty-state-title">No savings yet</h3>
-                        <p class="empty-state-text">Start your savings journey today by adding your first saving!</p>
-                        <a href="add-saving.html" class="btn btn-primary">Add First Saving</a>
+                        <p class="empty-state-text">Start saving to see your recent transactions here</p>
+                        <a href="add-saving.html" class="btn btn-primary">Add Saving</a>
                     </div>
                 </div>
             </div>
@@ -137,25 +197,229 @@
             margin: 0 auto;
         }
 
-        /* Dashboard Background */
+        /* Premium Dashboard Background */
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(37, 99, 235, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(5, 150, 105, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(37, 99, 235, 0.02) 0%, transparent 30%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Subtle floating rupee symbols */
+        body::after {
+            content: '₹';
+            position: fixed;
+            top: 10%;
+            right: 5%;
+            font-size: 20rem;
+            font-family: 'Playfair Display', serif;
+            color: rgba(37, 99, 235, 0.02);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.5;
+        }
+
+        .main-content {
+            position: relative;
+            z-index: 1;
         }
 
         .dashboard-header {
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
         }
 
         .dashboard-header h1 {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 700;
             color: var(--text-primary);
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.5rem;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: -0.02em;
         }
 
         .dashboard-header .subtitle {
             color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-header .motivational-text {
+            color: var(--text-tertiary);
             font-size: 0.875rem;
+            font-style: italic;
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Statistics Cards */
+        .stat-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-xs);
+            transition: all var(--transition-normal);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 120px;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--border-color-hover);
+        }
+
+        .stat-card .icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--spacing-md);
+            font-size: 1.25rem;
+        }
+
+        .stat-card .icon-blue {
+            background: rgba(37, 99, 235, 0.1);
+            color: #2563eb;
+        }
+
+        .stat-card .icon-green {
+            background: rgba(5, 150, 105, 0.1);
+            color: #059669;
+        }
+
+        .stat-card .icon-purple {
+            background: rgba(124, 58, 237, 0.1);
+            color: #7c3aed;
+        }
+
+        .stat-card .icon-orange {
+            background: rgba(249, 115, 22, 0.1);
+            color: #f97316;
+        }
+
+        .stat-card .label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .stat-card .value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: 'Playfair Display', serif;
+            letter-spacing: -0.02em;
+        }
+
+        /* Progress Ring */
+        .progress-ring {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            flex-shrink: 0;
+        }
+
+        .progress-ring svg {
+            transform: rotate(-90deg);
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Recent Savings Timeline */
+        .savings-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+
+        .savings-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md);
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            transition: all var(--transition-fast);
+        }
+
+        .savings-item:hover {
+            background: var(--bg-tertiary);
+            transform: translateX(4px);
+        }
+
+        .savings-item .category-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .savings-item .category-cash {
+            background: rgba(5, 150, 105, 0.1);
+            color: #059669;
+        }
+
+        .savings-item .category-bank {
+            background: rgba(37, 99, 235, 0.1);
+            color: #2563eb;
+        }
+
+        .savings-item .category-upi {
+            background: rgba(124, 58, 237, 0.1);
+            color: #7c3aed;
+        }
+
+        .savings-item .category-wallet {
+            background: rgba(249, 115, 22, 0.1);
+            color: #f97316;
+        }
+
+        .savings-item .details {
+            flex: 1;
+        }
+
+        .savings-item .amount {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: 'Playfair Display', serif;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .savings-item .meta {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
         }
 
         @media (max-width: 768px) {
@@ -215,7 +479,9 @@
             const userDoc = await getUserDocument(user.uid);
             if (userDoc.success) {
                 const userData = userDoc.data;
-                document.getElementById('username').textContent = `@${userData.username || 'user'}`;
+                const username = userData.username || 'user';
+                document.getElementById('username').textContent = `@${username}`;
+                document.getElementById('usernameDisplay').textContent = `@${username}`;
                 document.getElementById('goalAmount').textContent = `₹${(userData.goalAmount || 100000).toLocaleString()}`;
                 
                 // Update avatar with user's initial
@@ -241,26 +507,43 @@
 
                 const percentage = Math.min(100, Math.round((data.totalSaved / goal) * 100));
                 document.getElementById('progressPercent').textContent = `${percentage}%`;
-                document.getElementById('progressBar').style.width = `${percentage}%`;
+                
+                // Update progress ring
+                const progressRing = document.getElementById('progressRing');
+                const circumference = 339.292; // 2 * PI * 54
+                const offset = circumference - (percentage / 100) * circumference;
+                progressRing.style.strokeDashoffset = offset;
+                
+                document.getElementById('remainingAmountSmall').textContent = `₹${Math.max(0, goal - data.totalSaved).toLocaleString()}`;
             }
 
             const savings = await getUserSavings(user.uid);
             if (savings.success && savings.data.length > 0) {
                 const recentSavings = savings.data.slice(0, 5);
-                const recentSavingsHTML = recentSavings.map(saving => `
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--border-color);">
-                        <div>
-                            <div style="font-weight: 500;">₹${saving.amount.toLocaleString()}</div>
-                            <div style="color: var(--text-secondary); font-size: 0.8rem;">
-                                ${new Date(saving.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                                ${saving.time ? ` at ${saving.time}` : ''}
+                const categoryIcons = {
+                    'Cash': 'fa-money-bill',
+                    'Bank': 'fa-university',
+                    'UPI': 'fa-mobile-alt',
+                    'Wallet': 'fa-wallet'
+                };
+                const recentSavingsHTML = `
+                    <div class="savings-timeline">
+                        ${recentSavings.map(saving => `
+                            <div class="savings-item">
+                                <div class="category-badge category-${saving.category.toLowerCase()}">
+                                    <i class="fas ${categoryIcons[saving.category] || 'fa-coins'}"></i>
+                                </div>
+                                <div class="details">
+                                    <div class="amount">₹${saving.amount.toLocaleString()}</div>
+                                    <div class="meta">
+                                        ${new Date(saving.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                        ${saving.time ? ` • ${saving.time}` : ''}
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div style="background: var(--bg-tertiary); padding: 0.25rem 0.5rem; border-radius: var(--radius-sm); font-size: 0.75rem;">
-                            ${saving.category}
-                        </div>
+                        `).join('')}
                     </div>
-                `).join('');
+                `;
                 document.getElementById('recentSavings').innerHTML = recentSavingsHTML;
             } else {
                 // Show empty state for recent savings
@@ -303,19 +586,25 @@
 
         // Hamburger menu toggle for mobile
         const hamburger = document.getElementById('hamburger');
-        const navbarNav = document.getElementById('navbarNav');
+        const navbarCenter = document.querySelector('.navbar-center');
         
-        if (hamburger && navbarNav) {
+        if (hamburger && navbarCenter) {
             hamburger.addEventListener('click', () => {
-                navbarNav.classList.toggle('open');
+                navbarCenter.classList.toggle('open');
             });
 
-            // Close mobile menu when clicking a link
-            const mobileLinks = navbarNav.querySelectorAll('.nav-link, .dropdown-item');
-            mobileLinks.forEach(link => {
+            // Close menu when clicking a link
+            navbarCenter.querySelectorAll('.nav-link').forEach(link => {
                 link.addEventListener('click', () => {
-                    navbarNav.classList.remove('open');
+                    navbarCenter.classList.remove('open');
                 });
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!navbarCenter.contains(e.target) && !hamburger.contains(e.target)) {
+                    navbarCenter.classList.remove('open');
+                }
             });
         }
     </script>

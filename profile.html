@@ -30,14 +30,24 @@
         </div>
         <div class="navbar-right">
             <div class="dropdown" id="menuDropdown">
-                <div class="nav-link dropdown-toggle" id="menuToggle">
-                    <i class="fas fa-user-circle"></i>
+                <div class="dropdown-toggle" id="menuToggle">
+                    <div class="avatar" id="userAvatar">U</div>
+                    <span class="username-display" id="usernameDisplay">@username</span>
                 </div>
                 <div class="dropdown-menu">
-                    <a href="profile.html" class="dropdown-item active">Profile</a>
-                    <a href="settings.html" class="dropdown-item">Settings</a>
-                    <div style="border-top: 1px solid var(--border-color); margin: var(--spacing-xs) 0;"></div>
-                    <a href="#" class="dropdown-item logout" id="logoutBtn">Logout</a>
+                    <a href="profile.html" class="dropdown-item">
+                        <i class="fas fa-user"></i>
+                        Profile
+                    </a>
+                    <a href="settings.html" class="dropdown-item">
+                        <i class="fas fa-cog"></i>
+                        Settings
+                    </a>
+                    <div style="border-top: 1px solid var(--border-color); margin: var(--spacing-sm) 0;"></div>
+                    <a href="#" class="dropdown-item logout" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </a>
                 </div>
             </div>
             <button class="hamburger" id="hamburger">
@@ -243,9 +253,26 @@
             } else {
                 navbar.style.display = 'block';
                 mainContent.style.display = 'block';
+                loadUserInfo(user);
                 loadProfile(user);
             }
         });
+
+        async function loadUserInfo(user) {
+            const userDoc = await getUserDocument(user.uid);
+            if (userDoc.success) {
+                const userData = userDoc.data;
+                const username = userData.username || 'user';
+                const usernameDisplay = document.getElementById('usernameDisplay');
+                const userAvatar = document.getElementById('userAvatar');
+                
+                if (usernameDisplay) usernameDisplay.textContent = `@${username}`;
+                if (userAvatar) {
+                    const userInitial = (userData.fullName || userData.username || 'U').charAt(0).toUpperCase();
+                    userAvatar.textContent = userInitial;
+                }
+            }
+        }
 
         // Load profile
         async function loadProfile(user) {
@@ -456,10 +483,29 @@
             });
         }
 
-        // Mobile menu
-        document.getElementById('hamburger').addEventListener('click', () => {
-            document.getElementById('navbarNav').classList.toggle('open');
-        });
+        // Hamburger menu toggle for mobile
+        const hamburger = document.getElementById('hamburger');
+        const navbarCenter = document.querySelector('.navbar-center');
+        
+        if (hamburger && navbarCenter) {
+            hamburger.addEventListener('click', () => {
+                navbarCenter.classList.toggle('open');
+            });
+
+            // Close menu when clicking a link
+            navbarCenter.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    navbarCenter.classList.remove('open');
+                });
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!navbarCenter.contains(e.target) && !hamburger.contains(e.target)) {
+                    navbarCenter.classList.remove('open');
+                }
+            });
+        }
     </script>
 </body>
 </html>
