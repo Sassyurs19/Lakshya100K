@@ -156,8 +156,21 @@
         const urlParams = new URLSearchParams(window.location.search);
         const savingId = urlParams.get('id');
 
+        // Timeout fallback - if auth doesn't resolve in 5 seconds, show error
+        const authTimeout = setTimeout(() => {
+            console.error('Auth state timeout - Firebase may not be initialized');
+            loadingScreen.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: var(--danger); margin-bottom: 1rem;"></i>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">Unable to connect. Please check your internet connection.</p>
+                    <button onclick="window.location.reload()" class="btn btn-primary">Retry</button>
+                </div>
+            `;
+        }, 5000);
+
         // Wait for Firebase auth state to resolve
         onAuthStateChange((user) => {
+            clearTimeout(authTimeout);
             loadingScreen.style.display = 'none';
             
             if (!user) {

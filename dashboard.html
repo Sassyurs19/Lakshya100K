@@ -30,14 +30,23 @@
         </div>
         <div class="navbar-right">
             <div class="dropdown" id="menuDropdown">
-                <div class="nav-link dropdown-toggle" id="menuToggle">
-                    <i class="fas fa-user-circle"></i>
+                <div class="dropdown-toggle" id="menuToggle">
+                    <div class="avatar" id="userAvatar">U</div>
                 </div>
                 <div class="dropdown-menu">
-                    <a href="profile.html" class="dropdown-item">Profile</a>
-                    <a href="settings.html" class="dropdown-item">Settings</a>
-                    <div style="border-top: 1px solid var(--border-color); margin: var(--spacing-xs) 0;"></div>
-                    <a href="#" class="dropdown-item logout" id="logoutBtn">Logout</a>
+                    <a href="profile.html" class="dropdown-item">
+                        <i class="fas fa-user"></i>
+                        Profile
+                    </a>
+                    <a href="settings.html" class="dropdown-item">
+                        <i class="fas fa-cog"></i>
+                        Settings
+                    </a>
+                    <div style="border-top: 1px solid var(--border-color); margin: var(--spacing-sm) 0;"></div>
+                    <a href="#" class="dropdown-item logout" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </a>
                 </div>
             </div>
             <button class="hamburger" id="hamburger">
@@ -49,9 +58,9 @@
     </nav>
 
     <main class="main-content" id="main-content" style="display: none;">
-        <div style="margin-bottom: 2rem;">
-            <h1 style="margin-bottom: 0.5rem;" id="greeting">Good Morning</h1>
-            <div style="color: var(--text-secondary); font-size: 0.875rem;" id="username">@username</div>
+        <div class="dashboard-header">
+            <h1 id="greeting">Good Morning</h1>
+            <div class="subtitle" id="username">@username</div>
         </div>
 
         <div class="grid grid-4" style="margin-bottom: 2rem;">
@@ -128,12 +137,36 @@
             margin: 0 auto;
         }
 
+        /* Dashboard Background */
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+        }
+
+        .dashboard-header {
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .dashboard-header .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
         @media (max-width: 768px) {
             .main-content {
                 padding: 1rem;
             }
             .grid-4 {
                 grid-template-columns: repeat(2, 1fr);
+            }
+            .dashboard-header h1 {
+                font-size: 1.5rem;
             }
         }
     </style>
@@ -146,8 +179,21 @@
         const navbar = document.getElementById('navbar');
         const mainContent = document.getElementById('main-content');
 
+        // Timeout fallback - if auth doesn't resolve in 5 seconds, show error
+        const authTimeout = setTimeout(() => {
+            console.error('Auth state timeout - Firebase may not be initialized');
+            loadingScreen.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: var(--danger); margin-bottom: 1rem;"></i>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">Unable to connect. Please check your internet connection.</p>
+                    <button onclick="window.location.reload()" class="btn btn-primary">Retry</button>
+                </div>
+            `;
+        }, 5000);
+
         // Wait for Firebase auth state to resolve
         onAuthStateChange((user) => {
+            clearTimeout(authTimeout);
             loadingScreen.style.display = 'none';
             
             if (!user) {
@@ -171,6 +217,10 @@
                 const userData = userDoc.data;
                 document.getElementById('username').textContent = `@${userData.username || 'user'}`;
                 document.getElementById('goalAmount').textContent = `₹${(userData.goalAmount || 100000).toLocaleString()}`;
+                
+                // Update avatar with user's initial
+                const userInitial = (userData.fullName || userData.username || 'U').charAt(0).toUpperCase();
+                document.getElementById('userAvatar').textContent = userInitial;
             }
 
             const stats = await calculateStatistics(user.uid);
