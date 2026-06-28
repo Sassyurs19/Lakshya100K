@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Lakshya ₹100K</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="dashboard.html" class="navbar-brand">Lakshya ₹100K</a>
+        <button class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="navbar-nav" id="navbarNav">
+            <div class="dropdown" id="menuDropdown">
+                <div class="nav-link dropdown-toggle" id="menuToggle">Menu</div>
+                <div class="dropdown-menu">
+                    <a href="dashboard.html" class="dropdown-item">Dashboard</a>
+                    <a href="history.html" class="dropdown-item">History</a>
+                    <a href="analytics.html" class="dropdown-item">Analytics</a>
+                    <a href="gallery.html" class="dropdown-item">Gallery</a>
+                    <a href="achievements.html" class="dropdown-item">Achievements</a>
+                    <a href="profile.html" class="dropdown-item">Profile</a>
+                    <a href="settings.html" class="dropdown-item active">Settings</a>
+                </div>
+            </div>
+            <a href="#" class="nav-link logout" id="logoutBtn">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h2 style="margin-bottom: 2rem;">Settings</h2>
+        
+        <form id="settingsForm">
+            <div class="grid grid-2" style="margin-bottom: 2rem;">
+                <!-- Goal Settings -->
+                <div class="card">
+                    <h3 style="margin-bottom: 1.5rem;">
+                        Goal Settings
+                    </h3>
+                    <div class="form-group">
+                        <label class="form-label">Goal Amount</label>
+                        <input type="number" class="form-input" name="goal" id="goalInput" placeholder="Enter your goal amount" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Currency Symbol</label>
+                        <select class="form-input" name="currency" id="currencyInput">
+                            <option value="₹">₹ (Rupee)</option>
+                            <option value="$">$ (Dollar)</option>
+                            <option value="€">€ (Euro)</option>
+                            <option value="£">£ (Pound)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Reminder Settings -->
+                <div class="card">
+                    <h3 style="margin-bottom: 1.5rem;">
+                        Reminder Settings
+                    </h3>
+                    <div class="form-group">
+                        <label class="form-label">Daily Reminder Time</label>
+                        <input type="time" class="form-input" name="reminderTime" id="reminderTimeInput">
+                    </div>
+                    <div style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem;">
+                        Enable browser notifications to receive reminders.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Theme Settings -->
+            <div class="card" style="margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1.5rem;">
+                    Theme
+                </h3>
+                <div class="form-group">
+                    <label class="form-label">Theme Preference</label>
+                    <select class="form-input" name="theme" id="themeInput">
+                        <option value="light">Light</option>
+                        <option value="dark">Dark (Coming Soon)</option>
+                        <option value="auto">Auto (Coming Soon)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Data Management -->
+            <div class="card" style="margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1.5rem;">
+                    Data Management
+                </h3>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button type="button" onclick="exportData()" class="btn btn-secondary">
+                        <i class="fas fa-download"></i> Export Data
+                    </button>
+                    <button type="button" onclick="backupData()" class="btn btn-secondary">
+                        <i class="fas fa-cloud-upload-alt"></i> Backup
+                    </button>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Save Settings
+            </button>
+        </form>
+    </main>
+
+    <style>
+        .main-content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <script type="module">
+        import { onAuthStateChange, logoutUser, getCurrentUser, initializeAuthGuard } from './js/auth.js';
+        import { getUserDocument, updateUserDocument, getUserSavings } from './js/database.js';
+        import { exportToCSV, showToast } from './js/utils.js';
+
+        initializeAuthGuard();
+
+        // Check authentication
+        onAuthStateChange((user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+            } else {
+                loadSettings(user);
+            }
+        });
+
+        // Load settings
+        async function loadSettings(user) {
+            const userDoc = await getUserDocument(user.uid);
+            if (userDoc.success) {
+                const userData = userDoc.data;
+                document.getElementById('goalInput').value = userData.goal || 100000;
+                document.getElementById('currencyInput').value = userData.currency || '₹';
+                document.getElementById('reminderTimeInput').value = userData.settings?.reminderTime || '21:00';
+                document.getElementById('themeInput').value = userData.settings?.theme || 'light';
+            }
+        }
+
+        // Save settings
+        document.getElementById('settingsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const user = getCurrentUser();
+            
+            const settings = {
+                goal: parseInt(e.target.goal.value),
+                currency: e.target.currency.value,
+                settings: {
+                    reminderTime: e.target.reminderTime.value,
+                    theme: e.target.theme.value
+                }
+            };
+            
+            const result = await updateUserDocument(user.uid, settings);
+            if (result.success) {
+                showToast('Settings saved successfully!', 'success');
+            } else {
+                showToast(result.error, 'error');
+            }
+        });
+
+        // Export data
+        window.exportData = async function() {
+            const user = getCurrentUser();
+            const savings = await getUserSavings(user.uid);
+            
+            if (savings.success && savings.data.length > 0) {
+                const exportData = savings.data.map(s => ({
+                    Date: s.date,
+                    Time: s.time,
+                    Amount: s.amount,
+                    Category: s.category,
+                    Note: s.note
+                }));
+                exportToCSV(exportData, 'savings-export.csv');
+                showToast('Data exported successfully!', 'success');
+            } else {
+                showToast('No data to export', 'warning');
+            }
+        };
+
+        // Backup data (placeholder)
+        window.backupData = function() {
+            showToast('Backup feature coming soon', 'info');
+        };
+
+        // Logout handler
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await logoutUser();
+        });
+
+        // Dropdown menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const menuDropdown = document.getElementById('menuDropdown');
+        
+        if (menuToggle && menuDropdown) {
+            menuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                menuDropdown.classList.toggle('open');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!menuDropdown.contains(e.target)) {
+                    menuDropdown.classList.remove('open');
+                }
+            });
+        }
+
+        // Mobile menu
+        document.getElementById('hamburger').addEventListener('click', () => {
+            document.getElementById('navbarNav').classList.toggle('open');
+        });
+    </script>
+</body>
+</html>

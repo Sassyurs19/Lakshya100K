@@ -1,0 +1,32 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Savings images
+    match /savings-images/{allPaths=**} {
+      // Users can upload their own savings images
+      // The filename should contain their userId
+      allow write: if request.auth != null && 
+                   request.resource.size < 10 * 1024 * 1024 && // Max 10MB
+                   request.resource.contentType.matches('image/.*') &&
+                   request.auth.uid in request.resource.name;
+      
+      // Users can read their own savings images
+      allow read: if request.auth != null && 
+                  request.auth.uid in resource.name;
+    }
+    
+    // Profile images
+    match /profile-images/{allPaths=**} {
+      // Users can upload their own profile image
+      // The filename should contain their userId
+      allow write: if request.auth != null && 
+                   request.resource.size < 5 * 1024 * 1024 && // Max 5MB
+                   request.resource.contentType.matches('image/.*') &&
+                   request.auth.uid in request.resource.name;
+      
+      // Anyone can read profile images (for display purposes)
+      allow read: if true;
+    }
+  }
+}

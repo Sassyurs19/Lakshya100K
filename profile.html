@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Lakshya ₹100K</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="dashboard.html" class="navbar-brand">Lakshya ₹100K</a>
+        <button class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="navbar-nav" id="navbarNav">
+            <div class="dropdown" id="menuDropdown">
+                <div class="nav-link dropdown-toggle" id="menuToggle">Menu</div>
+                <div class="dropdown-menu">
+                    <a href="dashboard.html" class="dropdown-item">Dashboard</a>
+                    <a href="history.html" class="dropdown-item">History</a>
+                    <a href="analytics.html" class="dropdown-item">Analytics</a>
+                    <a href="gallery.html" class="dropdown-item">Gallery</a>
+                    <a href="achievements.html" class="dropdown-item">Achievements</a>
+                    <a href="profile.html" class="dropdown-item active">Profile</a>
+                    <a href="settings.html" class="dropdown-item">Settings</a>
+                </div>
+            </div>
+            <a href="#" class="nav-link logout" id="logoutBtn">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h2 style="margin-bottom: 2rem;">My Profile</h2>
+        
+        <!-- Profile Overview -->
+        <div class="card" style="margin-bottom: 2rem; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;">
+            <div style="position: relative;">
+                <div id="userAvatar" style="width: 120px; height: 120px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 3rem; color: white;">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+            <div style="flex: 1;">
+                <h3 style="font-size: 1.8rem; margin-bottom: 0.5rem;" id="fullName">User Name</h3>
+                <div style="color: var(--text-secondary); margin-bottom: 0.5rem;" id="username">@username</div>
+                <div style="color: var(--text-secondary); margin-bottom: 0.5rem;" id="email">user@email.com</div>
+                <div style="color: var(--text-secondary);" id="joinDate">Joined: January 2024</div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="grid grid-4" style="margin-bottom: 2rem;">
+            <div class="card">
+                <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">Total Saved</div>
+                <div style="font-size: 1.5rem; font-weight: 700;" id="totalSaved">₹0</div>
+            </div>
+            
+            <div class="card">
+                <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">Achievements</div>
+                <div style="font-size: 1.5rem; font-weight: 700;" id="achievementCount">0</div>
+            </div>
+            
+            <div class="card">
+                <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">Current Streak</div>
+                <div style="font-size: 1.5rem; font-weight: 700;" id="currentStreak">0 days</div>
+            </div>
+            
+            <div class="card">
+                <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">Days Active</div>
+                <div style="font-size: 1.5rem; font-weight: 700;" id="daysActive">0</div>
+            </div>
+        </div>
+
+        <!-- Edit Profile -->
+        <div class="card" style="margin-bottom: 2rem;">
+            <h3 style="margin-bottom: 1.5rem;">
+                Edit Profile
+            </h3>
+            <form id="editProfileForm">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-input" name="fullName" id="fullNameInput" placeholder="Enter your full name">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Profile Image</label>
+                    <div class="file-upload" onclick="document.getElementById('profileImageInput').click()">
+                        <input type="file" id="profileImageInput" name="profileImage" accept="image/*" onchange="previewProfileImage(this)">
+                        <div class="file-upload-icon">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                        <div class="file-upload-text">Click to upload new profile image</div>
+                    </div>
+                    <div id="profileImagePreview" style="margin-top: 1rem; display: none;">
+                        <img id="profilePreviewImg" style="max-width: 150px; max-height: 150px; border-radius: 50%; object-fit: cover;">
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Update Profile
+                </button>
+            </form>
+        </div>
+
+        <!-- Change Password -->
+        <div class="card" style="margin-bottom: 2rem;">
+            <h3 style="margin-bottom: 1.5rem;">
+                Change Password
+            </h3>
+            <form id="changePasswordForm">
+                <div class="form-group">
+                    <label class="form-label">Current Password</label>
+                    <input type="password" class="form-input" name="currentPassword" required placeholder="Enter current password">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">New Password</label>
+                    <input type="password" class="form-input" name="newPassword" required placeholder="Enter new password" minlength="8">
+                    <small style="color: var(--text-secondary); font-size: 0.8rem;">Min 8 chars, 1 uppercase, 1 lowercase, 1 number</small>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Confirm New Password</label>
+                    <input type="password" class="form-input" name="confirmPassword" required placeholder="Confirm new password" minlength="8">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-key"></i> Change Password
+                </button>
+            </form>
+        </div>
+
+        <!-- Delete Account -->
+        <div class="card" style="border: 2px solid #ef4444;">
+            <h3 style="color: #ef4444; margin-bottom: 1.5rem;">
+                Delete Account
+            </h3>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                Warning: This action cannot be undone. All your savings, achievements, and data will be permanently deleted.
+            </p>
+            <form id="deleteAccountForm">
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" name="password" required placeholder="Enter your password">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Type DELETE to confirm</label>
+                    <input type="text" class="form-input" name="confirmation" required pattern="DELETE" placeholder="Type DELETE">
+                </div>
+                
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Delete Account
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <style>
+        .main-content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+
+    <script type="module">
+        import { onAuthStateChange, logoutUser, getCurrentUser, initializeAuthGuard } from './js/auth.js';
+        import { getUserDocument, updateUserDocument, calculateStatistics, getUserAchievements } from './js/database.js';
+        import { uploadProfileImage, deleteProfileImage } from './js/storage.js';
+        import { formatCurrency, validatePassword, showToast } from './js/utils.js';
+        import { updatePassword } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { auth } from './js/firebase-config.js';
+
+        initializeAuthGuard();
+
+        // Check authentication
+        onAuthStateChange((user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+            } else {
+                loadProfile(user);
+            }
+        });
+
+        // Load profile
+        async function loadProfile(user) {
+            const userDoc = await getUserDocument(user.uid);
+            if (userDoc.success) {
+                const userData = userDoc.data;
+                document.getElementById('fullName').textContent = userData.fullName || 'User';
+                document.getElementById('username').textContent = `@${userData.username || 'user'}`;
+                document.getElementById('email').textContent = user.email;
+                document.getElementById('fullNameInput').value = userData.fullName || '';
+                
+                if (userData.createdAt) {
+                    document.getElementById('joinDate').textContent = `Joined: ${new Date(userData.createdAt.toDate()).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`;
+                }
+                
+                if (userData.profileImage) {
+                    document.getElementById('userAvatar').innerHTML = `<img src="${userData.profileImage}" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary);">`;
+                }
+            }
+            
+            // Load statistics
+            const stats = await calculateStatistics(user.uid);
+            if (stats.success) {
+                document.getElementById('totalSaved').textContent = formatCurrency(stats.data.totalSaved);
+                document.getElementById('currentStreak').textContent = `${stats.data.currentStreak} days`;
+                document.getElementById('daysActive').textContent = stats.data.daysActive;
+            }
+            
+            // Load achievements
+            const achievements = await getUserAchievements(user.uid);
+            if (achievements.success) {
+                document.getElementById('achievementCount').textContent = achievements.data.length;
+            }
+        }
+
+        // Preview profile image
+        window.previewProfileImage = function(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profilePreviewImg').src = e.target.result;
+                    document.getElementById('profileImagePreview').style.display = 'block';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        };
+
+        // Edit profile form
+        document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const user = getCurrentUser();
+            const fullName = e.target.fullName.value;
+            const profileImageFile = e.target.profileImage.files[0];
+            
+            let profileImageURL = null;
+            
+            if (profileImageFile) {
+                const uploadResult = await uploadProfileImage(profileImageFile, user.uid);
+                if (uploadResult.success) {
+                    profileImageURL = uploadResult.url;
+                }
+            }
+            
+            const updateData = { fullName };
+            if (profileImageURL) {
+                updateData.profileImage = profileImageURL;
+            }
+            
+            const result = await updateUserDocument(user.uid, updateData);
+            if (result.success) {
+                showToast('Profile updated successfully!', 'success');
+                location.reload();
+            } else {
+                showToast(result.error, 'error');
+            }
+        });
+
+        // Change password form
+        document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const currentPassword = e.target.currentPassword.value;
+            const newPassword = e.target.newPassword.value;
+            const confirmPassword = e.target.confirmPassword.value;
+            
+            const validation = validatePassword(newPassword);
+            if (!validation.isValid) {
+                showToast(validation.errors[0], 'error');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                showToast('Passwords do not match', 'error');
+                return;
+            }
+            
+            try {
+                const user = getCurrentUser();
+                await updatePassword(user, newPassword);
+                showToast('Password changed successfully!', 'success');
+                e.target.reset();
+            } catch (error) {
+                showToast('Failed to change password. Please check your current password.', 'error');
+            }
+        });
+
+        // Delete account form
+        document.getElementById('deleteAccountForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const password = e.target.password.value;
+            const confirmation = e.target.confirmation.value;
+            
+            if (confirmation !== 'DELETE') {
+                showToast('Please type DELETE to confirm', 'error');
+                return;
+            }
+            
+            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                const user = getCurrentUser();
+                try {
+                    await user.delete();
+                    showToast('Account deleted successfully', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1000);
+                } catch (error) {
+                    showToast('Failed to delete account. Please check your password.', 'error');
+                }
+            }
+        });
+
+        // Logout handler
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await logoutUser();
+        });
+
+        // Dropdown menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const menuDropdown = document.getElementById('menuDropdown');
+        
+        if (menuToggle && menuDropdown) {
+            menuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                menuDropdown.classList.toggle('open');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!menuDropdown.contains(e.target)) {
+                    menuDropdown.classList.remove('open');
+                }
+            });
+        }
+
+        // Mobile menu
+        document.getElementById('hamburger').addEventListener('click', () => {
+            document.getElementById('navbarNav').classList.toggle('open');
+        });
+    </script>
+</body>
+</html>

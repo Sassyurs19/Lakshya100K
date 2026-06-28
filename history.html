@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History - Lakshya ₹100K</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="dashboard.html" class="navbar-brand">Lakshya ₹100K</a>
+        <button class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="navbar-nav" id="navbarNav">
+            <div class="dropdown" id="menuDropdown">
+                <div class="nav-link dropdown-toggle" id="menuToggle">Menu</div>
+                <div class="dropdown-menu">
+                    <a href="dashboard.html" class="dropdown-item">Dashboard</a>
+                    <a href="history.html" class="dropdown-item active">History</a>
+                    <a href="analytics.html" class="dropdown-item">Analytics</a>
+                    <a href="gallery.html" class="dropdown-item">Gallery</a>
+                    <a href="achievements.html" class="dropdown-item">Achievements</a>
+                    <a href="profile.html" class="dropdown-item">Profile</a>
+                    <a href="settings.html" class="dropdown-item">Settings</a>
+                </div>
+            </div>
+            <a href="#" class="nav-link logout" id="logoutBtn">Logout</a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <h2 style="margin-bottom: 2rem;">Savings History</h2>
+        
+        <div class="card search-filter-bar">
+            <input type="text" class="form-input search-input" id="searchInput" placeholder="Search by amount, category, or note...">
+            <select class="form-input filter-select" id="categoryFilter">
+                <option value="all">All Categories</option>
+                <option value="Cash">Cash</option>
+                <option value="Bank">Bank</option>
+                <option value="UPI">UPI</option>
+                <option value="Wallet">Wallet</option>
+                <option value="Investment">Investment</option>
+                <option value="Other">Other</option>
+            </select>
+            <select class="form-input filter-select" id="timeFilter">
+                <option value="all">All Time</option>
+                <option value="today">Today</option>
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+            </select>
+        </div>
+        
+        <div class="savings-cards-grid" id="savingsGrid">
+            <div class="empty-state" style="grid-column: 1 / -1;">
+                <h3 class="empty-state-title">No savings yet</h3>
+                <p class="empty-state-text">Start your savings journey today by adding your first saving!</p>
+                <a href="add-saving.html" class="btn btn-primary">Add First Saving</a>
+            </div>
+        </div>
+    </main>
+
+    <div id="imageModal" class="modal">
+        <button class="modal-close" onclick="closeModal()">
+            <i class="fas fa-times"></i>
+        </button>
+        <img id="modalImage" class="modal-content" src="">
+    </div>
+
+    <style>
+        .main-content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .search-filter-bar {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .search-input {
+            flex: 1;
+        }
+
+        .filter-select {
+            width: auto;
+            min-width: 150px;
+        }
+
+        .savings-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        .saving-card {
+            padding: var(--spacing-lg);
+        }
+
+        .saving-thumbnail {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+            .search-filter-bar {
+                flex-direction: column;
+            }
+            .filter-select {
+                width: 100%;
+            }
+        }
+    </style>
+
+    <script type="module">
+        import { onAuthStateChange, logoutUser, initializeAuthGuard } from './js/auth.js';
+        import { getUserSavings, deleteSaving } from './js/database.js';
+
+        initializeAuthGuard();
+
+        onAuthStateChange((user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+            } else {
+                loadSavings(user);
+            }
+        });
+
+        async function loadSavings(user) {
+            const result = await getUserSavings(user.uid);
+            if (result.success && result.data.length > 0) {
+                const savings = result.data;
+                let runningTotal = 0;
+                
+                const savingsHTML = savings.map((saving, index) => {
+                    runningTotal += saving.amount;
+                    return `
+                        <div class="card saving-card" data-category="${saving.category}" data-date="${saving.date}" data-amount="${saving.amount}" data-note="${saving.note || ''}">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                                <div>
+                                    <div style="font-size: 1.75rem; font-weight: 600;">
+                                        ₹${saving.amount.toLocaleString()}
+                                    </div>
+                                    <div style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.25rem;">
+                                        ${new Date(saving.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                                    </div>
+                                </div>
+                                <div style="background: var(--bg-tertiary); padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); font-size: 0.875rem;">
+                                    ${saving.category}
+                                </div>
+                            </div>
+                            
+                            ${saving.note ? `
+                            <div style="color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.5; font-size: 0.875rem;">
+                                ${saving.note.length > 100 ? saving.note.substring(0, 100) + '...' : saving.note}
+                            </div>
+                            ` : ''}
+                            
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                ${saving.imageURL ? `
+                                <img src="${saving.imageURL}" class="saving-thumbnail" onclick="openModal('${saving.imageURL}')">
+                                ` : '<div style="flex: 1;"></div>'}
+                                
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button onclick="editSaving('${saving.id}')" class="btn btn-secondary btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button onclick="deleteSavingHandler('${saving.id}')" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.8rem;">
+                                Running Total: <strong>₹${runningTotal.toLocaleString()}</strong>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                document.getElementById('savingsGrid').innerHTML = savingsHTML;
+            }
+        }
+
+        window.deleteSavingHandler = async function(savingId) {
+            if (confirm('Are you sure you want to delete this saving?')) {
+                const result = await deleteSaving(savingId);
+                if (result.success) {
+                    location.reload();
+                } else {
+                    alert(result.error);
+                }
+            }
+        };
+
+        window.editSaving = function(savingId) {
+            alert('Edit functionality coming soon');
+        };
+
+        window.openModal = function(src) {
+            document.getElementById('modalImage').src = src;
+            document.getElementById('imageModal').classList.add('active');
+        };
+
+        window.closeModal = function() {
+            document.getElementById('imageModal').classList.remove('active');
+        };
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        document.getElementById('imageModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        const searchInput = document.getElementById('searchInput');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const timeFilter = document.getElementById('timeFilter');
+        const savingsGrid = document.getElementById('savingsGrid');
+
+        function filterSavings() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const category = categoryFilter.value;
+            const time = timeFilter.value;
+            const cards = savingsGrid.querySelectorAll('.saving-card');
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            const weekAgo = new Date(today);
+            weekAgo.setDate(weekAgo.getDate() - 7);
+            
+            const monthAgo = new Date(today);
+            monthAgo.setMonth(monthAgo.getMonth() - 1);
+            
+            cards.forEach(card => {
+                const cardCategory = card.dataset.category;
+                const cardDate = new Date(card.dataset.date);
+                const cardAmount = card.dataset.amount;
+                const cardNote = card.dataset.note.toLowerCase();
+                
+                let matchesSearch = true;
+                let matchesCategory = true;
+                let matchesTime = true;
+                
+                if (searchTerm) {
+                    matchesSearch = cardAmount.includes(searchTerm) || 
+                                  cardNote.includes(searchTerm) ||
+                                  cardCategory.toLowerCase().includes(searchTerm);
+                }
+                
+                if (category !== 'all') {
+                    matchesCategory = cardCategory === category;
+                }
+                
+                if (time === 'today') {
+                    matchesTime = cardDate >= today;
+                } else if (time === 'week') {
+                    matchesTime = cardDate >= weekAgo;
+                } else if (time === 'month') {
+                    matchesTime = cardDate >= monthAgo;
+                }
+                
+                if (matchesSearch && matchesCategory && matchesTime) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        searchInput.addEventListener('input', filterSavings);
+        categoryFilter.addEventListener('change', filterSavings);
+        timeFilter.addEventListener('change', filterSavings);
+
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await logoutUser();
+        });
+
+        // Dropdown menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const menuDropdown = document.getElementById('menuDropdown');
+        
+        if (menuToggle && menuDropdown) {
+            menuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                menuDropdown.classList.toggle('open');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!menuDropdown.contains(e.target)) {
+                    menuDropdown.classList.remove('open');
+                }
+            });
+        }
+
+        document.getElementById('hamburger').addEventListener('click', () => {
+            document.getElementById('navbarNav').classList.toggle('open');
+        });
+    </script>
+</body>
+</html>

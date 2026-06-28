@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Lakshya ₹100K</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="dashboard.html" class="navbar-brand">Lakshya ₹100K</a>
+        <button class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="navbar-nav" id="navbarNav">
+            <div class="dropdown" id="menuDropdown">
+                <div class="nav-link dropdown-toggle" id="menuToggle">Menu</div>
+                <div class="dropdown-menu">
+                    <a href="dashboard.html" class="dropdown-item">Dashboard</a>
+                    <a href="history.html" class="dropdown-item">History</a>
+                    <a href="analytics.html" class="dropdown-item">Analytics</a>
+                    <a href="gallery.html" class="dropdown-item active">Gallery</a>
+                    <a href="achievements.html" class="dropdown-item">Achievements</a>
+                    <a href="profile.html" class="dropdown-item">Profile</a>
+                    <a href="settings.html" class="dropdown-item">Settings</a>
+                </div>
+            </div>
+            <a href="#" class="nav-link logout" id="logoutBtn">Logout</a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <h2 style="margin-bottom: 2rem;">Proof Gallery</h2>
+        
+        <div class="gallery-masonry" id="galleryGrid">
+            <div class="empty-state" style="grid-column: 1 / -1;">
+                <h3 class="empty-state-title">No images yet</h3>
+                <p class="empty-state-text">Add savings with proof images to see them here</p>
+                <a href="add-saving.html" class="btn btn-primary">Add Saving with Image</a>
+            </div>
+        </div>
+    </main>
+
+    <div id="imageModal" class="modal">
+        <button class="modal-close" onclick="closeModal()">
+            <i class="fas fa-times"></i>
+        </button>
+        <img id="modalImage" class="modal-content" src="">
+        <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 1rem;">
+            <button onclick="downloadImage()" class="btn btn-primary">Download</button>
+        </div>
+    </div>
+
+    <style>
+        .main-content {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .gallery-masonry {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.02);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.2s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: 1rem;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-amount {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .gallery-date {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        .modal-content {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: var(--radius-md);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+        }
+    </style>
+
+    <script type="module">
+        import { onAuthStateChange, logoutUser, initializeAuthGuard } from './js/auth.js';
+        import { getUserSavings } from './js/database.js';
+
+        initializeAuthGuard();
+
+        let currentImageURL = '';
+
+        onAuthStateChange((user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+            } else {
+                loadGallery(user);
+            }
+        });
+
+        async function loadGallery(user) {
+            const result = await getUserSavings(user.uid);
+            if (result.success) {
+                const savingsWithImages = result.data.filter(s => s.imageURL);
+                
+                if (savingsWithImages.length > 0) {
+                    const galleryHTML = savingsWithImages.map(saving => `
+                        <div class="card gallery-item" onclick="openModal('${saving.imageURL}')">
+                            <img src="${saving.imageURL}" alt="Saving proof" loading="lazy">
+                            <div class="gallery-overlay">
+                                <div class="gallery-amount">₹${saving.amount.toLocaleString()}</div>
+                                <div class="gallery-date">${new Date(saving.date).toLocaleDateString()}</div>
+                            </div>
+                        </div>
+                    `).join('');
+                    
+                    document.getElementById('galleryGrid').innerHTML = galleryHTML;
+                }
+            }
+        }
+
+        window.openModal = function(src) {
+            currentImageURL = src;
+            document.getElementById('modalImage').src = src;
+            document.getElementById('imageModal').classList.add('active');
+        };
+
+        window.closeModal = function() {
+            document.getElementById('imageModal').classList.remove('active');
+        };
+
+        window.downloadImage = function() {
+            const a = document.createElement('a');
+            a.href = currentImageURL;
+            a.download = 'saving-proof.jpg';
+            a.target = '_blank';
+            a.click();
+        };
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        document.getElementById('imageModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await logoutUser();
+        });
+
+        // Dropdown menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const menuDropdown = document.getElementById('menuDropdown');
+        
+        if (menuToggle && menuDropdown) {
+            menuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                menuDropdown.classList.toggle('open');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!menuDropdown.contains(e.target)) {
+                    menuDropdown.classList.remove('open');
+                }
+            });
+        }
+
+        document.getElementById('hamburger').addEventListener('click', () => {
+            document.getElementById('navbarNav').classList.toggle('open');
+        });
+    </script>
+</body>
+</html>

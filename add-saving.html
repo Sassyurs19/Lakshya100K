@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Saving - Lakshya ₹100K</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="dashboard.html" class="navbar-brand">Lakshya ₹100K</a>
+        <button class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="navbar-nav" id="navbarNav">
+            <div class="dropdown" id="menuDropdown">
+                <div class="nav-link dropdown-toggle" id="menuToggle">Menu</div>
+                <div class="dropdown-menu">
+                    <a href="dashboard.html" class="dropdown-item">Dashboard</a>
+                    <a href="history.html" class="dropdown-item">History</a>
+                    <a href="analytics.html" class="dropdown-item">Analytics</a>
+                    <a href="gallery.html" class="dropdown-item">Gallery</a>
+                    <a href="achievements.html" class="dropdown-item">Achievements</a>
+                    <a href="profile.html" class="dropdown-item">Profile</a>
+                    <a href="settings.html" class="dropdown-item">Settings</a>
+                </div>
+            </div>
+            <a href="#" class="nav-link logout" id="logoutBtn">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="card" style="max-width: 600px; margin: 0 auto;">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+                <a href="dashboard.html" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+                <h2 style="margin: 0;">
+                    Add New Saving
+                </h2>
+            </div>
+            
+            <form id="addSavingForm">
+                <div class="form-group">
+                    <label class="form-label">Amount *</label>
+                    <input type="number" class="form-input" name="amount" required placeholder="Enter amount" min="1">
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label">Date</label>
+                        <input type="date" class="form-input" name="date" id="dateInput">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Time</label>
+                        <input type="time" class="form-input" name="time" id="timeInput">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select class="form-input" name="category">
+                        <option value="Cash">Cash</option>
+                        <option value="Bank">Bank</option>
+                        <option value="UPI">UPI</option>
+                        <option value="Wallet">Wallet</option>
+                        <option value="Investment">Investment</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Note (Optional)</label>
+                    <textarea class="form-input form-textarea" name="note" placeholder="Add a note about this saving..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Image Proof (Optional)</label>
+                    <div class="file-upload" onclick="document.getElementById('imageInput').click()">
+                        <input type="file" id="imageInput" name="image" accept="image/*" onchange="previewImage(this)">
+                        <div class="file-upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <div class="file-upload-text">Click to upload proof image</div>
+                    </div>
+                    <div id="imagePreview" style="margin-top: 1rem; display: none;">
+                        <img id="previewImg" style="max-width: 200px; max-height: 200px; border-radius: var(--radius-md); object-fit: cover;">
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 1rem;">
+                    Save Saving
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <style>
+        .main-content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+        }
+    </style>
+
+    <script type="module">
+        import { onAuthStateChange, logoutUser, getCurrentUser } from './js/auth.js';
+        import { addSaving } from './js/database.js';
+        import { uploadSavingImage } from './js/storage.js';
+        import { showToast } from './js/utils.js';
+
+        // Check authentication
+        onAuthStateChange((user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+            } else {
+                // Set default date and time
+                const now = new Date();
+                document.getElementById('dateInput').value = now.toISOString().split('T')[0];
+                document.getElementById('timeInput').value = now.toTimeString().slice(0, 5);
+            }
+        });
+
+        initializeAuthGuard();
+
+        // Preview image
+        window.previewImage = function(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('previewImg').src = e.target.result;
+                    document.getElementById('imagePreview').style.display = 'block';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        };
+
+        // Handle form submission
+        document.getElementById('addSavingForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const user = getCurrentUser();
+            if (!user) {
+                showToast('Please login first', 'error');
+                return;
+            }
+            
+            const amount = parseInt(e.target.amount.value);
+            const date = e.target.date.value;
+            const time = e.target.time.value;
+            const category = e.target.category.value;
+            const note = e.target.note.value;
+            const imageFile = e.target.image.files[0];
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            
+            let imageURL = null;
+            
+            // Upload image if provided
+            if (imageFile) {
+                const uploadResult = await uploadSavingImage(imageFile, user.uid, Date.now().toString());
+                if (uploadResult.success) {
+                    imageURL = uploadResult.url;
+                } else {
+                    showToast('Failed to upload image', 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Save Saving';
+                    return;
+                }
+            }
+            
+            // Add saving to Firestore
+            const savingData = {
+                userId: user.uid,
+                amount,
+                date,
+                time,
+                category,
+                note,
+                imageURL
+            };
+            
+            const result = await addSaving(savingData);
+            
+            if (result.success) {
+                showToast('Saving added successfully!', 'success');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+            } else {
+                showToast(result.error, 'error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Save Saving';
+            }
+        });
+
+        // Logout handler
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await logoutUser();
+        });
+
+        // Dropdown menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const menuDropdown = document.getElementById('menuDropdown');
+        
+        if (menuToggle && menuDropdown) {
+            menuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                menuDropdown.classList.toggle('open');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!menuDropdown.contains(e.target)) {
+                    menuDropdown.classList.remove('open');
+                }
+            });
+        }
+
+        // Mobile menu
+        document.getElementById('hamburger').addEventListener('click', () => {
+            document.getElementById('navbarNav').classList.toggle('open');
+        });
+    </script>
+</body>
+</html>

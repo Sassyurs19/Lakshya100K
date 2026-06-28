@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Achievements - Lakshya ₹100K</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="dashboard.html" class="navbar-brand">Lakshya ₹100K</a>
+        <button class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="navbar-nav" id="navbarNav">
+            <div class="dropdown" id="menuDropdown">
+                <div class="nav-link dropdown-toggle" id="menuToggle">Menu</div>
+                <div class="dropdown-menu">
+                    <a href="dashboard.html" class="dropdown-item">Dashboard</a>
+                    <a href="history.html" class="dropdown-item">History</a>
+                    <a href="analytics.html" class="dropdown-item">Analytics</a>
+                    <a href="gallery.html" class="dropdown-item">Gallery</a>
+                    <a href="achievements.html" class="dropdown-item active">Achievements</a>
+                    <a href="profile.html" class="dropdown-item">Profile</a>
+                    <a href="settings.html" class="dropdown-item">Settings</a>
+                </div>
+            </div>
+            <a href="#" class="nav-link logout" id="logoutBtn">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h2 style="margin-bottom: 2rem;">Achievements</h2>
+        
+        <!-- Summary Card -->
+        <div class="card" style="margin-bottom: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h3 style="margin-bottom: 0.5rem;">Your Progress</h3>
+                    <p style="margin: 0; color: var(--text-secondary);">
+                        <span id="unlockedCount">0</span> / <span id="totalCount">10</span> Achievements Unlocked
+                    </p>
+                </div>
+                <i class="fas fa-medal" style="font-size: 3rem; color: var(--primary);"></i>
+            </div>
+        </div>
+
+        <!-- Achievements Grid -->
+        <div class="grid grid-3" id="achievementsGrid">
+            <!-- Achievements will be loaded here -->
+        </div>
+    </main>
+
+    <style>
+        .main-content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <script type="module">
+        import { onAuthStateChange, logoutUser, getCurrentUser, initializeAuthGuard } from './js/auth.js';
+        import { calculateStatistics, getUserAchievements } from './js/database.js';
+        import { showToast } from './js/utils.js';
+
+        initializeAuthGuard();
+
+        const achievements = [
+            { id: 'first_saving', name: 'First Saving', icon: 'fa-crosshairs', threshold: 1, description: 'Add your first saving' },
+            { id: 'hundred', name: '₹100', icon: 'fa-coins', threshold: 100, description: 'Save ₹100' },
+            { id: 'five_hundred', name: '₹500', icon: 'fa-money-bill', threshold: 500, description: 'Save ₹500' },
+            { id: 'thousand', name: '₹1,000', icon: 'fa-gem', threshold: 1000, description: 'Save ₹1,000' },
+            { id: 'five_thousand', name: '₹5,000', icon: 'fa-trophy', threshold: 5000, description: 'Save ₹5,000' },
+            { id: 'ten_thousand', name: '₹10,000', icon: 'fa-star', threshold: 10000, description: 'Save ₹10,000' },
+            { id: 'twenty_five_thousand', name: '₹25,000', icon: 'fa-award', threshold: 25000, description: 'Save ₹25,000' },
+            { id: 'fifty_thousand', name: '₹50,000', icon: 'fa-crown', threshold: 50000, description: 'Save ₹50,000' },
+            { id: 'seventy_five_thousand', name: '₹75,000', icon: 'fa-fire', threshold: 75000, description: 'Save ₹75,000' },
+            { id: 'one_hundred_thousand', name: '₹100,000', icon: 'fa-flag-checkered', threshold: 100000, description: 'Reach your goal!' }
+        ];
+
+        // Check authentication
+        onAuthStateChange((user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+            } else {
+                loadAchievements(user);
+            }
+        });
+
+        // Load achievements
+        async function loadAchievements(user) {
+            const stats = await calculateStatistics(user.uid);
+            const userAchievements = await getUserAchievements(user.uid);
+            
+            const unlockedAchievementIds = userAchievements.success 
+                ? userAchievements.data.map(a => a.name)
+                : [];
+            
+            const totalSaved = stats.success ? stats.data.totalSaved : 0;
+            
+            // Update summary
+            document.getElementById('unlockedCount').textContent = unlockedAchievementIds.length;
+            document.getElementById('totalCount').textContent = achievements.length;
+            
+            // Render achievements
+            const achievementsHTML = achievements.map(achievement => {
+                const isUnlocked = unlockedAchievementIds.includes(achievement.id);
+                const progress = Math.min(100, Math.round((totalSaved / achievement.threshold) * 100));
+                
+                return `
+                    <div class="achievement-card card ${isUnlocked ? 'unlocked' : 'locked'}">
+                        <div class="achievement-icon"><i class="fas ${achievement.icon}"></i></div>
+                        <div class="achievement-name">${achievement.name}</div>
+                        <div class="achievement-status">
+                            ${isUnlocked ? 'Unlocked!' : `Progress: ${progress}%`}
+                        </div>
+                        <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+                            ${achievement.description}
+                        </div>
+                        ${!isUnlocked ? `
+                        <div class="progress-bar" style="margin-top: 1rem;">
+                            <div class="progress-fill" style="width: ${progress}%"></div>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('achievementsGrid').innerHTML = achievementsHTML;
+        }
+
+        // Logout handler
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await logoutUser();
+        });
+
+        // Dropdown menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const menuDropdown = document.getElementById('menuDropdown');
+        
+        if (menuToggle && menuDropdown) {
+            menuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                menuDropdown.classList.toggle('open');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!menuDropdown.contains(e.target)) {
+                    menuDropdown.classList.remove('open');
+                }
+            });
+        }
+
+        // Mobile menu
+        document.getElementById('hamburger').addEventListener('click', () => {
+            document.getElementById('navbarNav').classList.toggle('open');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Lakshya ₹100K</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="dashboard.html" class="navbar-brand">Lakshya ₹100K</a>
+        <button class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="navbar-nav" id="navbarNav">
+            <div class="dropdown" id="menuDropdown">
+                <div class="nav-link dropdown-toggle" id="menuToggle">Menu</div>
+                <div class="dropdown-menu">
+                    <a href="dashboard.html" class="dropdown-item">Dashboard</a>
+                    <a href="history.html" class="dropdown-item">History</a>
+                    <a href="analytics.html" class="dropdown-item active">Analytics</a>
+                    <a href="gallery.html" class="dropdown-item">Gallery</a>
+                    <a href="achievements.html" class="dropdown-item">Achievements</a>
+                    <a href="profile.html" class="dropdown-item">Profile</a>
+                    <a href="settings.html" class="dropdown-item">Settings</a>
+                </div>
+            </div>
+            <a href="#" class="nav-link logout" id="logoutBtn">Logout</a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <h2 style="margin-bottom: 2rem;">Analytics</h2>
+        
+        <div class="card" style="margin-bottom: 2rem; display: flex; gap: 1rem; align-items: center;">
+            <span style="font-weight: 500;">Time Period:</span>
+            <select class="form-input" id="timePeriod" style="width: auto;">
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+                <option value="yearly">Yearly</option>
+            </select>
+        </div>
+
+        <div class="grid grid-4" style="margin-bottom: 2rem;">
+            <div class="card">
+                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Total Saved</div>
+                <div style="font-size: 1.5rem; font-weight: 600;" id="totalSaved">₹0</div>
+            </div>
+            
+            <div class="card">
+                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Average Saving</div>
+                <div style="font-size: 1.5rem; font-weight: 600;" id="averageSaving">₹0</div>
+            </div>
+            
+            <div class="card">
+                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Highest Saving</div>
+                <div style="font-size: 1.5rem; font-weight: 600;" id="highestSaving">₹0</div>
+            </div>
+            
+            <div class="card">
+                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Days Active</div>
+                <div style="font-size: 1.5rem; font-weight: 600;" id="daysActive">0</div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-bottom: 2rem;">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <i class="fas fa-rocket" style="font-size: 1.5rem; color: var(--primary);"></i>
+                <div>
+                    <h3 style="margin-bottom: 0.5rem;">Goal Prediction</h3>
+                    <p style="margin: 0; color: var(--text-secondary); font-size: 0.875rem;" id="predictionText">At your current pace, you'll reach ₹100,000 in...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-bottom: 2rem;">
+            <h3 style="margin-bottom: 1.5rem;">Category Breakdown</h3>
+            <div id="categoryBreakdown">
+                <div class="empty-state">
+                    <h3 class="empty-state-title">No data yet</h3>
+                    <p class="empty-state-text">Add some savings to see category breakdown</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <style>
+        .main-content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .category-bar {
+            margin-bottom: 1rem;
+        }
+
+        .category-bar-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .category-bar-fill {
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .category-bar-progress {
+            height: 100%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+            .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+
+    <script type="module">
+        import { onAuthStateChange, logoutUser, initializeAuthGuard } from './js/auth.js';
+        import { getUserSavings, calculateStatistics, getUserDocument } from './js/database.js';
+
+        initializeAuthGuard();
+
+        onAuthStateChange((user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+            } else {
+                loadAnalytics(user);
+            }
+        });
+
+        async function loadAnalytics(user) {
+            const stats = await calculateStatistics(user.uid);
+            const userDoc = await getUserDocument(user.uid);
+            
+            if (stats.success) {
+                const data = stats.data;
+                const goal = userDoc.data?.goal || 100000;
+                
+                document.getElementById('totalSaved').textContent = `₹${data.totalSaved.toLocaleString()}`;
+                document.getElementById('averageSaving').textContent = `₹${data.averageSaving.toLocaleString()}`;
+                document.getElementById('highestSaving').textContent = `₹${data.highestSaving.toLocaleString()}`;
+                document.getElementById('daysActive').textContent = data.daysActive;
+                
+                const dailyAverage = data.totalSaved / Math.max(data.daysActive, 1);
+                const remaining = goal - data.totalSaved;
+                const daysRemaining = Math.ceil(remaining / dailyAverage);
+                
+                if (remaining > 0 && dailyAverage > 0) {
+                    const estimatedDate = new Date();
+                    estimatedDate.setDate(estimatedDate.getDate() + daysRemaining);
+                    document.getElementById('predictionText').textContent = 
+                        `Reach ₹100,000 on ${estimatedDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} (${daysRemaining} days)`;
+                } else {
+                    document.getElementById('predictionText').textContent = 'Goal reached!';
+                }
+            }
+            
+            const savings = await getUserSavings(user.uid);
+            if (savings.success && savings.data.length > 0) {
+                const categoryTotals = {};
+                let total = 0;
+                
+                savings.data.forEach(saving => {
+                    categoryTotals[saving.category] = (categoryTotals[saving.category] || 0) + saving.amount;
+                    total += saving.amount;
+                });
+                
+                const categoryBreakdownHTML = Object.entries(categoryTotals)
+                    .sort((a, b) => b[1] - a[1])
+                    .map(([category, amount]) => {
+                        const percentage = Math.round((amount / total) * 100);
+                        const colors = {
+                            'Cash': '#10b981',
+                            'Bank': '#3b82f6',
+                            'UPI': '#8b5cf6',
+                            'Wallet': '#f59e0b',
+                            'Investment': '#ef4444',
+                            'Other': '#64748b'
+                        };
+                        const color = colors[category] || '#64748b';
+                        
+                        return `
+                            <div class="category-bar">
+                                <div class="category-bar-header">
+                                    <span>${category}</span>
+                                    <span>₹${amount.toLocaleString()} (${percentage}%)</span>
+                                </div>
+                                <div class="category-bar-fill">
+                                    <div class="category-bar-progress" style="width: ${percentage}%; background: ${color};"></div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                
+                document.getElementById('categoryBreakdown').innerHTML = categoryBreakdownHTML;
+            }
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await logoutUser();
+        });
+
+        // Dropdown menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const menuDropdown = document.getElementById('menuDropdown');
+        
+        if (menuToggle && menuDropdown) {
+            menuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                menuDropdown.classList.toggle('open');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!menuDropdown.contains(e.target)) {
+                    menuDropdown.classList.remove('open');
+                }
+            });
+        }
+
+        document.getElementById('hamburger').addEventListener('click', () => {
+            document.getElementById('navbarNav').classList.toggle('open');
+        });
+    </script>
+</body>
+</html>

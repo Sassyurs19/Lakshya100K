@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Lakshya ₹100K</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="dashboard.html" class="navbar-brand">Lakshya ₹100K</a>
+        <button class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="navbar-nav" id="navbarNav">
+            <div class="dropdown" id="menuDropdown">
+                <div class="nav-link dropdown-toggle" id="menuToggle">Menu</div>
+                <div class="dropdown-menu">
+                    <a href="dashboard.html" class="dropdown-item active">Dashboard</a>
+                    <a href="history.html" class="dropdown-item">History</a>
+                    <a href="analytics.html" class="dropdown-item">Analytics</a>
+                    <a href="gallery.html" class="dropdown-item">Gallery</a>
+                    <a href="achievements.html" class="dropdown-item">Achievements</a>
+                    <a href="profile.html" class="dropdown-item">Profile</a>
+                    <a href="settings.html" class="dropdown-item">Settings</a>
+                </div>
+            </div>
+            <a href="#" class="nav-link logout" id="logoutBtn">Logout</a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="card" style="margin-bottom: 2rem; display: flex; align-items: center; gap: 1.5rem;">
+            <div id="userAvatar" style="width: 50px; height: 50px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.25rem;">
+                <i class="fas fa-user"></i>
+            </div>
+            <div>
+                <h2 style="margin: 0;" id="greeting">Good Morning</h2>
+                <div style="color: var(--text-secondary); font-size: 0.875rem;" id="username">@username</div>
+            </div>
+        </div>
+
+        <div class="grid grid-4" style="margin-bottom: 2rem;">
+            <a href="add-saving.html" class="card" style="text-decoration: none; color: inherit; text-align: center; display: block;">
+                <div style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--primary);">
+                    <i class="fas fa-plus"></i>
+                </div>
+                <div style="font-weight: 500; font-size: 0.875rem;">Add Saving</div>
+            </a>
+            <a href="history.html" class="card" style="text-decoration: none; color: inherit; text-align: center; display: block;">
+                <div style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--text-secondary);">
+                    <i class="fas fa-history"></i>
+                </div>
+                <div style="font-weight: 500; font-size: 0.875rem;">History</div>
+            </a>
+            <a href="analytics.html" class="card" style="text-decoration: none; color: inherit; text-align: center; display: block;">
+                <div style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--text-secondary);">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div style="font-weight: 500; font-size: 0.875rem;">Analytics</div>
+            </a>
+            <a href="gallery.html" class="card" style="text-decoration: none; color: inherit; text-align: center; display: block;">
+                <div style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--text-secondary);">
+                    <i class="fas fa-images"></i>
+                </div>
+                <div style="font-weight: 500; font-size: 0.875rem;">Gallery</div>
+            </a>
+        </div>
+
+        <div class="card-glow-success" style="margin-bottom: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <div>
+                    <h3 style="margin-bottom: 0.5rem;">Savings Goal</h3>
+                    <div style="font-size: 1.75rem; font-weight: 600;" id="goalAmount">₹100,000</div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 2rem; font-weight: 600; color: var(--success);" id="progressPercent">0%</div>
+                </div>
+            </div>
+            <div style="height: 8px; background: var(--bg-tertiary); border-radius: 4px; overflow: hidden; margin-bottom: 1rem;">
+                <div id="progressBar" style="height: 100%; background: var(--success); width: 0%; transition: width 0.3s ease;"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; color: var(--text-secondary); font-size: 0.875rem;">
+                <span>Saved: <strong id="savedAmount" style="color: var(--text-primary);">₹0</strong></span>
+                <span>Remaining: <strong id="remainingAmount" style="color: var(--text-primary);">₹100,000</strong></span>
+            </div>
+        </div>
+
+        <div class="grid grid-4" style="margin-bottom: 2rem;">
+            <div class="card-glow">
+                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Today's Saving</div>
+                <div style="font-size: 1.5rem; font-weight: 600;" id="todaySaving">₹0</div>
+            </div>
+            <div class="card-glow">
+                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Monthly Saving</div>
+                <div style="font-size: 1.5rem; font-weight: 600;" id="monthlySaving">₹0</div>
+            </div>
+            <div class="card-glow">
+                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Current Streak</div>
+                <div style="font-size: 1.5rem; font-weight: 600;" id="currentStreak">0 days</div>
+            </div>
+            <div class="card-glow">
+                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Longest Streak</div>
+                <div style="font-size: 1.5rem; font-weight: 600;" id="longestStreak">0 days</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 style="margin-bottom: 1.5rem;">Recent Savings</h3>
+            <div id="recentSavings">
+                <div class="empty-state">
+                    <h3 class="empty-state-title">No savings yet</h3>
+                    <p class="empty-state-text">Start your savings journey today by adding your first saving!</p>
+                    <a href="add-saving.html" class="btn btn-primary">Add First Saving</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <style>
+        .main-content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+            .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+
+    <script type="module">
+        import { onAuthStateChange, logoutUser, initializeAuthGuard } from './js/auth.js';
+        import { getUserDocument, calculateStatistics, getUserSavings } from './js/database.js';
+
+        initializeAuthGuard();
+
+        onAuthStateChange((user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+            } else {
+                loadDashboard(user);
+            }
+        });
+
+        async function loadDashboard(user) {
+            const hour = new Date().getHours();
+            const greeting = hour < 12 ? 'Good Morning' : hour < 18 ? 'Good Afternoon' : 'Good Evening';
+            document.getElementById('greeting').textContent = greeting;
+
+            const userDoc = await getUserDocument(user.uid);
+            if (userDoc.success) {
+                const userData = userDoc.data;
+                document.getElementById('username').textContent = `@${userData.displayName || 'user'}`;
+                document.getElementById('goalAmount').textContent = `₹${(userData.goal || 100000).toLocaleString()}`;
+            }
+
+            const stats = await calculateStatistics(user.uid);
+            if (stats.success) {
+                const data = stats.data;
+                const goal = userDoc.data?.goal || 100000;
+
+                document.getElementById('savedAmount').textContent = `₹${data.totalSaved.toLocaleString()}`;
+                document.getElementById('remainingAmount').textContent = `₹${Math.max(0, goal - data.totalSaved).toLocaleString()}`;
+                document.getElementById('todaySaving').textContent = `₹${data.todaySaving.toLocaleString()}`;
+                document.getElementById('monthlySaving').textContent = `₹${data.monthlySaving.toLocaleString()}`;
+                document.getElementById('currentStreak').textContent = `${data.currentStreak} days`;
+                document.getElementById('longestStreak').textContent = `${data.longestStreak} days`;
+
+                const percentage = Math.min(100, Math.round((data.totalSaved / goal) * 100));
+                document.getElementById('progressPercent').textContent = `${percentage}%`;
+                document.getElementById('progressBar').style.width = `${percentage}%`;
+            }
+
+            const savings = await getUserSavings(user.uid);
+            if (savings.success && savings.data.length > 0) {
+                const recentSavings = savings.data.slice(0, 5);
+                const recentSavingsHTML = recentSavings.map(saving => `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--border-color);">
+                        <div>
+                            <div style="font-weight: 500;">₹${saving.amount.toLocaleString()}</div>
+                            <div style="color: var(--text-secondary); font-size: 0.8rem;">${new Date(saving.date).toLocaleDateString()}</div>
+                        </div>
+                    </div>
+                `).join('');
+                document.getElementById('recentSavings').innerHTML = recentSavingsHTML;
+            }
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await logoutUser();
+        });
+
+        // Dropdown menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const menuDropdown = document.getElementById('menuDropdown');
+        
+        if (menuToggle && menuDropdown) {
+            menuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                menuDropdown.classList.toggle('open');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!menuDropdown.contains(e.target)) {
+                    menuDropdown.classList.remove('open');
+                }
+            });
+        }
+
+        document.getElementById('hamburger').addEventListener('click', () => {
+            document.getElementById('navbarNav').classList.toggle('open');
+        });
+    </script>
+</body>
+</html>

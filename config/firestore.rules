@@ -1,0 +1,54 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Users collection
+    match /users/{userId} {
+      // Users can read their own profile
+      allow read: if request.auth != null && request.auth.uid == userId;
+      
+      // Users can update their own profile
+      allow update: if request.auth != null && request.auth.uid == userId;
+      
+      // Only the user themselves can create their document (handled in signup)
+      allow create: if request.auth != null && request.auth.uid == userId;
+      
+      // Delete is not allowed
+      allow delete: if false;
+    }
+    
+    // Savings collection
+    match /savings/{savingId} {
+      // Users can read their own savings
+      allow read: if request.auth != null && 
+                   resource.data.userId == request.auth.uid;
+      
+      // Users can create savings for themselves
+      allow create: if request.auth != null && 
+                     request.resource.data.userId == request.auth.uid;
+      
+      // Users can update their own savings
+      allow update: if request.auth != null && 
+                    resource.data.userId == request.auth.uid;
+      
+      // Users can delete their own savings
+      allow delete: if request.auth != null && 
+                    resource.data.userId == request.auth.uid;
+    }
+    
+    // Achievements collection
+    match /achievements/{achievementId} {
+      // Users can read their own achievements
+      allow read: if request.auth != null && 
+                   resource.data.userId == request.auth.uid;
+      
+      // Users can create achievements for themselves (system will handle this)
+      allow create: if request.auth != null && 
+                     request.resource.data.userId == request.auth.uid;
+      
+      // Updates and deletes are not allowed for achievements
+      allow update: if false;
+      allow delete: if false;
+    }
+  }
+}
