@@ -160,14 +160,14 @@
             const userDoc = await getUserDocument(user.uid);
             if (userDoc.success) {
                 const userData = userDoc.data;
-                document.getElementById('username').textContent = `@${userData.displayName || 'user'}`;
-                document.getElementById('goalAmount').textContent = `₹${(userData.goal || 100000).toLocaleString()}`;
+                document.getElementById('username').textContent = `@${userData.username || 'user'}`;
+                document.getElementById('goalAmount').textContent = `₹${(userData.goalAmount || 100000).toLocaleString()}`;
             }
 
             const stats = await calculateStatistics(user.uid);
             if (stats.success) {
                 const data = stats.data;
-                const goal = userDoc.data?.goal || 100000;
+                const goal = userDoc.data?.goalAmount || 100000;
 
                 document.getElementById('savedAmount').textContent = `₹${data.totalSaved.toLocaleString()}`;
                 document.getElementById('remainingAmount').textContent = `₹${Math.max(0, goal - data.totalSaved).toLocaleString()}`;
@@ -175,6 +175,7 @@
                 document.getElementById('monthlySaving').textContent = `₹${data.monthlySaving.toLocaleString()}`;
                 document.getElementById('currentStreak').textContent = `${data.currentStreak} days`;
                 document.getElementById('longestStreak').textContent = `${data.longestStreak} days`;
+                document.getElementById('averageSaving').textContent = `₹${data.averageSaving.toLocaleString()}`;
 
                 const percentage = Math.min(100, Math.round((data.totalSaved / goal) * 100));
                 document.getElementById('progressPercent').textContent = `${percentage}%`;
@@ -188,11 +189,30 @@
                     <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--border-color);">
                         <div>
                             <div style="font-weight: 500;">₹${saving.amount.toLocaleString()}</div>
-                            <div style="color: var(--text-secondary); font-size: 0.8rem;">${new Date(saving.date).toLocaleDateString()}</div>
+                            <div style="color: var(--text-secondary); font-size: 0.8rem;">
+                                ${new Date(saving.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                ${saving.time ? ` at ${saving.time}` : ''}
+                            </div>
+                        </div>
+                        <div style="background: var(--bg-tertiary); padding: 0.25rem 0.5rem; border-radius: var(--radius-sm); font-size: 0.75rem;">
+                            ${saving.category}
                         </div>
                     </div>
                 `).join('');
                 document.getElementById('recentSavings').innerHTML = recentSavingsHTML;
+            } else {
+                // Show empty state for recent savings
+                document.getElementById('recentSavings').innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.3;">
+                            <i class="fas fa-receipt"></i>
+                        </div>
+                        <p>No savings yet</p>
+                        <a href="add-saving.html" class="btn btn-primary btn-sm" style="margin-top: 1rem; display: inline-block;">
+                            Add Your First Saving
+                        </a>
+                    </div>
+                `;
             }
         }
 

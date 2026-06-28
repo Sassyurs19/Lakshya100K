@@ -31,6 +31,58 @@ const SAVINGS_COLLECTION = 'savings';
 const ACHIEVEMENTS_COLLECTION = 'achievements';
 
 /**
+ * Get user by username
+ * @param {string} username - Username to search for
+ * @returns {Promise} User data or null
+ */
+export async function getUserByUsername(username) {
+    try {
+        const q = query(
+            collection(db, USERS_COLLECTION),
+            where('username', '==', username),
+            limit(1)
+        );
+        const querySnapshot = await getDocs(q);
+        
+        if (querySnapshot.empty) {
+            return { success: false, data: null };
+        }
+        
+        const userDoc = querySnapshot.docs[0];
+        return { success: true, data: { id: userDoc.id, ...userDoc.data() } };
+    } catch (error) {
+        console.error('Error getting user by username:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+/**
+ * Get user by email
+ * @param {string} email - Email to search for
+ * @returns {Promise} User data or null
+ */
+export async function getUserByEmail(email) {
+    try {
+        const q = query(
+            collection(db, USERS_COLLECTION),
+            where('email', '==', email),
+            limit(1)
+        );
+        const querySnapshot = await getDocs(q);
+        
+        if (querySnapshot.empty) {
+            return { success: false, data: null };
+        }
+        
+        const userDoc = querySnapshot.docs[0];
+        return { success: true, data: { id: userDoc.id, ...userDoc.data() } };
+    } catch (error) {
+        console.error('Error getting user by email:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+/**
  * Create or update user document
  * @param {string} userId - User ID
  * @param {Object} userData - User data to store
@@ -40,13 +92,7 @@ export async function createUserDocument(userId, userData) {
     try {
         await setDoc(doc(db, USERS_COLLECTION, userId), {
             ...userData,
-            goal: 100000,
-            currency: '₹',
-            createdAt: serverTimestamp(),
-            settings: {
-                reminderTime: '21:00',
-                theme: 'light'
-            }
+            createdAt: serverTimestamp()
         });
         return { success: true };
     } catch (error) {
@@ -102,11 +148,69 @@ export async function addSaving(savingData) {
     try {
         const docRef = await addDoc(collection(db, SAVINGS_COLLECTION), {
             ...savingData,
-            createdAt: serverTimestamp()
+            month: new Date(savingData.date).getMonth() + 1,
+            year: new Date(savingData.date).getFullYear(),
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
         });
+        
+        // Calculate running total
+        await updateRunningTotals(savingData.userId);
+        
         return { success: true, id: docRef.id };
     } catch (error) {
         console.error('Error adding saving:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+/**
+ * Calculate and update running totals for all user savings
+ * @param {string} userId - User ID
+ * @returns {Promise}
+ */
+async function updateRunningTotals(userId) {
+    try {
+        const q = query(
+            collection(db, SAVINGS_COLLECTION),
+            where('userId', '==', userId),
+            orderBy('date', 'asc'),
+            orderBy('time', 'asc')
+        );
+        const querySnapshot = await getDocs(q);
+        
+        let runningTotal = 0;
+        const batch = [];
+        
+        querySnapshot.forEach((doc) => {
+            const saving = doc.data();
+            runningTotal += saving.amount;
+            batch.push(updateDoc(doc.ref, { runningTotal }));
+        });
+        
+        await Promise.all(batch);
+    } catch (error) {
+        console.error('Error updating running totals:', error);
+    }
+}
+
+/**
+ * Get a single saving by ID
+ * @param {string} savingId - Saving ID
+ * @returns {Promise} Saving data
+ */
+export async function getSavingById(savingId) {
+    try {
+        const docRef = doc(db, SAVINGS_COLLECTION, savingId);
+        const docSnap = await getDoc(docRef);
+        
+        if (docSnap.exists()) {
+            return { success: true, data: { id: docSnap.id, ...docSnap.data() } };
+        } else {
+            return { success: false, error: 'Saving not found' };
+        }
+    } catch (error) {
+        console.error('Error getting saving:', error);
         return { success: false, error: error.message };
     }
 }
@@ -134,6 +238,57 @@ export async function getUserSavings(userId) {
         return { success: true, data: savings };
     } catch (error) {
         console.error('Error getting user savings:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+/**
+ * Get paginated savings for a user
+ * @param {string} userId - User ID
+ * @param {number} limit - Number of records per page
+ * @param {Object} lastDoc - Last document from previous page (for pagination)
+ * @returns {Promise} Array of savings with pagination info
+ */
+export async function getUserSavingsPaginated(userId, limit = 20, lastDoc = null) {
+    try {
+        let q;
+        if (lastDoc) {
+            q = query(
+                collection(db, SAVINGS_COLLECTION),
+                where('userId', '==', userId),
+                orderBy('date', 'desc'),
+                orderBy('time', 'desc'),
+                startAfter(lastDoc),
+                limit(limit)
+            );
+        } else {
+            q = query(
+                collection(db, SAVINGS_COLLECTION),
+                where('userId', '==', userId),
+                orderBy('date', 'desc'),
+                orderBy('time', 'desc'),
+                limit(limit)
+            );
+        }
+        
+        const querySnapshot = await getDocs(q);
+        
+        const savings = [];
+        let lastVisible = null;
+        
+        querySnapshot.forEach((doc) => {
+            savings.push({ id: doc.id, ...doc.data() });
+            lastVisible = doc;
+        });
+        
+        return { 
+            success: true, 
+            data: savings,
+            lastDoc: lastVisible,
+            hasMore: savings.length === limit
+        };
+    } catch (error) {
+        console.error('Error getting paginated savings:', error);
         return { success: false, error: error.message };
     }
 }
@@ -168,7 +323,19 @@ export async function getSavingById(savingId) {
 export async function updateSaving(savingId, savingData) {
     try {
         const docRef = doc(db, SAVINGS_COLLECTION, savingId);
-        await updateDoc(docRef, savingData);
+        await updateDoc(docRef, {
+            ...savingData,
+            month: new Date(savingData.date).getMonth() + 1,
+            year: new Date(savingData.date).getFullYear(),
+            updatedAt: serverTimestamp()
+        });
+        
+        // Recalculate running totals
+        const savingDoc = await getDoc(docRef);
+        if (savingDoc.exists()) {
+            await updateRunningTotals(savingDoc.data().userId);
+        }
+        
         return { success: true };
     } catch (error) {
         console.error('Error updating saving:', error);
@@ -183,7 +350,27 @@ export async function updateSaving(savingId, savingData) {
  */
 export async function deleteSaving(savingId) {
     try {
-        await deleteDoc(doc(db, SAVINGS_COLLECTION, savingId));
+        const docRef = doc(db, SAVINGS_COLLECTION, savingId);
+        const docSnap = await getDoc(docRef);
+        
+        if (docSnap.exists()) {
+            const savingData = docSnap.data();
+            const userId = savingData.userId;
+            const imagePath = savingData.imagePath;
+            
+            // Delete from Firestore
+            await deleteDoc(docRef);
+            
+            // Delete image from Storage if exists
+            if (imagePath) {
+                const { deleteSavingImage } = await import('./storage.js');
+                await deleteSavingImage(imagePath);
+            }
+            
+            // Recalculate running totals
+            await updateRunningTotals(userId);
+        }
+        
         return { success: true };
     } catch (error) {
         console.error('Error deleting saving:', error);

@@ -48,6 +48,7 @@
                 <h3 style="font-size: 1.8rem; margin-bottom: 0.5rem;" id="fullName">User Name</h3>
                 <div style="color: var(--text-secondary); margin-bottom: 0.5rem;" id="username">@username</div>
                 <div style="color: var(--text-secondary); margin-bottom: 0.5rem;" id="email">user@email.com</div>
+                <div style="color: var(--text-secondary); margin-bottom: 0.5rem;" id="goalAmount">Goal: ₹100,000</div>
                 <div style="color: var(--text-secondary);" id="joinDate">Joined: January 2024</div>
             </div>
         </div>
@@ -84,6 +85,24 @@
                 <div class="form-group">
                     <label class="form-label">Full Name</label>
                     <input type="text" class="form-input" name="fullName" id="fullNameInput" placeholder="Enter your full name">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-input" name="username" id="usernameInput" placeholder="Enter your username" pattern="[a-zA-Z0-9_]+" title="Only letters, numbers, and underscores">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Goal Amount (₹)</label>
+                    <input type="number" class="form-input" name="goalAmount" id="goalAmountInput" placeholder="100000" min="1000">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Theme</label>
+                    <select class="form-input" name="theme" id="themeInput">
+                        <option value="light">Light</option>
+                        <option value="dark">Dark</option>
+                    </select>
                 </div>
                 
                 <div class="form-group">
@@ -180,11 +199,7 @@
 
     <script type="module">
         import { onAuthStateChange, logoutUser, getCurrentUser, initializeAuthGuard } from './js/auth.js';
-        import { getUserDocument, updateUserDocument, calculateStatistics, getUserAchievements } from './js/database.js';
-        import { uploadProfileImage, deleteProfileImage } from './js/storage.js';
-        import { formatCurrency, validatePassword, showToast } from './js/utils.js';
-        import { updatePassword } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        import { auth } from './js/firebase-config.js';
+        import { getUserDocument, updateUserDocument, calculateStatistics, getUserAchievements, getUserByUsername } from './js/database.js';
 
         initializeAuthGuard();
 
@@ -205,10 +220,16 @@
                 document.getElementById('fullName').textContent = userData.fullName || 'User';
                 document.getElementById('username').textContent = `@${userData.username || 'user'}`;
                 document.getElementById('email').textContent = user.email;
+                document.getElementById('goalAmount').textContent = `Goal: ₹${(userData.goalAmount || 100000).toLocaleString()}`;
+                
                 document.getElementById('fullNameInput').value = userData.fullName || '';
+                document.getElementById('usernameInput').value = userData.username || '';
+                document.getElementById('goalAmountInput').value = userData.goalAmount || 100000;
+                document.getElementById('themeInput').value = userData.theme || 'light';
                 
                 if (userData.createdAt) {
-                    document.getElementById('joinDate').textContent = `Joined: ${new Date(userData.createdAt.toDate()).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`;
+                    const joinDate = new Date(userData.createdAt);
+                    document.getElementById('joinDate').textContent = `Joined: ${joinDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`;
                 }
                 
                 if (userData.profileImage) {
@@ -219,7 +240,7 @@
             // Load statistics
             const stats = await calculateStatistics(user.uid);
             if (stats.success) {
-                document.getElementById('totalSaved').textContent = formatCurrency(stats.data.totalSaved);
+                document.getElementById('totalSaved').textContent = `₹${stats.data.totalSaved.toLocaleString()}`;
                 document.getElementById('currentStreak').textContent = `${stats.data.currentStreak} days`;
                 document.getElementById('daysActive').textContent = stats.data.daysActive;
             }
@@ -247,29 +268,67 @@
         document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const user = getCurrentUser();
-            const fullName = e.target.fullName.value;
+            const fullName = e.target.fullName.value.trim();
+            const username = e.target.username.value.trim();
+            const goalAmount = parseInt(e.target.goalAmount.value);
+            const theme = e.target.theme.value;
             const profileImageFile = e.target.profileImage.files[0];
             
-            let profileImageURL = null;
+            // Validate required fields
+            if (!fullName) {
+                alert('Full name is required');
+                return;
+            }
             
-            if (profileImageFile) {
-                const uploadResult = await uploadProfileImage(profileImageFile, user.uid);
-                if (uploadResult.success) {
-                    profileImageURL = uploadResult.url;
+            if (!username) {
+                alert('Username is required');
+                return;
+            }
+            
+            if (goalAmount < 1000) {
+                alert('Goal amount must be at least ₹1,000');
+                return;
+            }
+            
+            // Check if username is being changed and if it's already taken
+            const currentDoc = await getUserDocument(user.uid);
+            if (currentDoc.success && currentDoc.data.username !== username.toLowerCase()) {
+                const usernameCheck = await getUserByUsername(username.toLowerCase());
+                if (usernameCheck.success && usernameCheck.data) {
+                    alert('Username already taken');
+                    return;
                 }
             }
             
-            const updateData = { fullName };
-            if (profileImageURL) {
-                updateData.profileImage = profileImageURL;
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Updating...';
+            
+            const updateData = {
+                fullName,
+                username: username.toLowerCase(),
+                goalAmount,
+                theme
+            };
+            
+            // Note: Profile image upload requires Firebase Storage setup
+            // For now, we'll skip image upload until Storage is configured
+            if (profileImageFile) {
+                alert('Profile image upload requires Firebase Storage configuration. This feature will be available soon.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+                return;
             }
             
             const result = await updateUserDocument(user.uid, updateData);
             if (result.success) {
-                showToast('Profile updated successfully!', 'success');
+                alert('Profile updated successfully!');
                 location.reload();
             } else {
-                showToast(result.error, 'error');
+                alert(result.error);
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
             }
         });
 
@@ -280,24 +339,36 @@
             const newPassword = e.target.newPassword.value;
             const confirmPassword = e.target.confirmPassword.value;
             
-            const validation = validatePassword(newPassword);
-            if (!validation.isValid) {
-                showToast(validation.errors[0], 'error');
+            // Validate password strength
+            if (newPassword.length < 8) {
+                alert('Password must be at least 8 characters long');
+                return;
+            }
+            if (!/[A-Z]/.test(newPassword)) {
+                alert('Password must contain at least one uppercase letter');
+                return;
+            }
+            if (!/[a-z]/.test(newPassword)) {
+                alert('Password must contain at least one lowercase letter');
+                return;
+            }
+            if (!/[0-9]/.test(newPassword)) {
+                alert('Password must contain at least one number');
                 return;
             }
             
             if (newPassword !== confirmPassword) {
-                showToast('Passwords do not match', 'error');
+                alert('Passwords do not match');
                 return;
             }
             
             try {
                 const user = getCurrentUser();
-                await updatePassword(user, newPassword);
-                showToast('Password changed successfully!', 'success');
-                e.target.reset();
+                // Note: Firebase requires re-authentication before password change
+                // For now, we'll show a message about this limitation
+                alert('Password change requires re-authentication. Please log out and log back in, then use the "Forgot Password" feature to reset your password.');
             } catch (error) {
-                showToast('Failed to change password. Please check your current password.', 'error');
+                alert('Failed to change password: ' + error.message);
             }
         });
 
@@ -308,7 +379,7 @@
             const confirmation = e.target.confirmation.value;
             
             if (confirmation !== 'DELETE') {
-                showToast('Please type DELETE to confirm', 'error');
+                alert('Please type DELETE to confirm');
                 return;
             }
             
@@ -316,12 +387,12 @@
                 const user = getCurrentUser();
                 try {
                     await user.delete();
-                    showToast('Account deleted successfully', 'success');
+                    alert('Account deleted successfully');
                     setTimeout(() => {
                         window.location.href = 'index.html';
                     }, 1000);
                 } catch (error) {
-                    showToast('Failed to delete account. Please check your password.', 'error');
+                    alert('Failed to delete account. Please check your password.');
                 }
             }
         });

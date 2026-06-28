@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Saving - Lakshya ₹100K</title>
+    <title>Edit Saving - Lakshya ₹100K</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
@@ -37,18 +37,26 @@
     <main class="main-content">
         <div class="card" style="max-width: 600px; margin: 0 auto;">
             <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
-                <a href="dashboard.html" class="btn btn-secondary btn-sm">
+                <a href="history.html" class="btn btn-secondary btn-sm">
                     <i class="fas fa-arrow-left"></i> Back
                 </a>
                 <h2 style="margin: 0;">
-                    Add New Saving
+                    Edit Saving
                 </h2>
             </div>
             
-            <form id="addSavingForm">
+            <div id="loadingMessage" style="text-align: center; padding: 2rem;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i>
+                <p style="margin-top: 1rem; color: var(--text-secondary);">Loading saving details...</p>
+            </div>
+            
+            <form id="editSavingForm" style="display: none;">
+                <input type="hidden" name="savingId" id="savingId">
+                <input type="hidden" name="existingImagePath" id="existingImagePath">
+                
                 <div class="form-group">
                     <label class="form-label">Amount *</label>
-                    <input type="number" class="form-input" name="amount" required placeholder="Enter amount" min="1" max="100000000">
+                    <input type="number" class="form-input" name="amount" id="amount" required placeholder="Enter amount" min="1" max="100000000">
                     <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">
                         Maximum: ₹1,00,00,000
                     </div>
@@ -68,7 +76,7 @@
                 
                 <div class="form-group">
                     <label class="form-label">Category</label>
-                    <select class="form-input" name="category" required>
+                    <select class="form-input" name="category" id="category" required>
                         <option value="Cash">Cash</option>
                         <option value="UPI">UPI</option>
                         <option value="Bank">Bank</option>
@@ -80,7 +88,7 @@
                 
                 <div class="form-group">
                     <label class="form-label">Note (Optional)</label>
-                    <textarea class="form-input form-textarea" name="note" placeholder="Add a note about this saving..." maxlength="500"></textarea>
+                    <textarea class="form-input form-textarea" name="note" id="note" placeholder="Add a note about this saving..." maxlength="500"></textarea>
                     <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">
                         Maximum 500 characters
                     </div>
@@ -88,27 +96,39 @@
                 
                 <div class="form-group">
                     <label class="form-label">Image Proof (Optional)</label>
+                    <div id="existingImageContainer" style="margin-bottom: 1rem; display: none;">
+                        <div style="position: relative; display: inline-block;">
+                            <img id="existingImage" style="max-width: 200px; max-height: 200px; border-radius: var(--radius-md); object-fit: cover;">
+                            <button type="button" onclick="removeExistingImage()" style="position: absolute; top: -8px; right: -8px; background: var(--danger); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-times" style="font-size: 0.75rem;"></i>
+                            </button>
+                        </div>
+                        <div style="margin-top: 0.5rem; font-size: 0.875rem; color: var(--text-secondary);">
+                            Current image
+                        </div>
+                    </div>
+                    
                     <div class="file-upload" onclick="document.getElementById('imageInput').click()">
                         <input type="file" id="imageInput" name="image" accept="image/jpeg,image/jpg,image/png,image/webp" onchange="previewImage(this)">
                         <div class="file-upload-icon">
                             <i class="fas fa-cloud-upload-alt"></i>
                         </div>
-                        <div class="file-upload-text">Click to upload proof image (JPG, PNG, WebP - Max 5MB)</div>
+                        <div class="file-upload-text">Click to upload new proof image (JPG, PNG, WebP - Max 5MB)</div>
                     </div>
                     <div id="imagePreview" style="margin-top: 1rem; display: none; position: relative;">
                         <img id="previewImg" style="max-width: 200px; max-height: 200px; border-radius: var(--radius-md); object-fit: cover;">
-                        <button type="button" onclick="removeImage()" style="position: absolute; top: -8px; right: -8px; background: var(--danger); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                        <button type="button" onclick="removeNewImage()" style="position: absolute; top: -8px; right: -8px; background: var(--danger); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
                             <i class="fas fa-times" style="font-size: 0.75rem;"></i>
                         </button>
                     </div>
                 </div>
                 
                 <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
-                    <button type="button" onclick="resetForm()" class="btn btn-secondary" style="flex: 1;">
-                        Reset
+                    <button type="button" onclick="cancelEdit()" class="btn btn-secondary" style="flex: 1;">
+                        Cancel
                     </button>
                     <button type="submit" class="btn btn-primary" style="flex: 1; justify-content: center; padding: 1rem;">
-                        Save Saving
+                        Update Saving
                     </button>
                 </div>
             </form>
@@ -131,25 +151,54 @@
 
     <script type="module">
         import { onAuthStateChange, logoutUser, getCurrentUser, initializeAuthGuard } from './js/auth.js';
-        import { addSaving } from './js/database.js';
-        import { uploadSavingImage } from './js/storage.js';
-        import { showToast } from './js/utils.js';
+        import { getSavingById, updateSaving } from './js/database.js';
+        import { uploadSavingImage, deleteSavingImage } from './js/storage.js';
 
         initializeAuthGuard();
+
+        // Get saving ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const savingId = urlParams.get('id');
 
         // Check authentication
         onAuthStateChange((user) => {
             if (!user) {
                 window.location.href = 'login.html';
+            } else if (savingId) {
+                loadSaving(savingId);
             } else {
-                // Set default date and time
-                const now = new Date();
-                document.getElementById('dateInput').value = now.toISOString().split('T')[0];
-                document.getElementById('timeInput').value = now.toTimeString().slice(0, 5);
+                window.location.href = 'history.html';
             }
         });
 
-        // Preview image
+        // Load saving details
+        async function loadSaving(id) {
+            const result = await getSavingById(id);
+            if (result.success && result.data) {
+                const saving = result.data;
+                
+                document.getElementById('savingId').value = saving.id;
+                document.getElementById('amount').value = saving.amount;
+                document.getElementById('dateInput').value = saving.date;
+                document.getElementById('timeInput').value = saving.time || '00:00';
+                document.getElementById('category').value = saving.category;
+                document.getElementById('note').value = saving.note || '';
+                document.getElementById('existingImagePath').value = saving.imagePath || '';
+                
+                if (saving.imageURL) {
+                    document.getElementById('existingImage').src = saving.imageURL;
+                    document.getElementById('existingImageContainer').style.display = 'block';
+                }
+                
+                document.getElementById('loadingMessage').style.display = 'none';
+                document.getElementById('editSavingForm').style.display = 'block';
+            } else {
+                alert('Saving not found');
+                window.location.href = 'history.html';
+            }
+        }
+
+        // Preview new image
         window.previewImage = function(input) {
             if (input.files && input.files[0]) {
                 const file = input.files[0];
@@ -178,49 +227,52 @@
             }
         };
 
-        // Remove image
-        window.removeImage = function() {
+        // Remove existing image
+        window.removeExistingImage = function() {
+            document.getElementById('existingImagePath').value = '';
+            document.getElementById('existingImage').src = '';
+            document.getElementById('existingImageContainer').style.display = 'none';
+        };
+
+        // Remove new image
+        window.removeNewImage = function() {
             document.getElementById('imageInput').value = '';
             document.getElementById('previewImg').src = '';
             document.getElementById('imagePreview').style.display = 'none';
         };
 
-        // Reset form
-        window.resetForm = function() {
-            document.getElementById('addSavingForm').reset();
-            window.removeImage();
-            
-            // Reset date and time to now
-            const now = new Date();
-            document.getElementById('dateInput').value = now.toISOString().split('T')[0];
-            document.getElementById('timeInput').value = now.toTimeString().slice(0, 5);
+        // Cancel edit
+        window.cancelEdit = function() {
+            window.location.href = 'history.html';
         };
 
         // Handle form submission
-        document.getElementById('addSavingForm').addEventListener('submit', async (e) => {
+        document.getElementById('editSavingForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const user = getCurrentUser();
             if (!user) {
-                showToast('Please login first', 'error');
+                alert('Please login first');
                 return;
             }
             
+            const savingId = e.target.savingId.value;
             const amount = parseInt(e.target.amount.value);
             const date = e.target.date.value;
             const time = e.target.time.value;
             const category = e.target.category.value;
             const note = e.target.note.value.trim();
             const imageFile = e.target.image.files[0];
+            const existingImagePath = e.target.existingImagePath.value;
             
             // Validate amount
             if (isNaN(amount) || amount <= 0) {
-                showToast('Please enter a valid amount greater than zero', 'error');
+                alert('Please enter a valid amount greater than zero');
                 return;
             }
             
             if (amount > 100000000) {
-                showToast('Amount cannot exceed ₹1,00,00,000', 'error');
+                alert('Amount cannot exceed ₹1,00,00,000');
                 return;
             }
             
@@ -230,47 +282,53 @@
             
             const originalText = submitBtn.textContent;
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Saving...';
+            submitBtn.textContent = 'Updating...';
             
             let imageURL = null;
-            let imagePath = null;
+            let imagePath = existingImagePath;
             
-            // Upload image if provided
+            // Handle image changes
             if (imageFile) {
-                const savingId = Date.now().toString();
+                // Delete old image if exists
+                if (existingImagePath) {
+                    await deleteSavingImage(existingImagePath);
+                }
+                
+                // Upload new image
                 const uploadResult = await uploadSavingImage(imageFile, user.uid, savingId);
                 if (uploadResult.success) {
                     imageURL = uploadResult.url;
                     imagePath = `proofs/${user.uid}/${savingId}_${Date.now()}.jpg`;
                 } else {
-                    showToast(uploadResult.error, 'error');
+                    alert(uploadResult.error);
                     submitBtn.disabled = false;
                     submitBtn.textContent = originalText;
                     return;
                 }
+            } else if (!existingImagePath) {
+                // No image selected and no existing image
+                imageURL = null;
+                imagePath = null;
             }
             
-            // Add saving to Firestore
+            // Update saving in Firestore
             const savingData = {
-                userId: user.uid,
                 amount,
                 date,
                 time,
                 category,
                 note,
-                imageUrl,
+                imageURL,
                 imagePath
             };
             
-            const result = await addSaving(savingData);
+            const result = await updateSaving(savingId, savingData);
             
             if (result.success) {
-                showToast('Saving added successfully!', 'success');
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 1000);
+                alert('Saving updated successfully!');
+                window.location.href = 'history.html';
             } else {
-                showToast(result.error, 'error');
+                alert(result.error);
                 submitBtn.disabled = false;
                 submitBtn.textContent = originalText;
             }

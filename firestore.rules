@@ -1,0 +1,29 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Users collection
+    match /users/{userId} {
+      // Allow read/write if user is authenticated and is the owner
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Savings collection
+    match /savings/{savingId} {
+      // Allow read/write if user is authenticated and is the owner
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
+      
+      // Allow create if user is authenticated and userId matches
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
+    }
+    
+    // Achievements collection
+    match /achievements/{achievementId} {
+      // Allow read/write if user is authenticated and is the owner
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
+      
+      // Allow create if user is authenticated and userId matches
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
+    }
+  }
+}
