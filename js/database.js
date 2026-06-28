@@ -294,27 +294,6 @@ export async function getUserSavingsPaginated(userId, limit = 20, lastDoc = null
 }
 
 /**
- * Get a single saving by ID
- * @param {string} savingId - Saving ID
- * @returns {Promise} Saving data
- */
-export async function getSavingById(savingId) {
-    try {
-        const docRef = doc(db, SAVINGS_COLLECTION, savingId);
-        const docSnap = await getDoc(docRef);
-        
-        if (docSnap.exists()) {
-            return { success: true, data: { id: docSnap.id, ...docSnap.data() } };
-        } else {
-            return { success: false, error: 'Saving not found' };
-        }
-    } catch (error) {
-        console.error('Error getting saving:', error);
-        return { success: false, error: error.message };
-    }
-}
-
-/**
  * Update a saving
  * @param {string} savingId - Saving ID
  * @param {Object} savingData - Updated saving data

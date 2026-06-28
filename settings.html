@@ -9,32 +9,39 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <nav class="navbar">
         <a href="dashboard.html" class="navbar-brand">Lakshya ₹100K</a>
-        <button class="hamburger" id="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-        <div class="navbar-nav" id="navbarNav">
+        <div class="navbar-center">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="add-saving.html" class="nav-link">Add Saving</a>
+            <a href="history.html" class="nav-link">History</a>
+            <a href="analytics.html" class="nav-link">Analytics</a>
+            <a href="gallery.html" class="nav-link">Gallery</a>
+            <a href="achievements.html" class="nav-link">Achievements</a>
+        </div>
+        <div class="navbar-right">
             <div class="dropdown" id="menuDropdown">
-                <div class="nav-link dropdown-toggle" id="menuToggle">Menu</div>
+                <div class="nav-link dropdown-toggle" id="menuToggle">
+                    <i class="fas fa-user-circle"></i>
+                </div>
                 <div class="dropdown-menu">
-                    <a href="dashboard.html" class="dropdown-item">Dashboard</a>
-                    <a href="history.html" class="dropdown-item">History</a>
-                    <a href="analytics.html" class="dropdown-item">Analytics</a>
-                    <a href="gallery.html" class="dropdown-item">Gallery</a>
-                    <a href="achievements.html" class="dropdown-item">Achievements</a>
                     <a href="profile.html" class="dropdown-item">Profile</a>
                     <a href="settings.html" class="dropdown-item active">Settings</a>
+                    <div style="border-top: 1px solid var(--border-color); margin: var(--spacing-xs) 0;"></div>
+                    <a href="#" class="dropdown-item logout" id="logoutBtn">Logout</a>
                 </div>
             </div>
-            <a href="#" class="nav-link logout" id="logoutBtn">Logout</a>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="main-content">
+    <main class="main-content" id="main-content">
         <h2 style="margin-bottom: 2rem;">Settings</h2>
         
         <form id="settingsForm">

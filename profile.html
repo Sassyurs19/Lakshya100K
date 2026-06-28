@@ -9,32 +9,39 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <nav class="navbar">
         <a href="dashboard.html" class="navbar-brand">Lakshya ₹100K</a>
-        <button class="hamburger" id="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-        <div class="navbar-nav" id="navbarNav">
+        <div class="navbar-center">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="add-saving.html" class="nav-link">Add Saving</a>
+            <a href="history.html" class="nav-link">History</a>
+            <a href="analytics.html" class="nav-link">Analytics</a>
+            <a href="gallery.html" class="nav-link">Gallery</a>
+            <a href="achievements.html" class="nav-link">Achievements</a>
+        </div>
+        <div class="navbar-right">
             <div class="dropdown" id="menuDropdown">
-                <div class="nav-link dropdown-toggle" id="menuToggle">Menu</div>
+                <div class="nav-link dropdown-toggle" id="menuToggle">
+                    <i class="fas fa-user-circle"></i>
+                </div>
                 <div class="dropdown-menu">
-                    <a href="dashboard.html" class="dropdown-item">Dashboard</a>
-                    <a href="history.html" class="dropdown-item">History</a>
-                    <a href="analytics.html" class="dropdown-item">Analytics</a>
-                    <a href="gallery.html" class="dropdown-item">Gallery</a>
-                    <a href="achievements.html" class="dropdown-item">Achievements</a>
                     <a href="profile.html" class="dropdown-item active">Profile</a>
                     <a href="settings.html" class="dropdown-item">Settings</a>
+                    <div style="border-top: 1px solid var(--border-color); margin: var(--spacing-xs) 0;"></div>
+                    <a href="#" class="dropdown-item logout" id="logoutBtn">Logout</a>
                 </div>
             </div>
-            <a href="#" class="nav-link logout" id="logoutBtn">Logout</a>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="main-content">
+    <main class="main-content" id="main-content">
         <h2 style="margin-bottom: 2rem;">My Profile</h2>
         
         <!-- Profile Overview -->
@@ -200,6 +207,7 @@
     <script type="module">
         import { onAuthStateChange, logoutUser, getCurrentUser, initializeAuthGuard } from './js/auth.js';
         import { getUserDocument, updateUserDocument, calculateStatistics, getUserAchievements, getUserByUsername } from './js/database.js';
+        import { showToast } from './js/utils.js';
 
         initializeAuthGuard();
 
@@ -276,17 +284,17 @@
             
             // Validate required fields
             if (!fullName) {
-                alert('Full name is required');
+                showToast('Full name is required', 'error');
                 return;
             }
             
             if (!username) {
-                alert('Username is required');
+                showToast('Username is required', 'error');
                 return;
             }
             
             if (goalAmount < 1000) {
-                alert('Goal amount must be at least ₹1,000');
+                showToast('Goal amount must be at least ₹1,000', 'error');
                 return;
             }
             
@@ -295,7 +303,7 @@
             if (currentDoc.success && currentDoc.data.username !== username.toLowerCase()) {
                 const usernameCheck = await getUserByUsername(username.toLowerCase());
                 if (usernameCheck.success && usernameCheck.data) {
-                    alert('Username already taken');
+                    showToast('Username already taken', 'error');
                     return;
                 }
             }
@@ -315,7 +323,7 @@
             // Note: Profile image upload requires Firebase Storage setup
             // For now, we'll skip image upload until Storage is configured
             if (profileImageFile) {
-                alert('Profile image upload requires Firebase Storage configuration. This feature will be available soon.');
+                showToast('Profile image upload requires Firebase Storage configuration. This feature will be available soon.', 'warning');
                 submitBtn.disabled = false;
                 submitBtn.textContent = originalText;
                 return;
@@ -323,10 +331,10 @@
             
             const result = await updateUserDocument(user.uid, updateData);
             if (result.success) {
-                alert('Profile updated successfully!');
+                showToast('Profile updated successfully!', 'success');
                 location.reload();
             } else {
-                alert(result.error);
+                showToast(result.error, 'error');
                 submitBtn.disabled = false;
                 submitBtn.textContent = originalText;
             }
@@ -341,24 +349,24 @@
             
             // Validate password strength
             if (newPassword.length < 8) {
-                alert('Password must be at least 8 characters long');
+                showToast('Password must be at least 8 characters long', 'error');
                 return;
             }
             if (!/[A-Z]/.test(newPassword)) {
-                alert('Password must contain at least one uppercase letter');
+                showToast('Password must contain at least one uppercase letter', 'error');
                 return;
             }
             if (!/[a-z]/.test(newPassword)) {
-                alert('Password must contain at least one lowercase letter');
+                showToast('Password must contain at least one lowercase letter', 'error');
                 return;
             }
             if (!/[0-9]/.test(newPassword)) {
-                alert('Password must contain at least one number');
+                showToast('Password must contain at least one number', 'error');
                 return;
             }
             
             if (newPassword !== confirmPassword) {
-                alert('Passwords do not match');
+                showToast('Passwords do not match', 'error');
                 return;
             }
             
@@ -366,9 +374,9 @@
                 const user = getCurrentUser();
                 // Note: Firebase requires re-authentication before password change
                 // For now, we'll show a message about this limitation
-                alert('Password change requires re-authentication. Please log out and log back in, then use the "Forgot Password" feature to reset your password.');
+                showToast('Password change requires re-authentication. Please log out and log back in, then use the "Forgot Password" feature to reset your password.', 'warning');
             } catch (error) {
-                alert('Failed to change password: ' + error.message);
+                showToast('Failed to change password: ' + error.message, 'error');
             }
         });
 
@@ -379,7 +387,7 @@
             const confirmation = e.target.confirmation.value;
             
             if (confirmation !== 'DELETE') {
-                alert('Please type DELETE to confirm');
+                showToast('Please type DELETE to confirm', 'error');
                 return;
             }
             
@@ -387,12 +395,12 @@
                 const user = getCurrentUser();
                 try {
                     await user.delete();
-                    alert('Account deleted successfully');
+                    showToast('Account deleted successfully', 'success');
                     setTimeout(() => {
                         window.location.href = 'index.html';
                     }, 1000);
                 } catch (error) {
-                    alert('Failed to delete account. Please check your password.');
+                    showToast('Failed to delete account. Please check your password.', 'error');
                 }
             }
         });

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <nav class="navbar">
         <a href="dashboard.html" class="navbar-brand">Lakshya ₹100K</a>
         <button class="hamburger" id="hamburger">
@@ -34,7 +35,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="main-content">
+    <main class="main-content" id="main-content">
         <div class="card" style="max-width: 600px; margin: 0 auto;">
             <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
                 <a href="history.html" class="btn btn-secondary btn-sm">
@@ -153,6 +154,7 @@
         import { onAuthStateChange, logoutUser, getCurrentUser, initializeAuthGuard } from './js/auth.js';
         import { getSavingById, updateSaving } from './js/database.js';
         import { uploadSavingImage, deleteSavingImage } from './js/storage.js';
+        import { showToast } from './js/utils.js';
 
         initializeAuthGuard();
 
@@ -193,7 +195,7 @@
                 document.getElementById('loadingMessage').style.display = 'none';
                 document.getElementById('editSavingForm').style.display = 'block';
             } else {
-                alert('Saving not found');
+                showToast('Saving not found', 'error');
                 window.location.href = 'history.html';
             }
         }
@@ -205,7 +207,7 @@
                 
                 // Validate file size (5MB)
                 if (file.size > 5 * 1024 * 1024) {
-                    alert('Image size must be less than 5 MB');
+                    showToast('Image size must be less than 5 MB', 'error');
                     input.value = '';
                     return;
                 }
@@ -213,7 +215,7 @@
                 // Validate file type
                 const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
                 if (!allowedTypes.includes(file.type)) {
-                    alert('Only JPG, PNG, and WebP images are allowed');
+                    showToast('Only JPG, PNG, and WebP images are allowed', 'error');
                     input.value = '';
                     return;
                 }
@@ -252,7 +254,7 @@
             
             const user = getCurrentUser();
             if (!user) {
-                alert('Please login first');
+                showToast('Please login first', 'error');
                 return;
             }
             
@@ -267,12 +269,12 @@
             
             // Validate amount
             if (isNaN(amount) || amount <= 0) {
-                alert('Please enter a valid amount greater than zero');
+                showToast('Please enter a valid amount greater than zero', 'error');
                 return;
             }
             
             if (amount > 100000000) {
-                alert('Amount cannot exceed ₹1,00,00,000');
+                showToast('Amount cannot exceed ₹1,00,00,000', 'error');
                 return;
             }
             
@@ -300,7 +302,7 @@
                     imageURL = uploadResult.url;
                     imagePath = `proofs/${user.uid}/${savingId}_${Date.now()}.jpg`;
                 } else {
-                    alert(uploadResult.error);
+                    showToast(uploadResult.error, 'error');
                     submitBtn.disabled = false;
                     submitBtn.textContent = originalText;
                     return;
@@ -325,10 +327,10 @@
             const result = await updateSaving(savingId, savingData);
             
             if (result.success) {
-                alert('Saving updated successfully!');
+                showToast('Saving updated successfully!', 'success');
                 window.location.href = 'history.html';
             } else {
-                alert(result.error);
+                showToast(result.error, 'error');
                 submitBtn.disabled = false;
                 submitBtn.textContent = originalText;
             }

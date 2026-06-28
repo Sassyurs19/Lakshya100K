@@ -1,18 +1,17 @@
 /**
  * Firebase Configuration
  * 
- * IMPORTANT: Replace the placeholder values with your actual Firebase project credentials
- * Get these from your Firebase Console > Project Settings > General > Your Apps
+ * Lakshya ₹100K - Firebase Project Configuration
  */
 
 // Firebase configuration
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY_HERE",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyAMqfOkmvsBRWmUHOCKG83GqPaIVcvC-UI",
+    authDomain: "lakshya-100k.firebaseapp.com",
+    projectId: "lakshya-100k",
+    storageBucket: "lakshya-100k.firebasestorage.app",
+    messagingSenderId: "772396453515",
+    appId: "1:772396453515:web:b5e3314be252b283d10e8e"
 };
 
 // Initialize Firebase

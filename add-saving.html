@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <nav class="navbar">
         <a href="dashboard.html" class="navbar-brand">Lakshya ₹100K</a>
         <button class="hamburger" id="hamburger">
@@ -34,7 +35,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="main-content">
+    <main class="main-content" id="main-content">
         <div class="card" style="max-width: 600px; margin: 0 auto;">
             <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
                 <a href="dashboard.html" class="btn btn-secondary btn-sm">
@@ -156,7 +157,7 @@
                 
                 // Validate file size (5MB)
                 if (file.size > 5 * 1024 * 1024) {
-                    alert('Image size must be less than 5 MB');
+                    showToast('Image size must be less than 5 MB', 'error');
                     input.value = '';
                     return;
                 }
@@ -164,7 +165,7 @@
                 // Validate file type
                 const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
                 if (!allowedTypes.includes(file.type)) {
-                    alert('Only JPG, PNG, and WebP images are allowed');
+                    showToast('Only JPG, PNG, and WebP images are allowed', 'error');
                     input.value = '';
                     return;
                 }

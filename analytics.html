@@ -9,43 +9,40 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <nav class="navbar">
         <a href="dashboard.html" class="navbar-brand">Lakshya ₹100K</a>
-        <button class="hamburger" id="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-        <div class="navbar-nav" id="navbarNav">
+        <div class="navbar-center">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="add-saving.html" class="nav-link">Add Saving</a>
+            <a href="history.html" class="nav-link">History</a>
+            <a href="analytics.html" class="nav-link active">Analytics</a>
+            <a href="gallery.html" class="nav-link">Gallery</a>
+            <a href="achievements.html" class="nav-link">Achievements</a>
+        </div>
+        <div class="navbar-right">
             <div class="dropdown" id="menuDropdown">
-                <div class="nav-link dropdown-toggle" id="menuToggle">Menu</div>
+                <div class="nav-link dropdown-toggle" id="menuToggle">
+                    <i class="fas fa-user-circle"></i>
+                </div>
                 <div class="dropdown-menu">
-                    <a href="dashboard.html" class="dropdown-item">Dashboard</a>
-                    <a href="history.html" class="dropdown-item">History</a>
-                    <a href="analytics.html" class="dropdown-item active">Analytics</a>
-                    <a href="gallery.html" class="dropdown-item">Gallery</a>
-                    <a href="achievements.html" class="dropdown-item">Achievements</a>
                     <a href="profile.html" class="dropdown-item">Profile</a>
                     <a href="settings.html" class="dropdown-item">Settings</a>
+                    <div style="border-top: 1px solid var(--border-color); margin: var(--spacing-xs) 0;"></div>
+                    <a href="#" class="dropdown-item logout" id="logoutBtn">Logout</a>
                 </div>
             </div>
-            <a href="#" class="nav-link logout" id="logoutBtn">Logout</a>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
 
-    <main class="main-content">
-        <h2 style="margin-bottom: 2rem;">Analytics</h2>
+    <main class="main-content" id="main-content">
+        <h1 style="margin-bottom: 2rem;">Analytics</h1>
         
-        <div class="card" style="margin-bottom: 2rem; display: flex; gap: 1rem; align-items: center;">
-            <span style="font-weight: 500;">Time Period:</span>
-            <select class="form-input" id="timePeriod" style="width: auto;">
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-                <option value="monthly">Monthly</option>
-                <option value="yearly">Yearly</option>
-            </select>
-        </div>
-
         <div class="grid grid-4" style="margin-bottom: 2rem;">
             <div class="card">
                 <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Total Saved</div>
@@ -68,12 +65,19 @@
             </div>
         </div>
 
-        <div class="card" style="margin-bottom: 2rem;">
-            <div style="display: flex; align-items: center; gap: 1rem;">
-                <i class="fas fa-rocket" style="font-size: 1.5rem; color: var(--primary);"></i>
-                <div>
-                    <h3 style="margin-bottom: 0.5rem;">Goal Prediction</h3>
-                    <p style="margin: 0; color: var(--text-secondary); font-size: 0.875rem;" id="predictionText">At your current pace, you'll reach ₹100,000 in...</p>
+        <div class="grid grid-2" style="margin-bottom: 2rem;">
+            <div class="card">
+                <h3 style="margin-bottom: 1.5rem;">Goal Prediction</h3>
+                <div style="color: var(--text-secondary); font-size: 0.875rem;" id="predictionText">At your current pace, you'll reach ₹100,000 in...</div>
+            </div>
+            
+            <div class="card">
+                <h3 style="margin-bottom: 1.5rem;">Savings Trend</h3>
+                <div id="savingsTrend" style="height: 150px; display: flex; align-items: flex-end; gap: 0.5rem;">
+                    <div class="empty-state" style="width: 100%;">
+                        <h3 class="empty-state-title">No data yet</h3>
+                        <p class="empty-state-text">Add savings to see trend</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -82,6 +86,9 @@
             <h3 style="margin-bottom: 1.5rem;">Category Breakdown</h3>
             <div id="categoryBreakdown">
                 <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
                     <h3 class="empty-state-title">No data yet</h3>
                     <p class="empty-state-text">Add some savings to see category breakdown</p>
                 </div>

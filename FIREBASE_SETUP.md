@@ -1,28 +1,27 @@
 # Firebase Setup Instructions
 
-This application requires Firebase Authentication and Firestore to function. Follow these steps to set up Firebase for your project.
+This application requires Firebase Authentication and Firestore to function. The Firebase configuration has been set up with the following credentials:
+
+## Current Firebase Configuration
+
+- **Project ID**: lakshya-100k
+- **Auth Domain**: lakshya-100k.firebaseapp.com
+- **Storage Bucket**: lakshya-100k.firebasestorage.app
+- **App ID**: 1:772396453515:web:b5e3314be252b283d10e8e
 
 ## Prerequisites
 
 - A Google account
-- A Firebase project
+- Firebase project already created
 
-## Step 1: Create Firebase Project
-
-1. Go to [Firebase Console](https://console.firebase.google.com/)
-2. Click "Add project"
-3. Enter project name (e.g., "lakshya-100k")
-4. Follow the setup wizard
-5. Enable Google Analytics (optional)
-
-## Step 2: Enable Authentication
+## Step 1: Enable Authentication
 
 1. In Firebase Console, go to **Build > Authentication**
 2. Click **Get Started**
 3. Enable **Email/Password** sign-in provider
 4. Click **Save**
 
-## Step 3: Create Firestore Database
+## Step 2: Create Firestore Database
 
 1. In Firebase Console, go to **Build > Firestore Database**
 2. Click **Create Database**
@@ -30,33 +29,7 @@ This application requires Firebase Authentication and Firestore to function. Fol
 4. Select **Start in Test Mode** (we'll update security rules later)
 5. Click **Enable**
 
-## Step 4: Get Firebase Configuration
-
-1. In Firebase Console, click the **Gear icon** (Project Settings)
-2. Scroll down to **Your Apps** section
-3. Click the **Web icon** (</>)
-4. Enter app name: "Lakshya 100K"
-5. Check "Also set up Firebase Hosting for this app" (optional)
-6. Click **Register app**
-7. Copy the `firebaseConfig` object
-
-## Step 5: Update Firebase Config
-
-1. Open `js/firebase-config.js`
-2. Replace the placeholder values with your actual Firebase credentials:
-
-```javascript
-const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
-};
-```
-
-## Step 6: Deploy Firestore Security Rules
+## Step 3: Deploy Firestore Security Rules
 
 1. In Firebase Console, go to **Build > Firestore Database > Rules**
 2. Replace the existing rules with the content from `firestore.rules` in this project
@@ -66,9 +39,7 @@ The security rules ensure:
 - Users can only read/write their own documents
 - Data is protected from unauthorized access
 
-## Step 7: (Optional) Set Up Firebase Storage
-
-If you want to enable profile image uploads:
+## Step 4: Set Up Firebase Storage
 
 1. In Firebase Console, go to **Build > Storage**
 2. Click **Get Started**
@@ -79,7 +50,7 @@ If you want to enable profile image uploads:
 7. Replace with the content from `storage.rules` in this project
 8. Click **Publish**
 
-## Step 8: Test the Application
+## Step 5: Test the Application
 
 1. Open `index.html` in your browser
 2. Try to create a new account

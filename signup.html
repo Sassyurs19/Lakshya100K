@@ -72,6 +72,7 @@
 
     <script type="module">
         import { registerUser, initializeAuthGuard } from './js/auth.js';
+        import { showToast } from './js/utils.js';
         
         initializeAuthGuard();
 
@@ -103,17 +104,17 @@
             
             // Basic validation
             if (!fullName) {
-                alert('Full name is required');
+                showToast('Full name is required', 'error');
                 return;
             }
             
             if (!username) {
-                alert('Username is required');
+                showToast('Username is required', 'error');
                 return;
             }
             
             if (!email) {
-                alert('Email is required');
+                showToast('Email is required', 'error');
                 return;
             }
             
@@ -131,9 +132,12 @@
             });
             
             if (result.success) {
-                window.location.href = 'dashboard.html';
+                showToast('Account created successfully!', 'success');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
             } else {
-                alert(result.error);
+                showToast(result.error, 'error');
                 submitBtn.disabled = false;
                 submitBtn.textContent = originalText;
             }

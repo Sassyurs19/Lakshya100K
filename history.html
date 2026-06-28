@@ -9,31 +9,38 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <nav class="navbar">
         <a href="dashboard.html" class="navbar-brand">Lakshya ₹100K</a>
-        <button class="hamburger" id="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-        <div class="navbar-nav" id="navbarNav">
+        <div class="navbar-center">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="add-saving.html" class="nav-link">Add Saving</a>
+            <a href="history.html" class="nav-link active">History</a>
+            <a href="analytics.html" class="nav-link">Analytics</a>
+            <a href="gallery.html" class="nav-link">Gallery</a>
+            <a href="achievements.html" class="nav-link">Achievements</a>
+        </div>
+        <div class="navbar-right">
             <div class="dropdown" id="menuDropdown">
-                <div class="nav-link dropdown-toggle" id="menuToggle">Menu</div>
+                <div class="nav-link dropdown-toggle" id="menuToggle">
+                    <i class="fas fa-user-circle"></i>
+                </div>
                 <div class="dropdown-menu">
-                    <a href="dashboard.html" class="dropdown-item">Dashboard</a>
-                    <a href="history.html" class="dropdown-item active">History</a>
-                    <a href="analytics.html" class="dropdown-item">Analytics</a>
-                    <a href="gallery.html" class="dropdown-item">Gallery</a>
-                    <a href="achievements.html" class="dropdown-item">Achievements</a>
                     <a href="profile.html" class="dropdown-item">Profile</a>
                     <a href="settings.html" class="dropdown-item">Settings</a>
+                    <div style="border-top: 1px solid var(--border-color); margin: var(--spacing-xs) 0;"></div>
+                    <a href="#" class="dropdown-item logout" id="logoutBtn">Logout</a>
                 </div>
             </div>
-            <a href="#" class="nav-link logout" id="logoutBtn">Logout</a>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
 
-    <main class="main-content">
+    <main class="main-content" id="main-content">
         <h2 style="margin-bottom: 2rem;">Savings History</h2>
         
         <div class="card search-filter-bar">
@@ -133,6 +140,7 @@
     <script type="module">
         import { onAuthStateChange, logoutUser, getCurrentUser, initializeAuthGuard } from './js/auth.js';
         import { getUserSavingsPaginated, deleteSaving } from './js/database.js';
+        import { showToast, debounce } from './js/utils.js';
 
         initializeAuthGuard();
 
@@ -194,7 +202,7 @@
                             
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 ${saving.imageURL ? `
-                                <img src="${saving.imageURL}" class="saving-thumbnail" onclick="openModal('${saving.imageURL}')">
+                                <img src="${saving.imageURL}" class="saving-thumbnail" loading="lazy" onclick="openModal('${saving.imageURL}')">
                                 ` : '<div style="flex: 1;"></div>'}
                                 
                                 <div style="display: flex; gap: 0.5rem;">
@@ -232,7 +240,7 @@
                 // Show empty state
                 document.getElementById('savingsGrid').innerHTML = `
                     <div class="empty-state" style="grid-column: 1 / -1;">
-                        <div style="font-size: 4rem; margin-bottom: 1rem; opacity: 0.3;">
+                        <div class="empty-state-icon">
                             <i class="fas fa-piggy-bank"></i>
                         </div>
                         <h3 class="empty-state-title">No savings recorded yet</h3>
@@ -252,9 +260,10 @@
             if (confirm('Are you sure you want to delete this saving? This action cannot be undone.')) {
                 const result = await deleteSaving(savingId);
                 if (result.success) {
+                    showToast('Saving deleted successfully', 'success');
                     location.reload();
                 } else {
-                    alert(result.error);
+                    showToast(result.error, 'error');
                 }
             }
         };
@@ -266,6 +275,91 @@
                 loadSavings(user, false);
             }
         };
+
+        // Instant search with debounce
+        const searchInput = document.getElementById('searchInput');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const timeFilter = document.getElementById('timeFilter');
+
+        const filterSavings = debounce(() => {
+            const searchTerm = searchInput.value.toLowerCase();
+            const category = categoryFilter.value;
+            const time = timeFilter.value;
+            
+            const cards = document.querySelectorAll('.saving-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const cardCategory = card.dataset.category;
+                const cardDate = card.dataset.date;
+                const cardAmount = card.dataset.amount;
+                const cardNote = card.dataset.note.toLowerCase();
+                
+                let matchesSearch = true;
+                let matchesCategory = true;
+                let matchesTime = true;
+
+                // Search filter
+                if (searchTerm) {
+                    matchesSearch = cardAmount.includes(searchTerm) || 
+                                    cardCategory.toLowerCase().includes(searchTerm) || 
+                                    cardNote.includes(searchTerm);
+                }
+
+                // Category filter
+                if (category !== 'all') {
+                    matchesCategory = cardCategory === category;
+                }
+
+                // Time filter
+                if (time !== 'all') {
+                    const savingDate = new Date(cardDate);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    
+                    if (time === 'today') {
+                        matchesTime = savingDate.toDateString() === today.toDateString();
+                    } else if (time === 'week') {
+                        const weekAgo = new Date(today);
+                        weekAgo.setDate(weekAgo.getDate() - 7);
+                        matchesTime = savingDate >= weekAgo;
+                    } else if (time === 'month') {
+                        const monthAgo = new Date(today);
+                        monthAgo.setMonth(monthAgo.getMonth() - 1);
+                        matchesTime = savingDate >= monthAgo;
+                    }
+                }
+
+                if (matchesSearch && matchesCategory && matchesTime) {
+                    card.style.display = '';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Show empty state if no results
+            if (visibleCount === 0 && cards.length > 0) {
+                const grid = document.getElementById('savingsGrid');
+                if (!document.querySelector('.no-results')) {
+                    const emptyState = document.createElement('div');
+                    emptyState.className = 'empty-state no-results';
+                    emptyState.style.gridColumn = '1 / -1';
+                    emptyState.innerHTML = `
+                        <h3 class="empty-state-title">No matching savings</h3>
+                        <p class="empty-state-text">Try adjusting your search or filters</p>
+                    `;
+                    grid.appendChild(emptyState);
+                }
+            } else {
+                const noResults = document.querySelector('.no-results');
+                if (noResults) noResults.remove();
+            }
+        }, 300);
+
+        searchInput.addEventListener('input', filterSavings);
+        categoryFilter.addEventListener('change', filterSavings);
+        timeFilter.addEventListener('change', filterSavings);
 
         window.viewSaving = async function(savingId) {
             // Get saving details from the card data
@@ -365,72 +459,6 @@
                 closeModal();
             }
         });
-
-        document.getElementById('imageModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
-
-        const searchInput = document.getElementById('searchInput');
-        const categoryFilter = document.getElementById('categoryFilter');
-        const timeFilter = document.getElementById('timeFilter');
-        const savingsGrid = document.getElementById('savingsGrid');
-
-        function filterSavings() {
-            const searchTerm = searchInput.value.toLowerCase();
-            const category = categoryFilter.value;
-            const time = timeFilter.value;
-            const cards = savingsGrid.querySelectorAll('.saving-card');
-            
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            
-            const weekAgo = new Date(today);
-            weekAgo.setDate(weekAgo.getDate() - 7);
-            
-            const monthAgo = new Date(today);
-            monthAgo.setMonth(monthAgo.getMonth() - 1);
-            
-            cards.forEach(card => {
-                const cardCategory = card.dataset.category;
-                const cardDate = new Date(card.dataset.date);
-                const cardAmount = card.dataset.amount;
-                const cardNote = card.dataset.note.toLowerCase();
-                
-                let matchesSearch = true;
-                let matchesCategory = true;
-                let matchesTime = true;
-                
-                if (searchTerm) {
-                    matchesSearch = cardAmount.includes(searchTerm) || 
-                                  cardNote.includes(searchTerm) ||
-                                  cardCategory.toLowerCase().includes(searchTerm);
-                }
-                
-                if (category !== 'all') {
-                    matchesCategory = cardCategory === category;
-                }
-                
-                if (time === 'today') {
-                    matchesTime = cardDate >= today;
-                } else if (time === 'week') {
-                    matchesTime = cardDate >= weekAgo;
-                } else if (time === 'month') {
-                    matchesTime = cardDate >= monthAgo;
-                }
-                
-                if (matchesSearch && matchesCategory && matchesTime) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-
-        searchInput.addEventListener('input', filterSavings);
-        categoryFilter.addEventListener('change', filterSavings);
-        timeFilter.addEventListener('change', filterSavings);
 
         document.getElementById('logoutBtn').addEventListener('click', async (e) => {
             e.preventDefault();

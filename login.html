@@ -67,6 +67,7 @@
 
     <script type="module">
         import { loginUser, initializeAuthGuard, resetPassword } from './js/auth.js';
+        import { showToast } from './js/utils.js';
         
         initializeAuthGuard();
 
@@ -96,9 +97,9 @@
             
             const result = await resetPassword(email);
             if (result.success) {
-                alert('Password reset email sent! Check your inbox.');
+                showToast('Password reset email sent! Check your inbox.', 'success');
             } else {
-                alert(result.error);
+                showToast(result.error, 'error');
             }
         });
 
@@ -118,7 +119,7 @@
             if (result.success) {
                 window.location.href = 'dashboard.html';
             } else {
-                alert(result.error);
+                showToast(result.error, 'error');
                 submitBtn.disabled = false;
                 submitBtn.textContent = originalText;
             }
