@@ -89,18 +89,14 @@
                 
                 <div class="form-group">
                     <label class="form-label">Image Proof (Optional)</label>
-                    <div class="file-upload" onclick="document.getElementById('imageInput').click()">
-                        <input type="file" id="imageInput" name="image" accept="image/jpeg,image/jpg,image/png,image/webp" onchange="previewImage(this)">
+                    <div class="file-upload" style="opacity: 0.6; cursor: not-allowed;">
                         <div class="file-upload-icon">
                             <i class="fas fa-cloud-upload-alt"></i>
                         </div>
-                        <div class="file-upload-text">Click to upload proof image (JPG, PNG, WebP - Max 5MB)</div>
-                    </div>
-                    <div id="imagePreview" style="margin-top: 1rem; display: none; position: relative;">
-                        <img id="previewImg" style="max-width: 200px; max-height: 200px; border-radius: var(--radius-md); object-fit: cover;">
-                        <button type="button" onclick="removeImage()" style="position: absolute; top: -8px; right: -8px; background: var(--danger); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-                            <i class="fas fa-times" style="font-size: 0.75rem;"></i>
-                        </button>
+                        <div class="file-upload-text">Upload proof image - Coming Soon</div>
+                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                            Image upload will be available in a future update
+                        </div>
                     </div>
                 </div>
                 
@@ -133,7 +129,7 @@
     <script type="module">
         import { onAuthStateChange, logoutUser, getCurrentUser, initializeAuthGuard } from './js/auth.js';
         import { addSaving } from './js/database.js';
-        import { uploadSavingImage } from './js/storage.js';
+        // import { uploadSavingImage } from './js/storage.js'; // Disabled for now - coming soon
         import { showToast } from './js/utils.js';
 
         initializeAuthGuard();
@@ -150,46 +146,46 @@
             }
         });
 
-        // Preview image
-        window.previewImage = function(input) {
-            if (input.files && input.files[0]) {
-                const file = input.files[0];
-                
-                // Validate file size (5MB)
-                if (file.size > 5 * 1024 * 1024) {
-                    showToast('Image size must be less than 5 MB', 'error');
-                    input.value = '';
-                    return;
-                }
-                
-                // Validate file type
-                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-                if (!allowedTypes.includes(file.type)) {
-                    showToast('Only JPG, PNG, and WebP images are allowed', 'error');
-                    input.value = '';
-                    return;
-                }
-                
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('previewImg').src = e.target.result;
-                    document.getElementById('imagePreview').style.display = 'block';
-                }
-                reader.readAsDataURL(file);
-            }
-        };
+        // Preview image (disabled for now - coming soon)
+        // window.previewImage = function(input) {
+        //     if (input.files && input.files[0]) {
+        //         const file = input.files[0];
+        //         
+        //         // Validate file size (5MB)
+        //         if (file.size > 5 * 1024 * 1024) {
+        //             showToast('Image size must be less than 5 MB', 'error');
+        //             input.value = '';
+        //             return;
+        //         }
+        //         
+        //         // Validate file type
+        //         const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+        //         if (!allowedTypes.includes(file.type)) {
+        //             showToast('Only JPG, PNG, and WebP images are allowed', 'error');
+        //             input.value = '';
+        //             return;
+        //         }
+        //         
+        //         const reader = new FileReader();
+        //         reader.onload = function(e) {
+        //             document.getElementById('previewImg').src = e.target.result;
+        //             document.getElementById('imagePreview').style.display = 'block';
+        //         }
+        //         reader.readAsDataURL(file);
+        //     }
+        // };
 
-        // Remove image
-        window.removeImage = function() {
-            document.getElementById('imageInput').value = '';
-            document.getElementById('previewImg').src = '';
-            document.getElementById('imagePreview').style.display = 'none';
-        };
+        // Remove image (disabled for now - coming soon)
+        // window.removeImage = function() {
+        //     document.getElementById('imageInput').value = '';
+        //     document.getElementById('previewImg').src = '';
+        //     document.getElementById('imagePreview').style.display = 'none';
+        // };
 
         // Reset form
         window.resetForm = function() {
             document.getElementById('addSavingForm').reset();
-            window.removeImage();
+            // window.removeImage(); // Disabled for now
             
             // Reset date and time to now
             const now = new Date();
@@ -212,7 +208,7 @@
             const time = e.target.time.value;
             const category = e.target.category.value;
             const note = e.target.note.value.trim();
-            const imageFile = e.target.image.files[0];
+            // const imageFile = e.target.image.files[0]; // Disabled for now - coming soon
             
             // Validate amount
             if (isNaN(amount) || amount <= 0) {
@@ -233,23 +229,24 @@
             submitBtn.disabled = true;
             submitBtn.textContent = 'Saving...';
             
-            let imageURL = null;
-            let imagePath = null;
-            
-            // Upload image if provided
-            if (imageFile) {
-                const savingId = Date.now().toString();
-                const uploadResult = await uploadSavingImage(imageFile, user.uid, savingId);
-                if (uploadResult.success) {
-                    imageURL = uploadResult.url;
-                    imagePath = `proofs/${user.uid}/${savingId}_${Date.now()}.jpg`;
-                } else {
-                    showToast(uploadResult.error, 'error');
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = originalText;
-                    return;
-                }
-            }
+            // Image upload disabled for now - coming soon
+            // let imageURL = null;
+            // let imagePath = null;
+            // 
+            // // Upload image if provided
+            // if (imageFile) {
+            //     const savingId = Date.now().toString();
+            //     const uploadResult = await uploadSavingImage(imageFile, user.uid, savingId);
+            //     if (uploadResult.success) {
+            //         imageURL = uploadResult.url;
+            //         imagePath = `proofs/${user.uid}/${savingId}_${Date.now()}.jpg`;
+            //     } else {
+            //         showToast(uploadResult.error, 'error');
+            //         submitBtn.disabled = false;
+            //         submitBtn.textContent = originalText;
+            //         return;
+            //     }
+            // }
             
             // Add saving to Firestore
             const savingData = {
@@ -259,8 +256,8 @@
                 time,
                 category,
                 note,
-                imageUrl,
-                imagePath
+                imageURL: null, // Disabled for now - will be enabled with Storage
+                imagePath: null // Disabled for now - will be enabled with Storage
             };
             
             const result = await addSaving(savingData);
