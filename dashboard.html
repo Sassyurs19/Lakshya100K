@@ -19,7 +19,10 @@
 
     <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <nav class="navbar" id="navbar" style="display: none;">
-        <a href="dashboard.html" class="navbar-brand">Lakshya ₹100K</a>
+        <a href="dashboard.html" class="navbar-brand">
+            <span class="brand-name">Lakshya</span>
+            <span class="brand-amount">₹100K</span>
+        </a>
         <div class="navbar-center">
             <a href="dashboard.html" class="nav-link active">Dashboard</a>
             <a href="add-saving.html" class="nav-link">Add Saving</a>
@@ -27,6 +30,7 @@
             <a href="analytics.html" class="nav-link">Analytics</a>
             <a href="gallery.html" class="nav-link">Gallery</a>
             <a href="achievements.html" class="nav-link">Achievements</a>
+            <a href="settings.html" class="nav-link">Settings</a>
         </div>
         <div class="navbar-right">
             <div class="dropdown" id="menuDropdown">
@@ -72,7 +76,7 @@
                 </div>
                 <div>
                     <div class="label">Total Saved</div>
-                    <div class="value" id="savedAmount">₹0</div>
+                    <div class="value amount" id="savedAmount">₹0</div>
                 </div>
             </div>
             <div class="stat-card">
@@ -81,7 +85,7 @@
                 </div>
                 <div>
                     <div class="label">Remaining</div>
-                    <div class="value" id="remainingAmount">₹100,000</div>
+                    <div class="value amount" id="remainingAmount">₹100,000</div>
                 </div>
             </div>
             <div class="stat-card">
@@ -90,7 +94,7 @@
                 </div>
                 <div>
                     <div class="label">Goal</div>
-                    <div class="value" id="goalAmount">₹100,000</div>
+                    <div class="value amount" id="goalAmount">₹100,000</div>
                 </div>
             </div>
             <div class="stat-card">
@@ -99,7 +103,7 @@
                 </div>
                 <div>
                     <div class="label">Today's Saving</div>
-                    <div class="value" id="todaySaving">₹0</div>
+                    <div class="value amount" id="todaySaving">₹0</div>
                 </div>
             </div>
         </div>
@@ -111,7 +115,7 @@
                 </div>
                 <div>
                     <div class="label">Monthly Saving</div>
-                    <div class="value" id="monthlySaving">₹0</div>
+                    <div class="value amount" id="monthlySaving">₹0</div>
                 </div>
             </div>
             <div class="stat-card">
@@ -120,7 +124,7 @@
                 </div>
                 <div>
                     <div class="label">Average Saving</div>
-                    <div class="value" id="averageSaving">₹0</div>
+                    <div class="value amount" id="averageSaving">₹0</div>
                 </div>
             </div>
             <div class="stat-card">
@@ -129,7 +133,7 @@
                 </div>
                 <div>
                     <div class="label">Current Streak</div>
-                    <div class="value" id="currentStreak">0 days</div>
+                    <div class="value number" id="currentStreak">0 days</div>
                 </div>
             </div>
             <div class="stat-card">
@@ -138,7 +142,7 @@
                 </div>
                 <div>
                     <div class="label">Longest Streak</div>
-                    <div class="value" id="longestStreak">0 days</div>
+                    <div class="value number" id="longestStreak">0 days</div>
                 </div>
             </div>
         </div>
@@ -161,15 +165,15 @@
                     <div style="flex: 1;">
                         <div style="margin-bottom: var(--spacing-md);">
                             <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: var(--spacing-xs);">Saved</div>
-                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); font-family: 'Playfair Display', serif;" id="savedAmountSmall">₹0</div>
+                            <div class="amount" style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);" id="savedAmountSmall">₹0</div>
                         </div>
                         <div style="margin-bottom: var(--spacing-md);">
                             <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: var(--spacing-xs);">Remaining</div>
-                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); font-family: 'Playfair Display', serif;" id="remainingAmountSmall">₹100,000</div>
+                            <div class="amount" style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);" id="remainingAmountSmall">₹100,000</div>
                         </div>
                         <div>
                             <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: var(--spacing-xs);">Goal</div>
-                            <div style="font-size: 1.25rem; font-weight: 600; color: var(--text-primary);" id="goalAmountSmall">₹100,000</div>
+                            <div class="amount" style="font-size: 1.25rem; font-weight: 600; color: var(--text-primary);" id="goalAmountSmall">₹100,000</div>
                         </div>
                     </div>
                 </div>
