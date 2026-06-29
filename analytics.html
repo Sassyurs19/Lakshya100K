@@ -36,51 +36,62 @@
     </div>
 
     <a href="#main-content" class="skip-to-content">Skip to main content</a>
-    <nav class="navbar" id="navbar" style="display: none;">
-        <a href="dashboard.html" class="navbar-brand">
-            <span class="brand-name">Lakshya</span>
-            <span class="brand-amount">₹100K</span>
-        </a>
-        <div class="navbar-center">
-            <a href="dashboard.html" class="nav-link">Dashboard</a>
-            <a href="add-saving.html" class="nav-link">Add Saving</a>
-            <a href="history.html" class="nav-link">History</a>
-            <a href="analytics.html" class="nav-link active">Analytics</a>
-            <a href="gallery.html" class="nav-link">Gallery</a>
-            <a href="achievements.html" class="nav-link">Achievements</a>
-            <a href="settings.html" class="nav-link">Settings</a>
-        </div>
-        <div class="navbar-right">
-            <div class="dropdown" id="menuDropdown">
-                <div class="dropdown-toggle" id="menuToggle">
-                    <div class="avatar" id="userAvatar">U</div>
-                    <span class="username-display" id="usernameDisplay">@username</span>
-                </div>
-                <div class="dropdown-menu">
-                    <a href="profile.html" class="dropdown-item">
-                        <i class="fas fa-user"></i>
-                        Profile
-                    </a>
-                    <a href="settings.html" class="dropdown-item">
-                        <i class="fas fa-cog"></i>
-                        Settings
-                    </a>
-                    <div style="border-top: 1px solid var(--border-color); margin: var(--spacing-sm) 0;"></div>
-                    <a href="#" class="dropdown-item logout" id="logoutBtn">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Logout
-                    </a>
-                </div>
+    
+    <div class="page-container" id="navbar" style="display: none;">
+        <!-- Left Sidebar - Profile -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="dashboard.html" class="navbar-brand">
+                    <span class="brand-name">Lakshya</span>
+                    <span class="brand-amount">₹100K</span>
+                </a>
             </div>
-            <button class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </nav>
-
-    <main class="main-content" id="main-content" style="display: none;">
+            
+            <div class="profile-section">
+                <div class="avatar-large" id="userAvatar">U</div>
+                <div class="username-display" id="usernameDisplay">@username</div>
+                <a href="profile.html" class="btn btn-outline btn-sm">View Profile</a>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-link">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+                <a href="add-saving.html" class="nav-link">
+                    <i class="fas fa-plus-circle"></i> Add Saving
+                </a>
+                <a href="history.html" class="nav-link">
+                    <i class="fas fa-history"></i> History
+                </a>
+                <a href="analytics.html" class="nav-link active">
+                    <i class="fas fa-chart-line"></i> Analytics
+                </a>
+                <a href="gallery.html" class="nav-link">
+                    <i class="fas fa-images"></i> Gallery
+                </a>
+                <a href="achievements.html" class="nav-link">
+                    <i class="fas fa-trophy"></i> Achievements
+                </a>
+                <a href="settings.html" class="nav-link">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <button class="icon-btn" id="themeToggle" title="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <a href="#" class="icon-btn" title="Notifications">
+                    <i class="fas fa-bell"></i>
+                </a>
+                <a href="#" class="icon-btn logout" id="logoutBtn" title="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content" id="main-content" style="display: none;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
             <h1>Analytics</h1>
             <select class="form-input" id="timePeriod" style="width: auto; min-width: 150px;">
@@ -607,58 +618,207 @@
             });
         }
 
-        // Navbar scroll effect
-        if (navbar) {
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 20) {
-                    navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('scrolled');
-                }
-            });
-        }
-
-        // Dropdown menu toggle
-        const menuToggle = document.getElementById('menuToggle');
-        const menuDropdown = document.getElementById('menuDropdown');
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('i');
         
-        if (menuToggle && menuDropdown) {
-            menuToggle.addEventListener('click', (e) => {
-                e.stopPropagation();
-                menuDropdown.classList.toggle('open');
-            });
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!menuDropdown.contains(e.target)) {
-                    menuDropdown.classList.remove('open');
-                }
-            });
+        // Load saved theme preference
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
         }
-
-        // Hamburger menu toggle for mobile
-        const hamburger = document.getElementById('hamburger');
-        const navbarCenter = document.querySelector('.navbar-center');
         
-        if (hamburger && navbarCenter) {
-            hamburger.addEventListener('click', () => {
-                navbarCenter.classList.toggle('open');
-            });
-
-            // Close menu when clicking a link
-            navbarCenter.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', () => {
-                    navbarCenter.classList.remove('open');
-                });
-            });
-
-            // Close menu when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!navbarCenter.contains(e.target) && !hamburger.contains(e.target)) {
-                    navbarCenter.classList.remove('open');
-                }
-            });
-        }
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Update icon
+            if (newTheme === 'dark') {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        });
     </script>
+
+    <style>
+        .page-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-right: 1px solid var(--glass-border);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            margin-bottom: 2rem;
+        }
+
+        .profile-section {
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .avatar-large {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            margin: 0 auto 1rem;
+            box-shadow: var(--shadow-lg), var(--glow-primary);
+        }
+
+        .profile-section .username-display {
+            display: block;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .sidebar-nav .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1rem;
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all var(--transition-normal);
+            font-weight: 500;
+        }
+
+        .sidebar-nav .nav-link:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .sidebar-nav .nav-link.active {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .sidebar-nav .nav-link i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            display: flex;
+            gap: 0.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .sidebar-footer .icon-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            text-decoration: none;
+        }
+
+        .sidebar-footer .icon-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .sidebar-footer .icon-btn.logout:hover {
+            background: var(--danger);
+            border-color: var(--danger);
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 240px;
+            }
+
+            .main-content {
+                margin-left: 240px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform var(--transition-slow);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .mobile-menu-toggle {
+                display: flex;
+                position: fixed;
+                bottom: 1rem;
+                right: 1rem;
+                width: 56px;
+                height: 56px;
+                background: var(--gradient-primary);
+                border-radius: 50%;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                box-shadow: var(--shadow-lg), var(--glow-primary);
+                z-index: 1000;
+                cursor: pointer;
+            }
+        }
+    </style>
 </body>
 </html>
