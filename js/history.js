@@ -1,5 +1,5 @@
 import { onAuthStateChange, logoutUser, getCurrentUser } from './auth.js?v=3';
-import { getUserSavingsPaginated, deleteSaving, getUserDocument } from './database.js?v=3';
+import { getUserSavings, getUserSavingsPaginated, deleteSaving, getUserDocument } from './database.js?v=3';
 import { showToast, debounce } from './utils.js?v=3';
 
 let currentPage = 1, lastDoc = null, hasMore = true, allSavings = [];
@@ -42,15 +42,13 @@ async function loadSavings(user, reset = false) {
         currentPage = 1; lastDoc = null; hasMore = true; allSavings = [];
         if ($('savingsGrid')) $('savingsGrid').innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;"><p style="color:var(--text-secondary);font-weight:600;">Loading savings...</p></div>`;
     }
-    const result = await getUserSavingsPaginated(user.uid, savingsPerPage, lastDoc);
+    const result = await getUserSavings(user.uid);
     console.log('[loadSavings] Result:', result);
     if (result.success && result.data.length > 0) {
         const savings = result.data;
-        lastDoc = result.lastDoc;
-        hasMore = result.hasMore;
-        allSavings = [...allSavings, ...savings];
-        renderSavingsGrid(reset ? savings : allSavings);
-        if ($('loadMoreBtn')) $('loadMoreBtn').style.display = hasMore ? 'inline-block' : 'none';
+        allSavings = savings;
+        renderSavingsGrid(allSavings);
+        if ($('loadMoreBtn')) $('loadMoreBtn').style.display = 'none';
     } else if (reset) {
         console.log('[loadSavings] No savings found');
         if ($('savingsGrid')) $('savingsGrid').innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="empty-state-icon"><i data-lucide="receipt"></i></div><h3 class="empty-state-title">No savings recorded yet</h3><p class="empty-state-text">Start your savings journey today by adding your first saving!</p><a href="add-saving.html" class="btn btn-primary">Add Your First Saving</a></div>`;
