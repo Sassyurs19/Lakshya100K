@@ -24,7 +24,7 @@ import {
     serverTimestamp,
     startAfter
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { db } from './firebase-config.js';
+import { db } from './firebase-config.js?v=3';
 
 // Collection names
 const USERS_COLLECTION = 'users';
