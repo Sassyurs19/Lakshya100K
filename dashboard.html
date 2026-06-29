@@ -379,11 +379,17 @@
                                     <div class="activity-text">
                                         <div class="title">${saving.description || saving.category + ' deposit'}</div>
                                         <div class="date">${new Date(saving.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
+                                        ${saving.note ? `<div class="note" style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 2px; font-weight: 500;">${saving.note.length > 30 ? saving.note.substring(0, 30) + '...' : saving.note}</div>` : ''}
                                     </div>
                                 </div>
                                 <div class="activity-amount text-success">₹${saving.amount.toLocaleString()}</div>
                             </div>
                         `).join('')}
+                    </div>
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <a href="history.html" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 6px;">
+                            <i data-lucide="list" style="width: 14px; height: 14px;"></i> View All History
+                        </a>
                     </div>
                 `;
                 document.getElementById('recentSavings').innerHTML = recentSavingsHTML;
