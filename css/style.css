@@ -245,7 +245,17 @@ a:hover {
     text-decoration: none;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 8px;
+}
+
+.brand-logo {
+    width: 28px;
+    height: 28px;
+    transition: transform var(--transition-normal);
+}
+
+.nav-brand:hover .brand-logo {
+    transform: scale(1.08) rotate(5deg);
 }
 
 .nav-brand .brand-blue {
@@ -558,26 +568,9 @@ a:hover {
 /* Dashboard Modular Grid */
 .dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(12, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1.5rem;
     margin-bottom: 2rem;
-}
-
-.widget-card {
-    grid-column: span 3;
-}
-
-.large-widget-card {
-    grid-column: span 6;
-}
-
-@media (max-width: 1024px) {
-    .widget-card { grid-column: span 6; }
-    .large-widget-card { grid-column: span 12; }
-}
-
-@media (max-width: 640px) {
-    .widget-card { grid-column: span 12; }
 }
 
 /* Linear Progress Bar */
