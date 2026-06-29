@@ -4,31 +4,239 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404 - Page Not Found</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <!-- Premium Animated Background -->
+    <div class="premium-background">
+        <div class="gradient-blob gradient-blob-1"></div>
+        <div class="gradient-blob gradient-blob-2"></div>
+        <div class="gradient-blob gradient-blob-3"></div>
+        <div class="grid-pattern"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="mouse-glow" id="mouseGlow"></div>
+    </div>
+
     <!-- 404 Content -->
     <div class="error-container">
-        <div class="card" style="text-align: center; padding: 4rem;">
-            <div style="font-size: 8rem; margin-bottom: 1rem;">404</div>
-            <h2 style="margin-bottom: 1rem;">Page Not Found</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Oops! The page you're looking for doesn't exist.</p>
-            <a href="index.html" class="btn btn-primary">
-                Go Home
-            </a>
+        <div class="error-card">
+            <div class="error-illustration">
+                <div class="error-icon">
+                    <i class="fas fa-compass"></i>
+                </div>
+                <div class="error-float">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div class="error-float" style="animation-delay: 1s;">
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+            <div class="error-code">404</div>
+            <h1 class="error-title">Page Not Found</h1>
+            <p class="error-description">
+                Oops! The page you're looking for doesn't exist or has been moved. Let's get you back on track.
+            </p>
+            <div class="error-actions">
+                <a href="index.html" class="btn btn-primary">
+                    <i class="fas fa-home"></i> Go Home
+                </a>
+                <a href="javascript:history.back()" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Go Back
+                </a>
+            </div>
         </div>
     </div>
 
     <style>
         .error-container {
-            min-height: calc(100vh - 80px);
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 2rem;
         }
+
+        .error-card {
+            width: 100%;
+            max-width: 500px;
+            padding: 3rem;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--glass-shadow);
+            text-align: center;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .error-illustration {
+            position: relative;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .error-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            animation: pulse 3s ease-in-out infinite;
+            box-shadow: var(--shadow-xl), var(--glow-primary);
+        }
+
+        .error-float {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: var(--primary);
+            animation: float 4s ease-in-out infinite;
+            box-shadow: var(--shadow-md);
+        }
+
+        .error-float:nth-child(2) {
+            top: 10%;
+            right: 10%;
+        }
+
+        .error-float:nth-child(3) {
+            bottom: 10%;
+            left: 10%;
+        }
+
+        .error-code {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 6rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            line-height: 1;
+        }
+
+        .error-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .error-description {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .error-card {
+                padding: 2rem;
+            }
+
+            .error-code {
+                font-size: 4rem;
+            }
+
+            .error-title {
+                font-size: 1.5rem;
+            }
+
+            .error-icon {
+                width: 80px;
+                height: 80px;
+                font-size: 2rem;
+            }
+
+            .error-actions {
+                flex-direction: column;
+            }
+
+            .error-actions .btn {
+                width: 100%;
+            }
+        }
     </style>
+
+    <script>
+        // Mouse glow effect
+        const mouseGlow = document.getElementById('mouseGlow');
+        if (mouseGlow) {
+            document.addEventListener('mousemove', (e) => {
+                mouseGlow.style.left = e.clientX + 'px';
+                mouseGlow.style.top = e.clientY + 'px';
+                mouseGlow.classList.add('active');
+            });
+
+            document.addEventListener('mouseleave', () => {
+                mouseGlow.classList.remove('active');
+            });
+        }
+    </script>
 </body>
 </html>

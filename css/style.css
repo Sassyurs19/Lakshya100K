@@ -57,6 +57,32 @@
     --glass-border: rgba(255, 255, 255, 0.18);
     --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.07);
     --glass-blur: blur(12px);
+    
+    /* Glow Effects */
+    --glow-primary: 0 0 20px rgba(37, 99, 235, 0.3);
+}
+
+/* Dark Mode Variables */
+[data-theme="dark"] {
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-tertiary: #64748b;
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --border-color: #334155;
+    --border-color-hover: #475569;
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.6);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.7);
+    
+    --glass-bg: rgba(30, 41, 59, 0.72);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    
+    --glow-primary: 0 0 20px rgba(37, 99, 235, 0.5);
 }
 
 * {
@@ -98,13 +124,13 @@ h6 { font-size: 1rem; }
 
 /* Numbers should use readable sans-serif font */
 .number {
-    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-weight: 600;
     letter-spacing: 0;
 }
 
 .amount {
-    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-weight: 700;
     letter-spacing: -0.01em;
 }
@@ -566,7 +592,7 @@ a:hover {
     font-size: 1.25rem;
     font-weight: 700;
     color: var(--text-primary);
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Inter', sans-serif;
 }
 
 .savings-item .meta {
@@ -711,7 +737,7 @@ a:hover {
 }
 
 .navbar {
-    position: sticky;
+    position: fixed;
     top: 1rem;
     left: 50%;
     transform: translateX(-50%);
@@ -756,7 +782,7 @@ a:hover {
 }
 
 .navbar-brand .brand-amount {
-    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 1.125rem;
     font-weight: 700;
     letter-spacing: -0.01em;
@@ -1265,7 +1291,7 @@ a:hover {
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--primary);
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Inter', sans-serif;
 }
 
 .progress-label {
@@ -1821,6 +1847,12 @@ a:focus {
 }
 
 /* Responsive Breakpoints */
+.main-content {
+    padding: calc(var(--navbar-height) + 2rem) 2rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
 @media (max-width: 1440px) {
     .main-content {
         max-width: 1100px;

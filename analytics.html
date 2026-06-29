@@ -9,6 +9,24 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <!-- Premium Animated Background -->
+    <div class="premium-background">
+        <div class="gradient-blob gradient-blob-1"></div>
+        <div class="gradient-blob gradient-blob-2"></div>
+        <div class="gradient-blob gradient-blob-3"></div>
+        <div class="grid-pattern"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="mouse-glow" id="mouseGlow"></div>
+    </div>
+
     <!-- Loading Screen -->
     <div id="loadingScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; z-index: 9999;">
         <div style="text-align: center;">
@@ -63,40 +81,77 @@
     </nav>
 
     <main class="main-content" id="main-content" style="display: none;">
-        <h1 style="margin-bottom: 2rem;">Analytics</h1>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h1>Analytics</h1>
+            <select class="form-input" id="timePeriod" style="width: auto; min-width: 150px;">
+                <option value="week">This Week</option>
+                <option value="month" selected>This Month</option>
+                <option value="year">This Year</option>
+                <option value="all">All Time</option>
+            </select>
+        </div>
         
         <div class="grid grid-4" style="margin-bottom: 2rem;">
-            <div class="card">
-                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Total Saved</div>
-                <div style="font-size: 1.5rem; font-weight: 600;" id="totalSaved">₹0</div>
+            <div class="card stat-card">
+                <div class="icon icon-blue">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <div>
+                    <div class="label">Total Saved</div>
+                    <div class="value amount" id="totalSaved">₹0</div>
+                </div>
             </div>
             
-            <div class="card">
-                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Average Saving</div>
-                <div style="font-size: 1.5rem; font-weight: 600;" id="averageSaving">₹0</div>
+            <div class="card stat-card">
+                <div class="icon icon-green">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div>
+                    <div class="label">Average Saving</div>
+                    <div class="value amount" id="averageSaving">₹0</div>
+                </div>
             </div>
             
-            <div class="card">
-                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Highest Saving</div>
-                <div style="font-size: 1.5rem; font-weight: 600;" id="highestSaving">₹0</div>
+            <div class="card stat-card">
+                <div class="icon icon-orange">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div>
+                    <div class="label">Highest Saving</div>
+                    <div class="value amount" id="highestSaving">₹0</div>
+                </div>
             </div>
             
-            <div class="card">
-                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Days Active</div>
-                <div style="font-size: 1.5rem; font-weight: 600;" id="daysActive">0</div>
+            <div class="card stat-card">
+                <div class="icon icon-purple">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div>
+                    <div class="label">Days Active</div>
+                    <div class="value number" id="daysActive">0</div>
+                </div>
             </div>
         </div>
 
         <div class="grid grid-2" style="margin-bottom: 2rem;">
             <div class="card">
-                <h3 style="margin-bottom: 1.5rem;">Goal Prediction</h3>
-                <div style="color: var(--text-secondary); font-size: 0.875rem;" id="predictionText">At your current pace, you'll reach ₹100,000 in...</div>
+                <h3 style="margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">Goal Prediction</h3>
+                <div class="prediction-container">
+                    <div class="prediction-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <div class="prediction-text" id="predictionText">At your current pace, you'll reach ₹100,000 in...</div>
+                    <div class="prediction-days" id="predictionDays">Calculating...</div>
+                </div>
             </div>
             
             <div class="card">
-                <h3 style="margin-bottom: 1.5rem;">Savings Trend</h3>
-                <div id="savingsTrend" style="height: 150px; display: flex; align-items: flex-end; gap: 0.5rem;">
+                <h3 style="margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">Savings Trend</h3>
+                <div id="savingsTrend" style="height: 200px; display: flex; align-items: flex-end; gap: 0.5rem; padding: 1rem 0;">
                     <div class="empty-state" style="width: 100%;">
+                        <div class="empty-state-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
                         <h3 class="empty-state-title">No data yet</h3>
                         <p class="empty-state-text">Add savings to see trend</p>
                     </div>
@@ -105,7 +160,7 @@
         </div>
 
         <div class="card" style="margin-bottom: 2rem;">
-            <h3 style="margin-bottom: 1.5rem;">Category Breakdown</h3>
+            <h3 style="margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">Category Breakdown</h3>
             <div id="categoryBreakdown">
                 <div class="empty-state">
                     <div class="empty-state-icon">
@@ -113,6 +168,19 @@
                     </div>
                     <h3 class="empty-state-title">No data yet</h3>
                     <p class="empty-state-text">Add some savings to see category breakdown</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 style="margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">Monthly Overview</h3>
+            <div id="monthlyOverview">
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3 class="empty-state-title">No data yet</h3>
+                    <p class="empty-state-text">Add savings to see monthly overview</p>
                 </div>
             </div>
         </div>
@@ -125,8 +193,58 @@
             margin: 0 auto;
         }
 
-        .category-bar {
+        .prediction-container {
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-lg);
+        }
+
+        .prediction-icon {
+            font-size: 3rem;
+            color: var(--primary);
             margin-bottom: 1rem;
+        }
+
+        .prediction-text {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .prediction-days {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .trend-bar {
+            flex: 1;
+            background: var(--gradient-primary);
+            border-radius: 4px 4px 0 0;
+            transition: height 0.3s ease;
+            min-height: 4px;
+            position: relative;
+        }
+
+        .trend-bar:hover {
+            opacity: 0.8;
+        }
+
+        .trend-bar::after {
+            content: attr(data-amount);
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            color: var(--text-primary);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .category-bar {
+            margin-bottom: 1.5rem;
         }
 
         .category-bar-header {
@@ -137,16 +255,56 @@
         }
 
         .category-bar-fill {
-            height: 8px;
+            height: 12px;
             background: var(--bg-tertiary);
-            border-radius: 4px;
+            border-radius: 6px;
             overflow: hidden;
         }
 
         .category-bar-progress {
             height: 100%;
-            transition: width 0.3s ease;
+            transition: width 0.5s ease;
+            border-radius: 6px;
+        }
+
+        .monthly-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-md);
+            margin-bottom: 0.75rem;
+        }
+
+        .monthly-bar-label {
+            min-width: 80px;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .monthly-bar-fill {
+            flex: 1;
+            height: 8px;
+            background: var(--bg-primary);
             border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .monthly-bar-progress {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .monthly-bar-value {
+            min-width: 80px;
+            text-align: right;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
         }
 
         @media (max-width: 768px) {
@@ -155,6 +313,12 @@
             }
             .grid-4 {
                 grid-template-columns: repeat(2, 1fr);
+            }
+            .prediction-icon {
+                font-size: 2.5rem;
+            }
+            .prediction-days {
+                font-size: 1.25rem;
             }
         }
     </style>
@@ -211,8 +375,10 @@
         }
 
         async function loadAnalytics(user) {
+            const timePeriod = document.getElementById('timePeriod').value;
             const stats = await calculateStatistics(user.uid);
             const userDoc = await getUserDocument(user.uid);
+            const savings = await getUserSavings(user.uid);
             
             if (stats.success) {
                 const data = stats.data;
@@ -230,58 +396,227 @@
                 if (remaining > 0 && dailyAverage > 0) {
                     const estimatedDate = new Date();
                     estimatedDate.setDate(estimatedDate.getDate() + daysRemaining);
-                    document.getElementById('predictionText').textContent = 
-                        `Reach ₹100,000 on ${estimatedDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} (${daysRemaining} days)`;
+                    document.getElementById('predictionDays').textContent = 
+                        `${daysRemaining} days (${estimatedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })})`;
+                } else if (remaining <= 0) {
+                    document.getElementById('predictionDays').textContent = 'Goal reached! 🎉';
                 } else {
-                    document.getElementById('predictionText').textContent = 'Goal reached!';
+                    document.getElementById('predictionDays').textContent = 'Start saving to see prediction';
                 }
             }
             
-            const savings = await getUserSavings(user.uid);
             if (savings.success && savings.data.length > 0) {
-                const categoryTotals = {};
-                let total = 0;
+                // Filter savings based on time period
+                const filteredSavings = filterSavingsByPeriod(savings.data, timePeriod);
                 
-                savings.data.forEach(saving => {
-                    categoryTotals[saving.category] = (categoryTotals[saving.category] || 0) + saving.amount;
-                    total += saving.amount;
-                });
+                // Render savings trend
+                renderSavingsTrend(filteredSavings);
                 
-                const categoryBreakdownHTML = Object.entries(categoryTotals)
-                    .sort((a, b) => b[1] - a[1])
-                    .map(([category, amount]) => {
-                        const percentage = Math.round((amount / total) * 100);
-                        const colors = {
-                            'Cash': '#10b981',
-                            'Bank': '#3b82f6',
-                            'UPI': '#8b5cf6',
-                            'Wallet': '#f59e0b',
-                            'Investment': '#ef4444',
-                            'Other': '#64748b'
-                        };
-                        const color = colors[category] || '#64748b';
-                        
-                        return `
-                            <div class="category-bar">
-                                <div class="category-bar-header">
-                                    <span>${category}</span>
-                                    <span>₹${amount.toLocaleString()} (${percentage}%)</span>
-                                </div>
-                                <div class="category-bar-fill">
-                                    <div class="category-bar-progress" style="width: ${percentage}%; background: ${color};"></div>
-                                </div>
-                            </div>
-                        `;
-                    }).join('');
+                // Render category breakdown
+                renderCategoryBreakdown(filteredSavings);
                 
-                document.getElementById('categoryBreakdown').innerHTML = categoryBreakdownHTML;
+                // Render monthly overview
+                renderMonthlyOverview(savings.data);
             }
         }
+
+        function filterSavingsByPeriod(savings, period) {
+            const now = new Date();
+            return savings.filter(saving => {
+                const savingDate = new Date(saving.date);
+                if (period === 'week') {
+                    const weekAgo = new Date(now);
+                    weekAgo.setDate(weekAgo.getDate() - 7);
+                    return savingDate >= weekAgo;
+                } else if (period === 'month') {
+                    const monthAgo = new Date(now);
+                    monthAgo.setMonth(monthAgo.getMonth() - 1);
+                    return savingDate >= monthAgo;
+                } else if (period === 'year') {
+                    const yearAgo = new Date(now);
+                    yearAgo.setFullYear(yearAgo.getFullYear() - 1);
+                    return savingDate >= yearAgo;
+                }
+                return true;
+            });
+        }
+
+        function renderSavingsTrend(savings) {
+            const container = document.getElementById('savingsTrend');
+            
+            if (savings.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="width: 100%;">
+                        <div class="empty-state-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h3 class="empty-state-title">No data yet</h3>
+                        <p class="empty-state-text">Add savings to see trend</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Group by date and sum amounts
+            const grouped = {};
+            savings.forEach(saving => {
+                const date = saving.date.split('T')[0];
+                grouped[date] = (grouped[date] || 0) + saving.amount;
+            });
+            
+            const sortedDates = Object.keys(grouped).sort();
+            const maxAmount = Math.max(...Object.values(grouped));
+            
+            const trendHTML = sortedDates.map(date => {
+                const amount = grouped[date];
+                const height = (amount / maxAmount) * 100;
+                return `
+                    <div class="trend-bar" style="height: ${height}%;" data-amount="₹${amount.toLocaleString()}"></div>
+                `;
+            }).join('');
+            
+            container.innerHTML = trendHTML;
+        }
+
+        function renderCategoryBreakdown(savings) {
+            const container = document.getElementById('categoryBreakdown');
+            
+            if (savings.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <h3 class="empty-state-title">No data yet</h3>
+                        <p class="empty-state-text">Add some savings to see category breakdown</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const categoryTotals = {};
+            let total = 0;
+            
+            savings.forEach(saving => {
+                categoryTotals[saving.category] = (categoryTotals[saving.category] || 0) + saving.amount;
+                total += saving.amount;
+            });
+            
+            const colors = {
+                'Cash': 'var(--primary)',
+                'Bank': 'var(--success)',
+                'UPI': 'var(--accent)',
+                'Wallet': '#f97316',
+                'Investment': '#0891b2',
+                'Other': '#6b7280'
+            };
+            
+            const categoryHTML = Object.entries(categoryTotals)
+                .sort((a, b) => b[1] - a[1])
+                .map(([category, amount]) => {
+                    const percentage = ((amount / total) * 100).toFixed(1);
+                    const color = colors[category] || 'var(--primary)';
+                    return `
+                        <div class="category-bar">
+                            <div class="category-bar-header">
+                                <span>${category}</span>
+                                <span>₹${amount.toLocaleString()} (${percentage}%)</span>
+                            </div>
+                            <div class="category-bar-fill">
+                                <div class="category-bar-progress" style="width: ${percentage}%; background: ${color};"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            
+            container.innerHTML = categoryHTML;
+        }
+
+        function renderMonthlyOverview(savings) {
+            const container = document.getElementById('monthlyOverview');
+            
+            if (savings.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3 class="empty-state-title">No data yet</h3>
+                        <p class="empty-state-text">Add savings to see monthly overview</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Group by month
+            const monthlyData = {};
+            savings.forEach(saving => {
+                const date = new Date(saving.date);
+                const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                monthlyData[monthKey] = (monthlyData[monthKey] || 0) + saving.amount;
+            });
+            
+            const sortedMonths = Object.keys(monthlyData).sort().slice(-6);
+            const maxAmount = Math.max(...Object.values(monthlyData));
+            
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            
+            const monthlyHTML = sortedMonths.map(monthKey => {
+                const [year, month] = monthKey.split('-');
+                const amount = monthlyData[monthKey];
+                const percentage = (amount / maxAmount) * 100;
+                const monthName = monthNames[parseInt(month) - 1];
+                return `
+                    <div class="monthly-bar">
+                        <div class="monthly-bar-label">${monthName} ${year.slice(2)}</div>
+                        <div class="monthly-bar-fill">
+                            <div class="monthly-bar-progress" style="width: ${percentage}%;"></div>
+                        </div>
+                        <div class="monthly-bar-value">₹${amount.toLocaleString()}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = monthlyHTML;
+        }
+
+        // Time period change handler
+        document.getElementById('timePeriod').addEventListener('change', () => {
+            const user = getCurrentUser();
+            if (user) {
+                loadAnalytics(user);
+            }
+        });
 
         document.getElementById('logoutBtn').addEventListener('click', async (e) => {
             e.preventDefault();
             await logoutUser();
         });
+
+        // Mouse glow effect
+        const mouseGlow = document.getElementById('mouseGlow');
+        if (mouseGlow) {
+            document.addEventListener('mousemove', (e) => {
+                mouseGlow.style.left = e.clientX + 'px';
+                mouseGlow.style.top = e.clientY + 'px';
+                mouseGlow.classList.add('active');
+            });
+
+            document.addEventListener('mouseleave', () => {
+                mouseGlow.classList.remove('active');
+            });
+        }
+
+        // Navbar scroll effect
+        if (navbar) {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+        }
 
         // Dropdown menu toggle
         const menuToggle = document.getElementById('menuToggle');

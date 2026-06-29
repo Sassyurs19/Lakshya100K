@@ -9,6 +9,24 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <!-- Premium Animated Background -->
+    <div class="premium-background">
+        <div class="gradient-blob gradient-blob-1"></div>
+        <div class="gradient-blob gradient-blob-2"></div>
+        <div class="gradient-blob gradient-blob-3"></div>
+        <div class="grid-pattern"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="mouse-glow" id="mouseGlow"></div>
+    </div>
+
     <!-- Loading Screen -->
     <div id="loadingScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; z-index: 9999;">
         <div style="text-align: center;">
@@ -64,88 +82,92 @@
 
     <!-- Main Content -->
     <main class="main-content" id="main-content" style="display: none;">
-        <h2 style="margin-bottom: 2rem;">My Profile</h2>
+        <h1 style="margin-bottom: 2rem; font-family: 'Playfair Display', serif;">My Profile</h1>
         
         <!-- Profile Overview -->
-        <div class="card" style="margin-bottom: 2rem; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;">
-            <div style="position: relative;">
-                <div id="userAvatar" style="width: 120px; height: 120px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 3rem; color: white;">
-                    <i class="fas fa-user"></i>
+        <div class="card profile-overview" style="margin-bottom: 2rem;">
+            <div class="profile-header">
+                <div class="avatar-container">
+                    <div id="userAvatar" class="avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <button type="button" class="avatar-upload-btn" onclick="document.getElementById('profileImageInput').click()">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                    <input type="file" id="profileImageInput" name="profileImage" accept="image/*" style="display: none;" onchange="previewProfileImage(this)">
                 </div>
-            </div>
-            <div style="flex: 1;">
-                <h3 style="font-size: 1.8rem; margin-bottom: 0.5rem;" id="fullName">User Name</h3>
-                <div style="color: var(--text-secondary); margin-bottom: 0.5rem;" id="username">@username</div>
-                <div style="color: var(--text-secondary); margin-bottom: 0.5rem;" id="email">user@email.com</div>
-                <div style="color: var(--text-secondary); margin-bottom: 0.5rem;" id="goalAmount">Goal: ₹100,000</div>
-                <div style="color: var(--text-secondary);" id="joinDate">Joined: January 2024</div>
+                <div class="profile-info">
+                    <h3 class="profile-name" id="fullName">User Name</h3>
+                    <div class="profile-detail" id="username">@username</div>
+                    <div class="profile-detail" id="email">user@email.com</div>
+                    <div class="profile-detail" id="goalAmount">Goal: ₹100,000</div>
+                    <div class="profile-detail" id="joinDate">Joined: January 2024</div>
+                </div>
             </div>
         </div>
 
         <!-- Statistics -->
         <div class="grid grid-4" style="margin-bottom: 2rem;">
-            <div class="card">
-                <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">Total Saved</div>
-                <div style="font-size: 1.5rem; font-weight: 700;" id="totalSaved">₹0</div>
+            <div class="card stat-card">
+                <div class="icon icon-blue">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <div>
+                    <div class="label">Total Saved</div>
+                    <div class="value amount" id="totalSaved">₹0</div>
+                </div>
             </div>
             
-            <div class="card">
-                <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">Achievements</div>
-                <div style="font-size: 1.5rem; font-weight: 700;" id="achievementCount">0</div>
+            <div class="card stat-card">
+                <div class="icon icon-green">
+                    <i class="fas fa-medal"></i>
+                </div>
+                <div>
+                    <div class="label">Achievements</div>
+                    <div class="value number" id="achievementCount">0</div>
+                </div>
             </div>
             
-            <div class="card">
-                <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">Current Streak</div>
-                <div style="font-size: 1.5rem; font-weight: 700;" id="currentStreak">0 days</div>
+            <div class="card stat-card">
+                <div class="icon icon-orange">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <div>
+                    <div class="label">Current Streak</div>
+                    <div class="value number" id="currentStreak">0 days</div>
+                </div>
             </div>
             
-            <div class="card">
-                <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">Days Active</div>
-                <div style="font-size: 1.5rem; font-weight: 700;" id="daysActive">0</div>
+            <div class="card stat-card">
+                <div class="icon icon-purple">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div>
+                    <div class="label">Days Active</div>
+                    <div class="value number" id="daysActive">0</div>
+                </div>
             </div>
         </div>
 
         <!-- Edit Profile -->
         <div class="card" style="margin-bottom: 2rem;">
-            <h3 style="margin-bottom: 1.5rem;">
-                Edit Profile
-            </h3>
+            <h3 style="margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">Edit Profile</h3>
             <form id="editProfileForm">
-                <div class="form-group">
-                    <label class="form-label">Full Name</label>
-                    <input type="text" class="form-input" name="fullName" id="fullNameInput" placeholder="Enter your full name">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Username</label>
-                    <input type="text" class="form-input" name="username" id="usernameInput" placeholder="Enter your username" pattern="[a-zA-Z0-9_]+" title="Only letters, numbers, and underscores">
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-input" name="fullName" id="fullNameInput" placeholder="Enter your full name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Username</label>
+                        <input type="text" class="form-input" name="username" id="usernameInput" placeholder="Enter your username" pattern="[a-zA-Z0-9_]{3,20}" title="3-20 characters, letters, numbers, and underscores only">
+                    </div>
                 </div>
                 
                 <div class="form-group">
                     <label class="form-label">Goal Amount (₹)</label>
                     <input type="number" class="form-input" name="goalAmount" id="goalAmountInput" placeholder="100000" min="1000">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Theme</label>
-                    <select class="form-input" name="theme" id="themeInput">
-                        <option value="light">Light</option>
-                        <option value="dark">Dark</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Profile Image</label>
-                    <div class="file-upload" onclick="document.getElementById('profileImageInput').click()">
-                        <input type="file" id="profileImageInput" name="profileImage" accept="image/*" onchange="previewProfileImage(this)">
-                        <div class="file-upload-icon">
-                            <i class="fas fa-camera"></i>
-                        </div>
-                        <div class="file-upload-text">Click to upload new profile image</div>
-                    </div>
-                    <div id="profileImagePreview" style="margin-top: 1rem; display: none;">
-                        <img id="profilePreviewImg" style="max-width: 150px; max-height: 150px; border-radius: 50%; object-fit: cover;">
-                    </div>
                 </div>
                 
                 <button type="submit" class="btn btn-primary">
@@ -156,9 +178,7 @@
 
         <!-- Change Password -->
         <div class="card" style="margin-bottom: 2rem;">
-            <h3 style="margin-bottom: 1.5rem;">
-                Change Password
-            </h3>
+            <h3 style="margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">Change Password</h3>
             <form id="changePasswordForm">
                 <div class="form-group">
                     <label class="form-label">Current Password</label>
@@ -215,6 +235,79 @@
             margin: 0 auto;
         }
 
+        .profile-overview {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .avatar-container {
+            position: relative;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            box-shadow: var(--shadow-lg), var(--glow-primary);
+            transition: all 0.3s ease;
+        }
+
+        .avatar-upload-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+        }
+
+        .avatar-upload-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-family: 'Playfair Display', serif;
+            color: var(--text-primary);
+        }
+
+        .profile-detail {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
         @media (max-width: 768px) {
             .main-content {
                 padding: 1rem;
@@ -222,6 +315,18 @@
             
             .grid-4 {
                 grid-template-columns: repeat(2, 1fr);
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .avatar {
+                width: 100px;
+                height: 100px;
+                font-size: 2.5rem;
             }
         }
     </style>
@@ -286,12 +391,11 @@
                 document.getElementById('fullName').textContent = userData.fullName || 'User';
                 document.getElementById('username').textContent = `@${userData.username || 'user'}`;
                 document.getElementById('email').textContent = user.email;
-                document.getElementById('goalAmount').textContent = `Goal: ₹${(userData.goalAmount || 100000).toLocaleString()}`;
+                document.getElementById('goalAmount').textContent = `Goal: ₹${(userData.goal || 100000).toLocaleString()}`;
                 
                 document.getElementById('fullNameInput').value = userData.fullName || '';
                 document.getElementById('usernameInput').value = userData.username || '';
-                document.getElementById('goalAmountInput').value = userData.goalAmount || 100000;
-                document.getElementById('themeInput').value = userData.theme || 'light';
+                document.getElementById('goalAmountInput').value = userData.goal || 100000;
                 
                 if (userData.createdAt) {
                     const joinDate = new Date(userData.createdAt);
@@ -299,7 +403,10 @@
                 }
                 
                 if (userData.profileImage) {
-                    document.getElementById('userAvatar').innerHTML = `<img src="${userData.profileImage}" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary);">`;
+                    document.getElementById('userAvatar').innerHTML = `<img src="${userData.profileImage}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+                } else {
+                    const userInitial = (userData.fullName || userData.username || 'U').charAt(0).toUpperCase();
+                    document.getElementById('userAvatar').innerHTML = `<span>${userInitial}</span>`;
                 }
             }
             
@@ -323,8 +430,7 @@
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    document.getElementById('profilePreviewImg').src = e.target.result;
-                    document.getElementById('profileImagePreview').style.display = 'block';
+                    document.getElementById('userAvatar').innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
                 }
                 reader.readAsDataURL(input.files[0]);
             }
@@ -336,9 +442,7 @@
             const user = getCurrentUser();
             const fullName = e.target.fullName.value.trim();
             const username = e.target.username.value.trim();
-            const goalAmount = parseInt(e.target.goalAmount.value);
-            const theme = e.target.theme.value;
-            const profileImageFile = e.target.profileImage.files[0];
+            const goal = parseInt(e.target.goalAmount.value);
             
             // Validate required fields
             if (!fullName) {
@@ -351,7 +455,7 @@
                 return;
             }
             
-            if (goalAmount < 1000) {
+            if (goal < 1000) {
                 showToast('Goal amount must be at least ₹1,000', 'error');
                 return;
             }
@@ -374,18 +478,8 @@
             const updateData = {
                 fullName,
                 username: username.toLowerCase(),
-                goalAmount,
-                theme
+                goal
             };
-            
-            // Note: Profile image upload requires Firebase Storage setup
-            // For now, we'll skip image upload until Storage is configured
-            if (profileImageFile) {
-                showToast('Profile image upload requires Firebase Storage configuration. This feature will be available soon.', 'warning');
-                submitBtn.disabled = false;
-                submitBtn.textContent = originalText;
-                return;
-            }
             
             const result = await updateUserDocument(user.uid, updateData);
             if (result.success) {
@@ -468,6 +562,31 @@
             e.preventDefault();
             await logoutUser();
         });
+
+        // Mouse glow effect
+        const mouseGlow = document.getElementById('mouseGlow');
+        if (mouseGlow) {
+            document.addEventListener('mousemove', (e) => {
+                mouseGlow.style.left = e.clientX + 'px';
+                mouseGlow.style.top = e.clientY + 'px';
+                mouseGlow.classList.add('active');
+            });
+
+            document.addEventListener('mouseleave', () => {
+                mouseGlow.classList.remove('active');
+            });
+        }
+
+        // Navbar scroll effect
+        if (navbar) {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+        }
 
         // Dropdown menu toggle
         const menuToggle = document.getElementById('menuToggle');

@@ -9,6 +9,24 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <!-- Premium Animated Background -->
+    <div class="premium-background">
+        <div class="gradient-blob gradient-blob-1"></div>
+        <div class="gradient-blob gradient-blob-2"></div>
+        <div class="gradient-blob gradient-blob-3"></div>
+        <div class="grid-pattern"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="mouse-glow" id="mouseGlow"></div>
+    </div>
+
     <!-- Loading Screen -->
     <div id="loadingScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; z-index: 9999;">
         <div style="text-align: center;">
@@ -82,6 +100,15 @@
                 <option value="week">This Week</option>
                 <option value="month">This Month</option>
             </select>
+            <select class="form-input filter-select" id="sortFilter">
+                <option value="date-desc">Newest First</option>
+                <option value="date-asc">Oldest First</option>
+                <option value="amount-desc">Highest Amount</option>
+                <option value="amount-asc">Lowest Amount</option>
+            </select>
+            <button class="btn btn-secondary" id="exportBtn" onclick="exportToCSV()">
+                <i class="fas fa-download"></i> Export
+            </button>
         </div>
         
         <div class="savings-cards-grid" id="savingsGrid">
@@ -172,6 +199,7 @@
         let lastDoc = null;
         let hasMore = true;
         const savingsPerPage = 20;
+        let allSavings = []; // Store all savings for filtering
 
         // Timeout fallback - if auth doesn't resolve in 5 seconds, show error
         const authTimeout = setTimeout(() => {
@@ -221,6 +249,7 @@
                 currentPage = 1;
                 lastDoc = null;
                 hasMore = true;
+                allSavings = [];
                 document.getElementById('savingsGrid').innerHTML = `
                     <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
                         <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i>
@@ -234,6 +263,9 @@
                 const savings = result.data;
                 lastDoc = result.lastDoc;
                 hasMore = result.hasMore;
+                
+                // Store all savings for filtering
+                allSavings = [...allSavings, ...savings];
                 
                 const savingsHTML = savings.map((saving) => {
                     return `
@@ -339,45 +371,30 @@
         const searchInput = document.getElementById('searchInput');
         const categoryFilter = document.getElementById('categoryFilter');
         const timeFilter = document.getElementById('timeFilter');
+        const sortFilter = document.getElementById('sortFilter');
 
         const filterSavings = debounce(() => {
             const searchTerm = searchInput.value.toLowerCase();
             const category = categoryFilter.value;
             const time = timeFilter.value;
+            const sort = sortFilter.value;
             
-            const cards = document.querySelectorAll('.saving-card');
-            let visibleCount = 0;
-
-            cards.forEach(card => {
-                const cardCategory = card.dataset.category;
-                const cardDate = card.dataset.date;
-                const cardAmount = card.dataset.amount;
-                const cardNote = card.dataset.note.toLowerCase();
+            let filtered = allSavings.filter(saving => {
+                const matchesSearch = 
+                    saving.amount.toString().includes(searchTerm) ||
+                    saving.category.toLowerCase().includes(searchTerm) ||
+                    (saving.note && saving.note.toLowerCase().includes(searchTerm));
                 
-                let matchesSearch = true;
-                let matchesCategory = true;
+                const matchesCategory = category === 'all' || saving.category === category;
+                
                 let matchesTime = true;
-
-                // Search filter
-                if (searchTerm) {
-                    matchesSearch = cardAmount.includes(searchTerm) || 
-                                    cardCategory.toLowerCase().includes(searchTerm) || 
-                                    cardNote.includes(searchTerm);
-                }
-
-                // Category filter
-                if (category !== 'all') {
-                    matchesCategory = cardCategory === category;
-                }
-
-                // Time filter
                 if (time !== 'all') {
-                    const savingDate = new Date(cardDate);
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
+                    const savingDate = new Date(saving.date);
+                    const now = new Date();
+                    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
                     
                     if (time === 'today') {
-                        matchesTime = savingDate.toDateString() === today.toDateString();
+                        matchesTime = savingDate >= today;
                     } else if (time === 'week') {
                         const weekAgo = new Date(today);
                         weekAgo.setDate(weekAgo.getDate() - 7);
@@ -388,37 +405,111 @@
                         matchesTime = savingDate >= monthAgo;
                     }
                 }
-
-                if (matchesSearch && matchesCategory && matchesTime) {
-                    card.style.display = '';
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
-                }
+                
+                return matchesSearch && matchesCategory && matchesTime;
             });
-
-            // Show empty state if no results
-            if (visibleCount === 0 && cards.length > 0) {
-                const grid = document.getElementById('savingsGrid');
-                if (!document.querySelector('.no-results')) {
-                    const emptyState = document.createElement('div');
-                    emptyState.className = 'empty-state no-results';
-                    emptyState.style.gridColumn = '1 / -1';
-                    emptyState.innerHTML = `
-                        <h3 class="empty-state-title">No matching savings</h3>
-                        <p class="empty-state-text">Try adjusting your search or filters</p>
-                    `;
-                    grid.appendChild(emptyState);
-                }
-            } else {
-                const noResults = document.querySelector('.no-results');
-                if (noResults) noResults.remove();
+            
+            // Sort
+            if (sort === 'date-desc') {
+                filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+            } else if (sort === 'date-asc') {
+                filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+            } else if (sort === 'amount-desc') {
+                filtered.sort((a, b) => b.amount - a.amount);
+            } else if (sort === 'amount-asc') {
+                filtered.sort((a, b) => a.amount - b.amount);
             }
+            
+            // Render filtered results
+            renderSavings(filtered);
         }, 300);
 
         searchInput.addEventListener('input', filterSavings);
         categoryFilter.addEventListener('change', filterSavings);
         timeFilter.addEventListener('change', filterSavings);
+        sortFilter.addEventListener('change', filterSavings);
+
+        function renderSavings(savings) {
+            const grid = document.getElementById('savingsGrid');
+            
+            if (savings.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <div class="empty-state-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3 class="empty-state-title">No savings found</h3>
+                        <p class="empty-state-text">Try adjusting your filters or search terms</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const savingsHTML = savings.map((saving) => {
+                return `
+                        <div class="card saving-card" data-category="${saving.category}" data-date="${saving.date}" data-amount="${saving.amount}" data-note="${saving.note || ''}" data-id="${saving.id}">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                                <div>
+                                    <div style="font-size: 1.75rem; font-weight: 600;">
+                                        ₹${saving.amount.toLocaleString()}
+                                    </div>
+                                    <div style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.25rem;">
+                                        ${new Date(saving.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                                        ${saving.time ? ` at ${saving.time}` : ''}
+                                    </div>
+                                </div>
+                                <div style="background: var(--bg-tertiary); padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); font-size: 0.875rem;">
+                                    ${saving.category}
+                                </div>
+                            </div>
+                            ${saving.note ? `<div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 1rem;">${saving.note}</div>` : ''}
+                            ${saving.imageURL ? `<img src="${saving.imageURL}" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: var(--radius-md); margin-bottom: 1rem; cursor: pointer;" onclick="openModal('${saving.imageURL}')">` : ''}
+                            <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+                                <button onclick="editSaving('${saving.id}')" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button onclick="deleteSavingHandler('${saving.id}')" class="btn btn-danger" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </div>
+                    `;
+            }).join('');
+            
+            grid.innerHTML = savingsHTML;
+        }
+
+        // Export to CSV function
+        window.exportToCSV = function() {
+            if (allSavings.length === 0) {
+                showToast('No savings to export', 'error');
+                return;
+            }
+            
+            const headers = ['Date', 'Time', 'Amount', 'Category', 'Note'];
+            const csvContent = [
+                headers.join(','),
+                ...allSavings.map(saving => [
+                    saving.date,
+                    saving.time || '',
+                    saving.amount,
+                    saving.category,
+                    `"${saving.note || ''}"`
+                ].join(','))
+            ].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `savings_export_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showToast('Export successful!', 'success');
+        };
 
         window.viewSaving = async function(savingId) {
             // Get saving details from the card data
@@ -523,6 +614,31 @@
             e.preventDefault();
             await logoutUser();
         });
+
+        // Mouse glow effect
+        const mouseGlow = document.getElementById('mouseGlow');
+        if (mouseGlow) {
+            document.addEventListener('mousemove', (e) => {
+                mouseGlow.style.left = e.clientX + 'px';
+                mouseGlow.style.top = e.clientY + 'px';
+                mouseGlow.classList.add('active');
+            });
+
+            document.addEventListener('mouseleave', () => {
+                mouseGlow.classList.remove('active');
+            });
+        }
+
+        // Navbar scroll effect
+        if (navbar) {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+        }
 
         // Dropdown menu toggle
         const menuToggle = document.getElementById('menuToggle');
