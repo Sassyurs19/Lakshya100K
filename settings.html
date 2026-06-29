@@ -4,267 +4,230 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings - Lakshya ₹100K</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    <!-- Premium Animated Background -->
-    <div class="premium-background">
-        <div class="gradient-blob gradient-blob-1"></div>
-        <div class="gradient-blob gradient-blob-2"></div>
-        <div class="gradient-blob gradient-blob-3"></div>
-        <div class="grid-pattern"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="mouse-glow" id="mouseGlow"></div>
-    </div>
+    <!-- Premium Background -->
+    <div class="premium-background"></div>
 
     <!-- Loading Screen -->
     <div id="loadingScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; z-index: 9999;">
         <div style="text-align: center;">
-            <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary); margin-bottom: 1rem;"></i>
-            <p style="color: var(--text-secondary);">Loading...</p>
+            <p style="color: var(--text-secondary); font-weight: 600;">Loading...</p>
         </div>
     </div>
 
-    <a href="#main-content" class="skip-to-content">Skip to main content</a>
-    
-    <div class="page-container" id="navbar" style="display: none;">
-        <!-- Left Sidebar - Profile -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <a href="dashboard.html" class="navbar-brand">
-                    <span class="brand-name">Lakshya</span>
-                    <span class="brand-amount">₹100K</span>
-                </a>
+    <!-- Sticky Top Navigation Bar -->
+    <nav class="top-nav" id="navbar" style="display: none;">
+        <div class="nav-container">
+            <a href="dashboard.html" class="nav-brand">
+                <span>Lakshya</span><span class="brand-blue">₹100K</span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="dashboard.html" class="nav-link">Home</a>
+                <a href="add-saving.html" class="nav-link">Add Saving</a>
+                <a href="history.html" class="nav-link">History</a>
+                <a href="analytics.html" class="nav-link">Analytics</a>
+                <a href="gallery.html" class="nav-link">Gallery</a>
+                <a href="achievements.html" class="nav-link">Achievements</a>
+                <a href="settings.html" class="nav-link active">Settings</a>
             </div>
             
-            <div class="profile-section">
-                <div class="avatar-large" id="userAvatar">U</div>
-                <div class="username-display" id="usernameDisplay">@username</div>
-                <a href="profile.html" class="btn btn-outline btn-sm">View Profile</a>
-            </div>
-            
-            <nav class="sidebar-nav">
-                <a href="dashboard.html" class="nav-link">
-                    <i class="fas fa-home"></i> Dashboard
-                </a>
-                <a href="add-saving.html" class="nav-link">
-                    <i class="fas fa-plus-circle"></i> Add Saving
-                </a>
-                <a href="history.html" class="nav-link">
-                    <i class="fas fa-history"></i> History
-                </a>
-                <a href="analytics.html" class="nav-link">
-                    <i class="fas fa-chart-line"></i> Analytics
-                </a>
-                <a href="gallery.html" class="nav-link">
-                    <i class="fas fa-images"></i> Gallery
-                </a>
-                <a href="achievements.html" class="nav-link">
-                    <i class="fas fa-trophy"></i> Achievements
-                </a>
-                <a href="settings.html" class="nav-link active">
-                    <i class="fas fa-cog"></i> Settings
-                </a>
-            </nav>
-            
-            <div class="sidebar-footer">
-                <button class="icon-btn" id="themeToggle" title="Toggle Theme">
-                    <i class="fas fa-moon"></i>
+            <div class="nav-right">
+                <button class="nav-icon-btn" id="themeToggle" title="Toggle Theme">
+                    <i data-lucide="moon"></i>
                 </button>
-                <a href="#" class="icon-btn" title="Notifications">
-                    <i class="fas fa-bell"></i>
-                </a>
-                <a href="#" class="icon-btn logout" id="logoutBtn" title="Logout">
-                    <i class="fas fa-sign-out-alt"></i>
-                </a>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <button class="avatar-btn" id="avatarDropdownToggle">
+                        <div class="avatar-circle" id="userAvatar">U</div>
+                    </button>
+                    <div class="dropdown-menu">
+                        <div style="padding: 12px 16px; font-size: 0.8rem; color: var(--text-secondary); font-weight: 600;" id="usernameDisplay">@username</div>
+                        <div class="dropdown-divider"></div>
+                        <a href="profile.html" class="dropdown-item">
+                            <i data-lucide="user"></i> Profile
+                        </a>
+                        <a href="settings.html" class="dropdown-item">
+                            <i data-lucide="settings"></i> Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item logout" id="logoutBtn">
+                            <i data-lucide="log-out"></i> Logout
+                        </a>
+                    </div>
+                </div>
+                <button class="hamburger" id="mobileMenuBtn">
+                    <i data-lucide="menu"></i>
+                </button>
             </div>
-        </aside>
-
-        <!-- Mobile Menu Toggle -->
-        <div class="mobile-menu-toggle" id="mobileMenuToggle" title="Toggle Menu">
-            <i class="fas fa-bars"></i>
         </div>
-        
+    </nav>
+    
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-header">
+            <a href="dashboard.html" class="nav-brand">
+                <span>Lakshya</span><span class="brand-blue">₹100K</span>
+            </a>
+            <button class="close-btn" id="closeDrawerBtn">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <div class="drawer-links">
+            <a href="dashboard.html" class="drawer-link">Home</a>
+            <a href="add-saving.html" class="drawer-link">Add Saving</a>
+            <a href="history.html" class="drawer-link">History</a>
+            <a href="analytics.html" class="drawer-link">Analytics</a>
+            <a href="gallery.html" class="drawer-link">Gallery</a>
+            <a href="achievements.html" class="drawer-link">Achievements</a>
+            <a href="settings.html" class="drawer-link active">Settings</a>
+            <div class="drawer-divider"></div>
+            <a href="profile.html" class="drawer-link"><i data-lucide="user" style="display:inline; vertical-align:middle; margin-right:8px;"></i>Profile</a>
+            <a href="settings.html" class="drawer-link"><i data-lucide="settings" style="display:inline; vertical-align:middle; margin-right:8px;"></i>Settings</a>
+            <a href="#" class="drawer-link logout" id="drawerLogoutBtn"><i data-lucide="log-out" style="display:inline; vertical-align:middle; margin-right:8px;"></i>Logout</a>
+        </div>
+    </div>
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+
+    <div class="page-container">
         <!-- Main Content -->
         <main class="main-content" id="main-content" style="display: none;">
-        <h1 style="margin-bottom: 2rem; font-family: 'Playfair Display', serif;">Settings</h1>
-        
-        <form id="settingsForm">
-            <!-- Profile Settings -->
-            <div class="card" style="margin-bottom: 2rem;">
-                <h3 style="margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">Profile Settings</h3>
-                <div class="grid grid-2">
-                    <div class="form-group">
-                        <label class="form-label">Full Name</label>
-                        <input type="text" class="form-input" name="fullName" id="fullNameInput" placeholder="Your full name">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Username</label>
-                        <input type="text" class="form-input" name="username" id="usernameInput" placeholder="Your username" pattern="[a-zA-Z0-9_]{3,20}" title="3-20 characters, letters, numbers, and underscores only">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Email</label>
-                    <input type="email" class="form-input" name="email" id="emailInput" placeholder="your@email.com" disabled>
-                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">
-                        Email cannot be changed. Contact support if needed.
-                    </div>
-                </div>
-            </div>
+            <h1 style="margin-bottom: 2rem; font-size: 1.75rem; letter-spacing: -0.02em;">Settings</h1>
             
-            <div class="grid grid-2" style="margin-bottom: 2rem;">
-                <!-- Goal Settings -->
-                <div class="card">
-                    <h3 style="margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">
-                        Goal Settings
-                    </h3>
-                    <div class="form-group">
-                        <label class="form-label">Goal Amount</label>
-                        <input type="number" class="form-input" name="goal" id="goalInput" placeholder="Enter your goal amount" min="1">
+            <form id="settingsForm">
+                <!-- Profile Settings -->
+                <div class="card" style="margin-bottom: 2rem; padding: 24px;">
+                    <h3 style="margin-bottom: 1.5rem; font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em;">Profile Settings</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-input" name="fullName" id="fullNameInput" placeholder="Your full name">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-input" name="username" id="usernameInput" placeholder="Your username" pattern="[a-zA-Z0-9_]{3,20}" title="3-20 characters, letters, numbers, and underscores only">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Currency Symbol</label>
-                        <select class="form-input" name="currency" id="currencyInput">
-                            <option value="₹">₹ (Rupee)</option>
-                            <option value="$">$ (Dollar)</option>
-                            <option value="€">€ (Euro)</option>
-                            <option value="£">£ (Pound)</option>
-                        </select>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-input" name="email" id="emailInput" placeholder="your@email.com" disabled>
+                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">
+                            Email cannot be changed. Contact support if needed.
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Theme Settings -->
-                <div class="card">
-                    <h3 style="margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">
-                        Appearance
-                    </h3>
-                    <div class="form-group">
-                        <label class="form-label">Theme Preference</label>
-                        <select class="form-input" name="theme" id="themeInput">
-                            <option value="light">Light Mode</option>
-                            <option value="dark">Dark Mode</option>
-                            <option value="auto">Auto (System)</option>
-                        </select>
+                <div class="dashboard-grid" style="margin-bottom: 2rem;">
+                    <!-- Goal Settings -->
+                    <div class="card" style="padding: 24px;">
+                        <h3 style="margin-bottom: 1.5rem; font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em;">Goal Settings</h3>
+                        <div class="form-group">
+                            <label class="form-label">Goal Amount</label>
+                            <input type="number" class="form-input" name="goal" id="goalInput" placeholder="Enter your goal amount" min="1">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label">Currency Symbol</label>
+                            <select class="form-select" name="currency" id="currencyInput">
+                                <option value="₹">₹ (Rupee)</option>
+                                <option value="$">$ (Dollar)</option>
+                                <option value="€">€ (Euro)</option>
+                                <option value="£">£ (Pound)</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Accent Color</label>
-                        <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-                            <button type="button" class="color-option" data-color="primary" style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary); border: 2px solid var(--border-color); cursor: pointer;"></button>
-                            <button type="button" class="color-option" data-color="success" style="width: 40px; height: 40px; border-radius: 50%; background: var(--success); border: 2px solid var(--border-color); cursor: pointer;"></button>
-                            <button type="button" class="color-option" data-color="accent" style="width: 40px; height: 40px; border-radius: 50%; background: var(--accent); border: 2px solid var(--border-color); cursor: pointer;"></button>
-                            <button type="button" class="color-option" data-color="orange" style="width: 40px; height: 40px; border-radius: 50%; background: #f97316; border: 2px solid var(--border-color); cursor: pointer;"></button>
+                    
+                    <!-- Theme Settings -->
+                    <div class="card" style="padding: 24px;">
+                        <h3 style="margin-bottom: 1.5rem; font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em;">Appearance</h3>
+                        <div class="form-group">
+                            <label class="form-label">Theme Preference</label>
+                            <select class="form-select" name="theme" id="themeInput">
+                                <option value="light">Light Mode</option>
+                                <option value="dark">Dark Mode</option>
+                                <option value="auto">Auto (System)</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label">Accent Color</label>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 8px;">
+                                <button type="button" class="color-option" data-color="primary" style="width: 36px; height: 36px; border-radius: 50%; background: var(--primary); border: 2px solid var(--border-color); cursor: pointer;"></button>
+                                <button type="button" class="color-option" data-color="success" style="width: 36px; height: 36px; border-radius: 50%; background: var(--success); border: 2px solid var(--border-color); cursor: pointer;"></button>
+                                <button type="button" class="color-option" data-color="accent" style="width: 36px; height: 36px; border-radius: 50%; background: var(--accent); border: 2px solid var(--border-color); cursor: pointer;"></button>
+                                <button type="button" class="color-option" data-color="orange" style="width: 36px; height: 36px; border-radius: 50%; background: #f97316; border: 2px solid var(--border-color); cursor: pointer;"></button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Notification Settings -->
-            <div class="card" style="margin-bottom: 2rem;">
-                <h3 style="margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">Notifications</h3>
-                <div class="grid grid-2">
-                    <div class="form-group">
-                        <label class="form-label">Daily Reminder Time</label>
-                        <input type="time" class="form-input" name="reminderTime" id="reminderTimeInput">
+                
+                <!-- Notification Settings -->
+                <div class="card" style="margin-bottom: 2rem; padding: 24px;">
+                    <h3 style="margin-bottom: 1.5rem; font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em;">Notifications</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label">Daily Reminder Time</label>
+                            <input type="time" class="form-input" name="reminderTime" id="reminderTimeInput">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: center;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: var(--text-primary);">
+                                <input type="checkbox" name="enableNotifications" id="enableNotifications">
+                                <span>Enable Browser Notifications</span>
+                            </label>
+                            <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">
+                                Receive daily reminders to save
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                            <input type="checkbox" name="enableNotifications" id="enableNotifications">
-                            <span>Enable Browser Notifications</span>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: var(--text-primary);">
+                            <input type="checkbox" name="milestoneAlerts" id="milestoneAlerts">
+                            <span>Milestone Achievement Alerts</span>
                         </label>
-                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">
-                            Receive daily reminders to save
+                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">
+                            Get notified when you reach savings milestones
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                        <input type="checkbox" name="milestoneAlerts" id="milestoneAlerts">
-                        <span>Milestone Achievement Alerts</span>
-                    </label>
-                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">
-                        Get notified when you reach savings milestones
+                
+                <!-- Security Settings -->
+                <div class="card" style="margin-bottom: 2rem; padding: 24px;">
+                    <h3 style="margin-bottom: 1.5rem; font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em;">Security</h3>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button type="button" onclick="changePassword()" class="btn btn-secondary" style="height: 38px;">
+                            <i data-lucide="key" style="width:16px; height:16px; display:inline-block; margin-right:4px;"></i> Change Password
+                        </button>
+                        <button type="button" class="btn btn-secondary" style="opacity: 0.6; cursor: not-allowed; height: 38px;" disabled>
+                            <i data-lucide="shield" style="width:16px; height:16px; display:inline-block; margin-right:4px;"></i> Enable 2FA (Coming Soon)
+                        </button>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Security Settings -->
-            <div class="card" style="margin-bottom: 2rem;">
-                <h3 style="margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">Security</h3>
-                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                    <button type="button" onclick="changePassword()" class="btn btn-secondary">
-                        <i class="fas fa-key"></i> Change Password
-                    </button>
-                    <button type="button" onclick="enable2FA()" class="btn btn-secondary" style="opacity: 0.6; cursor: not-allowed;" disabled>
-                        <i class="fas fa-shield-alt"></i> Enable 2FA (Coming Soon)
-                    </button>
+                
+                <!-- Data Management -->
+                <div class="card" style="margin-bottom: 2rem; padding: 24px;">
+                    <h3 style="margin-bottom: 1.5rem; font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em;">Data Management</h3>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button type="button" onclick="exportData()" class="btn btn-secondary" style="height: 38px;">
+                            <i data-lucide="download" style="width:16px; height:16px; display:inline-block; margin-right:4px;"></i> Export Data
+                        </button>
+                        <button type="button" onclick="backupData()" class="btn btn-secondary" style="height: 38px;">
+                            <i data-lucide="cloud-upload" style="width:16px; height:16px; display:inline-block; margin-right:4px;"></i> Backup
+                        </button>
+                        <button type="button" onclick="deleteAccount()" class="btn btn-danger" style="height: 38px;">
+                            <i data-lucide="trash" style="width:16px; height:16px; display:inline-block; margin-right:4px;"></i> Delete Account
+                        </button>
+                    </div>
+                    <div style="margin-top: 1rem; padding: 12px 16px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-md); font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4;">
+                        Export and backup features allow you to save your data locally. Account deletion is permanent and cannot be undone.
+                    </div>
                 </div>
-            </div>
-            
-            <!-- Data Management -->
-            <div class="card" style="margin-bottom: 2rem;">
-                <h3 style="margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">Data Management</h3>
-                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                    <button type="button" onclick="exportData()" class="btn btn-secondary">
-                        <i class="fas fa-download"></i> Export Data
-                    </button>
-                    <button type="button" onclick="backupData()" class="btn btn-secondary">
-                        <i class="fas fa-cloud-upload-alt"></i> Backup
-                    </button>
-                    <button type="button" onclick="deleteAccount()" class="btn btn-danger">
-                        <i class="fas fa-trash"></i> Delete Account
-                    </button>
-                </div>
-                <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-tertiary); border-radius: var(--radius-md); font-size: 0.875rem; color: var(--text-secondary);">
-                    <i class="fas fa-info-circle"></i> Export and backup features allow you to save your data locally. Account deletion is permanent and cannot be undone.
-                </div>
-            </div>
-            
-            <button type="submit" class="btn btn-primary">
-                <i class="fas fa-save"></i> Save Settings
-            </button>
-        </form>
-    </main>
-
-    <style>
-        .main-content {
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .color-option {
-            transition: all 0.3s ease;
-        }
-
-        .color-option:hover {
-            transform: scale(1.1);
-        }
-
-        .color-option.selected {
-            border-color: var(--text-primary) !important;
-            box-shadow: 0 0 0 3px var(--bg-primary), 0 0 0 5px var(--text-primary);
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                padding: 1rem;
-            }
-            
-            .grid-2 {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+                
+                <button type="submit" class="btn btn-primary" style="height: 44px; padding: 0 24px;">
+                    Save Settings
+                </button>
+            </form>
+        </main>
+    </div>
 
     <script type="module">
         import { onAuthStateChange, logoutUser, getCurrentUser } from './js/auth.js';
@@ -275,13 +238,12 @@
         const navbar = document.getElementById('navbar');
         const mainContent = document.getElementById('main-content');
 
-        // Timeout fallback - if auth doesn't resolve in 5 seconds, show error
+        // Timeout fallback
         const authTimeout = setTimeout(() => {
-            console.error('Auth state timeout - Firebase may not be initialized');
+            console.error('Auth state timeout');
             loadingScreen.innerHTML = `
                 <div style="text-align: center; padding: 2rem;">
-                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: var(--danger); margin-bottom: 1rem;"></i>
-                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">Unable to connect. Please check your internet connection.</p>
+                    <p style="color: var(--danger); font-weight: 700; margin-bottom: 1rem;">Unable to connect. Please check your connection.</p>
                     <button onclick="window.location.reload()" class="btn btn-primary">Retry</button>
                 </div>
             `;
@@ -333,6 +295,7 @@
                 document.getElementById('enableNotifications').checked = userData.settings?.enableNotifications || false;
                 document.getElementById('milestoneAlerts').checked = userData.settings?.milestoneAlerts !== false;
             }
+            lucide.createIcons();
         }
 
         // Save settings
@@ -372,7 +335,6 @@
                 return;
             }
             
-            // This would need to be implemented in auth.js
             showToast('Password change feature coming soon', 'info');
         };
 
@@ -384,7 +346,6 @@
                 return;
             }
             
-            // This would need to be implemented in auth.js
             showToast('Account deletion feature coming soon', 'info');
         };
 
@@ -393,7 +354,6 @@
             option.addEventListener('click', () => {
                 document.querySelectorAll('.color-option').forEach(o => o.classList.remove('selected'));
                 option.classList.add('selected');
-                // Save color preference
                 const color = option.dataset.color;
                 showToast(`Accent color changed to ${color}`, 'success');
             });
@@ -405,14 +365,14 @@
             const savings = await getUserSavings(user.uid);
             
             if (savings.success && savings.data.length > 0) {
-                const exportData = savings.data.map(s => ({
+                const exportDataVal = savings.data.map(s => ({
                     Date: s.date,
                     Time: s.time,
                     Amount: s.amount,
                     Category: s.category,
                     Note: s.note
                 }));
-                exportToCSV(exportData, 'savings-export.csv');
+                exportToCSV(exportDataVal, 'savings-export.csv');
                 showToast('Data exported successfully!', 'success');
             } else {
                 showToast('No data to export', 'warning');
@@ -424,36 +384,55 @@
             showToast('Backup feature coming soon', 'info');
         };
 
-        // Logout handler
+        // Nav Dropdown and Drawer functionality
+        const avatarBtn = document.getElementById('avatarDropdownToggle');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileDrawer = document.getElementById('mobileDrawer');
+        const drawerOverlay = document.getElementById('drawerOverlay');
+        const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+
+        if (avatarBtn && profileDropdown) {
+            avatarBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('open');
+            });
+            document.addEventListener('click', () => {
+                profileDropdown.classList.remove('open');
+            });
+        }
+
+        if (mobileMenuBtn && mobileDrawer && drawerOverlay) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileDrawer.classList.add('open');
+                drawerOverlay.classList.add('open');
+            });
+            
+            const closeDrawer = () => {
+                mobileDrawer.classList.remove('open');
+                drawerOverlay.classList.remove('open');
+            };
+            
+            drawerOverlay.addEventListener('click', closeDrawer);
+            if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', closeDrawer);
+        }
+
         document.getElementById('logoutBtn').addEventListener('click', async (e) => {
             e.preventDefault();
             await logoutUser();
         });
-
-        // Mouse glow effect
-        const mouseGlow = document.getElementById('mouseGlow');
-        if (mouseGlow) {
-            document.addEventListener('mousemove', (e) => {
-                mouseGlow.style.left = e.clientX + 'px';
-                mouseGlow.style.top = e.clientY + 'px';
-                mouseGlow.classList.add('active');
-            });
-
-            document.addEventListener('mouseleave', () => {
-                mouseGlow.classList.remove('active');
-            });
-        }
+        
+        document.getElementById('drawerLogoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await logoutUser();
+        });
 
         // Theme toggle functionality
         const themeToggle = document.getElementById('themeToggle');
-        const themeIcon = themeToggle.querySelector('i');
-        
-        // Load saved theme preference
         const savedTheme = localStorage.getItem('theme') || 'light';
         if (savedTheme === 'dark') {
             document.documentElement.setAttribute('data-theme', 'dark');
-            themeIcon.classList.remove('fa-moon');
-            themeIcon.classList.add('fa-sun');
+            themeToggle.innerHTML = '<i data-lucide="sun"></i>';
         }
         
         themeToggle.addEventListener('click', () => {
@@ -463,205 +442,27 @@
             document.documentElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             
-            // Update icon
             if (newTheme === 'dark') {
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
+                themeToggle.innerHTML = '<i data-lucide="sun"></i>';
             } else {
-                themeIcon.classList.remove('fa-sun');
-                themeIcon.classList.add('fa-moon');
+                themeToggle.innerHTML = '<i data-lucide="moon"></i>';
             }
+            lucide.createIcons();
         });
-
-        // Mobile menu toggle
-        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-        const sidebar = document.querySelector('.sidebar');
-        
-        if (mobileMenuToggle && sidebar) {
-            mobileMenuToggle.addEventListener('click', (e) => {
-                e.stopPropagation();
-                sidebar.classList.toggle('open');
-            });
-            
-            // Close sidebar when clicking outside
-            document.addEventListener('click', (e) => {
-                if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== mobileMenuToggle) {
-                    sidebar.classList.remove('open');
-                }
-            });
-        }
     </script>
 
     <style>
-        .page-container {
-            display: flex;
-            min-height: 100vh;
+        .color-option {
+            transition: all var(--transition-fast);
         }
 
-        .sidebar {
-            width: 280px;
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border-right: 1px solid var(--glass-border);
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            left: 0;
-            top: 0;
-            height: 100vh;
-            overflow-y: auto;
-            z-index: 100;
+        .color-option:hover {
+            transform: scale(1.08);
         }
 
-        .sidebar-header {
-            margin-bottom: 2rem;
-        }
-
-        .profile-section {
-            text-align: center;
-            padding: 1.5rem 0;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .avatar-large {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: var(--gradient-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: white;
-            margin: 0 auto 1rem;
-            box-shadow: var(--shadow-lg), var(--glow-primary);
-        }
-
-        .profile-section .username-display {
-            display: block;
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 0.75rem;
-        }
-
-        .sidebar-nav {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .sidebar-nav .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.875rem 1rem;
-            border-radius: var(--radius-md);
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: all var(--transition-normal);
-            font-weight: 500;
-        }
-
-        .sidebar-nav .nav-link:hover {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-        }
-
-        .sidebar-nav .nav-link.active {
-            background: var(--gradient-primary);
-            color: white;
-        }
-
-        .sidebar-nav .nav-link i {
-            width: 20px;
-            text-align: center;
-        }
-
-        .sidebar-footer {
-            display: flex;
-            gap: 0.5rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .sidebar-footer .icon-btn {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.75rem;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all var(--transition-normal);
-            text-decoration: none;
-        }
-
-        .sidebar-footer .icon-btn:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .sidebar-footer .icon-btn.logout:hover {
-            background: var(--danger);
-            border-color: var(--danger);
-        }
-
-        .main-content {
-            flex: 1;
-            margin-left: 280px;
-            padding: 2rem;
-        }
-
-        @media (max-width: 1024px) {
-            .sidebar {
-                width: 240px;
-            }
-
-            .main-content {
-                margin-left: 240px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-                transition: transform var(--transition-slow);
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding: 1rem;
-            }
-
-            .mobile-menu-toggle {
-                display: flex;
-                position: fixed;
-                bottom: 1rem;
-                right: 1rem;
-                width: 56px;
-                height: 56px;
-                background: var(--gradient-primary);
-                border-radius: 50%;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                box-shadow: var(--shadow-lg), var(--glow-primary);
-                z-index: 1000;
-                cursor: pointer;
-            }
+        .color-option.selected {
+            border-color: var(--text-primary) !important;
+            box-shadow: 0 0 0 2px var(--bg-card), 0 0 0 4px var(--primary);
         }
     </style>
 </body>

@@ -4,195 +4,179 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Saving - Lakshya ₹100K</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    <!-- Premium Animated Background -->
-    <div class="premium-background">
-        <div class="gradient-blob gradient-blob-1"></div>
-        <div class="gradient-blob gradient-blob-2"></div>
-        <div class="gradient-blob gradient-blob-3"></div>
-        <div class="grid-pattern"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="mouse-glow" id="mouseGlow"></div>
-    </div>
+    <!-- Premium Background -->
+    <div class="premium-background"></div>
 
     <!-- Loading Screen -->
     <div id="loadingScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; z-index: 9999;">
         <div style="text-align: center;">
-            <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary); margin-bottom: 1rem;"></i>
-            <p style="color: var(--text-secondary);">Loading...</p>
+            <p style="color: var(--text-secondary); font-weight: 600;">Loading...</p>
         </div>
     </div>
 
-    <a href="#main-content" class="skip-to-content">Skip to main content</a>
-    
-    <div class="page-container" id="navbar" style="display: none;">
-        <!-- Left Sidebar - Profile -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <a href="dashboard.html" class="navbar-brand">
-                    <span class="brand-name">Lakshya</span>
-                    <span class="brand-amount">₹100K</span>
-                </a>
+    <!-- Sticky Top Navigation Bar -->
+    <nav class="top-nav" id="navbar" style="display: none;">
+        <div class="nav-container">
+            <a href="dashboard.html" class="nav-brand">
+                <span>Lakshya</span><span class="brand-blue">₹100K</span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="dashboard.html" class="nav-link">Home</a>
+                <a href="add-saving.html" class="nav-link active">Add Saving</a>
+                <a href="history.html" class="nav-link">History</a>
+                <a href="analytics.html" class="nav-link">Analytics</a>
+                <a href="gallery.html" class="nav-link">Gallery</a>
+                <a href="achievements.html" class="nav-link">Achievements</a>
+                <a href="settings.html" class="nav-link">Settings</a>
             </div>
             
-            <div class="profile-section">
-                <div class="avatar-large" id="userAvatar">U</div>
-                <div class="username-display" id="usernameDisplay">@username</div>
-                <a href="profile.html" class="btn btn-outline btn-sm">View Profile</a>
-            </div>
-            
-            <nav class="sidebar-nav">
-                <a href="dashboard.html" class="nav-link">
-                    <i class="fas fa-home"></i> Dashboard
-                </a>
-                <a href="add-saving.html" class="nav-link active">
-                    <i class="fas fa-plus-circle"></i> Add Saving
-                </a>
-                <a href="history.html" class="nav-link">
-                    <i class="fas fa-history"></i> History
-                </a>
-                <a href="analytics.html" class="nav-link">
-                    <i class="fas fa-chart-line"></i> Analytics
-                </a>
-                <a href="gallery.html" class="nav-link">
-                    <i class="fas fa-images"></i> Gallery
-                </a>
-                <a href="achievements.html" class="nav-link">
-                    <i class="fas fa-trophy"></i> Achievements
-                </a>
-                <a href="settings.html" class="nav-link">
-                    <i class="fas fa-cog"></i> Settings
-                </a>
-            </nav>
-            
-            <div class="sidebar-footer">
-                <button class="icon-btn" id="themeToggle" title="Toggle Theme">
-                    <i class="fas fa-moon"></i>
+            <div class="nav-right">
+                <button class="nav-icon-btn" id="themeToggle" title="Toggle Theme">
+                    <i data-lucide="moon"></i>
                 </button>
-                <a href="#" class="icon-btn" title="Notifications">
-                    <i class="fas fa-bell"></i>
-                </a>
-                <a href="#" class="icon-btn logout" id="logoutBtn" title="Logout">
-                    <i class="fas fa-sign-out-alt"></i>
-                </a>
-            </div>
-        </aside>
-
-        <!-- Mobile Menu Toggle -->
-        <div class="mobile-menu-toggle" id="mobileMenuToggle" title="Toggle Menu">
-            <i class="fas fa-bars"></i>
-        </div>
-        
-        <!-- Main Content -->
-    <main class="main-content" id="main-content" style="display: none;">
-        <div class="card" style="max-width: 600px; margin: 0 auto;">
-            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
-                <a href="dashboard.html" class="btn btn-secondary btn-sm">
-                    <i class="fas fa-arrow-left"></i> Back
-                </a>
-                <h2 style="margin: 0;">
-                    Add New Saving
-                </h2>
-            </div>
-            
-            <form id="addSavingForm">
-                <div class="form-group">
-                    <label class="form-label">Amount *</label>
-                    <input type="number" class="form-input" name="amount" required placeholder="Enter amount" min="1" max="100000000">
-                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">
-                        Maximum: ₹1,00,00,000
+                <div class="profile-dropdown" id="profileDropdown">
+                    <button class="avatar-btn" id="avatarDropdownToggle">
+                        <div class="avatar-circle" id="userAvatar">U</div>
+                    </button>
+                    <div class="dropdown-menu">
+                        <div style="padding: 12px 16px; font-size: 0.8rem; color: var(--text-secondary); font-weight: 600;" id="usernameDisplay">@username</div>
+                        <div class="dropdown-divider"></div>
+                        <a href="profile.html" class="dropdown-item">
+                            <i data-lucide="user"></i> Profile
+                        </a>
+                        <a href="settings.html" class="dropdown-item">
+                            <i data-lucide="settings"></i> Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item logout" id="logoutBtn">
+                            <i data-lucide="log-out"></i> Logout
+                        </a>
                     </div>
                 </div>
+                <button class="hamburger" id="mobileMenuBtn">
+                    <i data-lucide="menu"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-header">
+            <a href="dashboard.html" class="nav-brand">
+                <span>Lakshya</span><span class="brand-blue">₹100K</span>
+            </a>
+            <button class="close-btn" id="closeDrawerBtn">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <div class="drawer-links">
+            <a href="dashboard.html" class="drawer-link">Home</a>
+            <a href="add-saving.html" class="drawer-link active">Add Saving</a>
+            <a href="history.html" class="drawer-link">History</a>
+            <a href="analytics.html" class="drawer-link">Analytics</a>
+            <a href="gallery.html" class="drawer-link">Gallery</a>
+            <a href="achievements.html" class="drawer-link">Achievements</a>
+            <a href="settings.html" class="drawer-link">Settings</a>
+            <div class="drawer-divider"></div>
+            <a href="profile.html" class="drawer-link"><i data-lucide="user" style="display:inline; vertical-align:middle; margin-right:8px;"></i>Profile</a>
+            <a href="settings.html" class="drawer-link"><i data-lucide="settings" style="display:inline; vertical-align:middle; margin-right:8px;"></i>Settings</a>
+            <a href="#" class="drawer-link logout" id="drawerLogoutBtn"><i data-lucide="log-out" style="display:inline; vertical-align:middle; margin-right:8px;"></i>Logout</a>
+        </div>
+    </div>
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+
+    <div class="page-container">
+        <!-- Main Content -->
+        <main class="main-content" id="main-content" style="display: none;">
+            <div class="card" style="max-width: 600px; margin: 0 auto;">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+                    <a href="dashboard.html" class="btn btn-secondary btn-sm" style="height: 34px;">
+                        <i data-lucide="arrow-left" style="width:16px; height:16px;"></i> Back
+                    </a>
+                    <h2 style="margin: 0; font-size: 1.5rem; letter-spacing: -0.02em;">
+                        Add New Saving
+                    </h2>
+                </div>
                 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <form id="addSavingForm">
                     <div class="form-group">
-                        <label class="form-label">Date</label>
-                        <input type="date" class="form-input" name="date" id="dateInput" required>
+                        <label class="form-label">Amount (₹) *</label>
+                        <input type="number" class="form-input" name="amount" required placeholder="Enter amount" min="1" max="100000000">
+                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">
+                            Maximum: ₹1,00,00,000
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label">Date</label>
+                            <input type="date" class="form-input" name="date" id="dateInput" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Time</label>
+                            <input type="time" class="form-input" name="time" id="timeInput" required>
+                        </div>
                     </div>
                     
                     <div class="form-group">
-                        <label class="form-label">Time</label>
-                        <input type="time" class="form-input" name="time" id="timeInput" required>
+                        <label class="form-label">Category</label>
+                        <select class="form-select" name="category" required>
+                            <option value="Cash">Cash</option>
+                            <option value="UPI">UPI</option>
+                            <option value="Bank">Bank</option>
+                            <option value="Wallet">Wallet</option>
+                            <option value="Investment">Investment</option>
+                            <option value="Other">Other</option>
+                        </select>
                     </div>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Category</label>
-                    <select class="form-input" name="category" required>
-                        <option value="Cash">Cash</option>
-                        <option value="UPI">UPI</option>
-                        <option value="Bank">Bank</option>
-                        <option value="Wallet">Wallet</option>
-                        <option value="Investment">Investment</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Note (Optional)</label>
-                    <textarea class="form-input form-textarea" name="note" placeholder="Add a note about this saving..." maxlength="500"></textarea>
-                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">
-                        Maximum 500 characters
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Image Proof (Optional)</label>
-                    <div class="file-upload" onclick="document.getElementById('imageInput').click()" style="cursor: pointer;">
-                        <div class="file-upload-icon">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                        </div>
-                        <div class="file-upload-text" id="uploadText">Click to upload proof image</div>
-                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">
-                            JPEG, PNG, or WebP up to 5MB
+                    
+                    <div class="form-group">
+                        <label class="form-label">Note (Optional)</label>
+                        <textarea class="form-textarea" name="note" placeholder="Add a note about this saving..." maxlength="500"></textarea>
+                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">
+                            Maximum 500 characters
                         </div>
                     </div>
-                    <input type="file" id="imageInput" name="image" accept="image/*" style="display: none;" onchange="previewImage(this)">
-                    <div id="imagePreview" style="display: none; margin-top: 1rem; position: relative;">
-                        <img id="previewImg" src="" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: var(--radius-md);">
-                        <button type="button" onclick="removeImage()" style="position: absolute; top: 0.5rem; right: 0.5rem; background: var(--danger); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--shadow-md);">
-                            <i class="fas fa-times"></i>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Image Proof (Optional)</label>
+                        <div class="file-upload" onclick="document.getElementById('imageInput').click()" style="cursor: pointer;">
+                            <div class="file-upload-icon">
+                                <i data-lucide="cloud-upload"></i>
+                            </div>
+                            <div class="file-upload-text" id="uploadText">Click to upload proof image</div>
+                            <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">
+                                JPEG, PNG, or WebP up to 5MB
+                            </div>
+                        </div>
+                        <input type="file" id="imageInput" name="image" accept="image/*" style="display: none;" onchange="previewImage(this)">
+                        <div id="imagePreview" style="display: none; margin-top: 1rem; position: relative;">
+                            <img id="previewImg" src="" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                            <button type="button" onclick="removeImage()" style="position: absolute; top: 8px; right: 8px; background: var(--danger); color: white; border: none; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--shadow-sm);">
+                                <i data-lucide="x" style="width:14px; height:14px;"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <button type="button" onclick="resetForm()" class="btn btn-secondary" style="flex: 1;">
+                            Reset
+                        </button>
+                        <button type="submit" class="btn btn-primary" style="flex: 1; justify-content: center;">
+                            Save Saving
                         </button>
                     </div>
-                </div>
-                
-                <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
-                    <button type="button" onclick="resetForm()" class="btn btn-secondary" style="flex: 1;">
-                        Reset
-                    </button>
-                    <button type="submit" class="btn btn-primary" style="flex: 1; justify-content: center; padding: 1rem;">
-                        Save Saving
-                    </button>
-                </div>
-            </form>
-        </div>
-    </main>
-
-    <style>
-        .main-content {
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                padding: 1rem;
-            }
-        }
-    </style>
+                </form>
+            </div>
+        </main>
+    </div>
 
     <script type="module">
         import { onAuthStateChange, logoutUser, getCurrentUser } from './js/auth.js';
@@ -204,13 +188,12 @@
         const navbar = document.getElementById('navbar');
         const mainContent = document.getElementById('main-content');
 
-        // Timeout fallback - if auth doesn't resolve in 5 seconds, show error
+        // Timeout fallback
         const authTimeout = setTimeout(() => {
-            console.error('Auth state timeout - Firebase may not be initialized');
+            console.error('Auth state timeout');
             loadingScreen.innerHTML = `
                 <div style="text-align: center; padding: 2rem;">
-                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: var(--danger); margin-bottom: 1rem;"></i>
-                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">Unable to connect. Please check your internet connection.</p>
+                    <p style="color: var(--danger); font-weight: 700; margin-bottom: 1rem;">Unable to connect. Please check your connection.</p>
                     <button onclick="window.location.reload()" class="btn btn-primary">Retry</button>
                 </div>
             `;
@@ -231,6 +214,7 @@
                 const now = new Date();
                 document.getElementById('dateInput').value = now.toISOString().split('T')[0];
                 document.getElementById('timeInput').value = now.toTimeString().slice(0, 5);
+                lucide.createIcons();
             }
         });
 
@@ -255,14 +239,12 @@
             if (input.files && input.files[0]) {
                 const file = input.files[0];
                 
-                // Validate file size (5MB)
                 if (file.size > 5 * 1024 * 1024) {
                     showToast('Image size must be less than 5 MB', 'error');
                     input.value = '';
                     return;
                 }
                 
-                // Validate file type
                 const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
                 if (!allowedTypes.includes(file.type)) {
                     showToast('Only JPG, PNG, and WebP images are allowed', 'error');
@@ -274,6 +256,7 @@
                 reader.onload = function(e) {
                     document.getElementById('previewImg').src = e.target.result;
                     document.getElementById('imagePreview').style.display = 'block';
+                    lucide.createIcons();
                 }
                 reader.readAsDataURL(file);
             }
@@ -291,7 +274,6 @@
             document.getElementById('addSavingForm').reset();
             window.removeImage();
             
-            // Reset date and time to now
             const now = new Date();
             document.getElementById('dateInput').value = now.toISOString().split('T')[0];
             document.getElementById('timeInput').value = now.toTimeString().slice(0, 5);
@@ -314,7 +296,6 @@
             const note = e.target.note.value.trim();
             const imageFile = e.target.image.files[0];
             
-            // Client-side validation
             if (isNaN(amount) || amount <= 0) {
                 showToast('Please enter a valid amount greater than zero', 'error');
                 return;
@@ -345,7 +326,6 @@
                 return;
             }
             
-            // Prevent duplicate submission
             const submitBtn = e.target.querySelector('button[type="submit"]');
             if (submitBtn.disabled) return;
             
@@ -356,7 +336,6 @@
             let imageURL = null;
             let imagePath = null;
             
-            // Upload image if provided
             if (imageFile) {
                 const savingId = Date.now().toString();
                 const uploadResult = await uploadSavingImage(imageFile, user.uid, savingId);
@@ -371,7 +350,6 @@
                 }
             }
             
-            // Add saving to Firestore
             const savingData = {
                 userId: user.uid,
                 amount,
@@ -397,36 +375,55 @@
             }
         });
 
-        // Logout handler
+        // Nav Dropdown and Drawer functionality
+        const avatarBtn = document.getElementById('avatarDropdownToggle');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileDrawer = document.getElementById('mobileDrawer');
+        const drawerOverlay = document.getElementById('drawerOverlay');
+        const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+
+        if (avatarBtn && profileDropdown) {
+            avatarBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('open');
+            });
+            document.addEventListener('click', () => {
+                profileDropdown.classList.remove('open');
+            });
+        }
+
+        if (mobileMenuBtn && mobileDrawer && drawerOverlay) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileDrawer.classList.add('open');
+                drawerOverlay.classList.add('open');
+            });
+            
+            const closeDrawer = () => {
+                mobileDrawer.classList.remove('open');
+                drawerOverlay.classList.remove('open');
+            };
+            
+            drawerOverlay.addEventListener('click', closeDrawer);
+            if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', closeDrawer);
+        }
+
         document.getElementById('logoutBtn').addEventListener('click', async (e) => {
             e.preventDefault();
             await logoutUser();
         });
-
-        // Mouse glow effect
-        const mouseGlow = document.getElementById('mouseGlow');
-        if (mouseGlow) {
-            document.addEventListener('mousemove', (e) => {
-                mouseGlow.style.left = e.clientX + 'px';
-                mouseGlow.style.top = e.clientY + 'px';
-                mouseGlow.classList.add('active');
-            });
-
-            document.addEventListener('mouseleave', () => {
-                mouseGlow.classList.remove('active');
-            });
-        }
+        
+        document.getElementById('drawerLogoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await logoutUser();
+        });
 
         // Theme toggle functionality
         const themeToggle = document.getElementById('themeToggle');
-        const themeIcon = themeToggle.querySelector('i');
-        
-        // Load saved theme preference
         const savedTheme = localStorage.getItem('theme') || 'light';
         if (savedTheme === 'dark') {
             document.documentElement.setAttribute('data-theme', 'dark');
-            themeIcon.classList.remove('fa-moon');
-            themeIcon.classList.add('fa-sun');
+            themeToggle.innerHTML = '<i data-lucide="sun"></i>';
         }
         
         themeToggle.addEventListener('click', () => {
@@ -436,206 +433,13 @@
             document.documentElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             
-            // Update icon
             if (newTheme === 'dark') {
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
+                themeToggle.innerHTML = '<i data-lucide="sun"></i>';
             } else {
-                themeIcon.classList.remove('fa-sun');
-                themeIcon.classList.add('fa-moon');
+                themeToggle.innerHTML = '<i data-lucide="moon"></i>';
             }
+            lucide.createIcons();
         });
-
-        // Mobile menu toggle
-        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-        const sidebar = document.querySelector('.sidebar');
-        
-        if (mobileMenuToggle && sidebar) {
-            mobileMenuToggle.addEventListener('click', (e) => {
-                e.stopPropagation();
-                sidebar.classList.toggle('open');
-            });
-            
-            // Close sidebar when clicking outside
-            document.addEventListener('click', (e) => {
-                if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== mobileMenuToggle) {
-                    sidebar.classList.remove('open');
-                }
-            });
-        }
     </script>
-
-    <style>
-        .page-container {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .sidebar {
-            width: 280px;
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border-right: 1px solid var(--glass-border);
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            left: 0;
-            top: 0;
-            height: 100vh;
-            overflow-y: auto;
-            z-index: 100;
-        }
-
-        .sidebar-header {
-            margin-bottom: 2rem;
-        }
-
-        .profile-section {
-            text-align: center;
-            padding: 1.5rem 0;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .avatar-large {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: var(--gradient-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: white;
-            margin: 0 auto 1rem;
-            box-shadow: var(--shadow-lg), var(--glow-primary);
-        }
-
-        .profile-section .username-display {
-            display: block;
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 0.75rem;
-        }
-
-        .sidebar-nav {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .sidebar-nav .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.875rem 1rem;
-            border-radius: var(--radius-md);
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: all var(--transition-normal);
-            font-weight: 500;
-        }
-
-        .sidebar-nav .nav-link:hover {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-        }
-
-        .sidebar-nav .nav-link.active {
-            background: var(--gradient-primary);
-            color: white;
-        }
-
-        .sidebar-nav .nav-link i {
-            width: 20px;
-            text-align: center;
-        }
-
-        .sidebar-footer {
-            display: flex;
-            gap: 0.5rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .sidebar-footer .icon-btn {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.75rem;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all var(--transition-normal);
-            text-decoration: none;
-        }
-
-        .sidebar-footer .icon-btn:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .sidebar-footer .icon-btn.logout:hover {
-            background: var(--danger);
-            border-color: var(--danger);
-        }
-
-        .main-content {
-            flex: 1;
-            margin-left: 280px;
-            padding: 2rem;
-        }
-
-        @media (max-width: 1024px) {
-            .sidebar {
-                width: 240px;
-            }
-
-            .main-content {
-                margin-left: 240px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-                transition: transform var(--transition-slow);
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding: 1rem;
-            }
-
-            .mobile-menu-toggle {
-                display: flex;
-                position: fixed;
-                bottom: 1rem;
-                right: 1rem;
-                width: 56px;
-                height: 56px;
-                background: var(--gradient-primary);
-                border-radius: 50%;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                box-shadow: var(--shadow-lg), var(--glow-primary);
-                z-index: 1000;
-                cursor: pointer;
-            }
-        }
-    </style>
 </body>
 </html>

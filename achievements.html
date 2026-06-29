@@ -4,410 +4,160 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Achievements - Lakshya ₹100K</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    <!-- Premium Animated Background -->
-    <div class="premium-background">
-        <div class="gradient-blob gradient-blob-1"></div>
-        <div class="gradient-blob gradient-blob-2"></div>
-        <div class="gradient-blob gradient-blob-3"></div>
-        <div class="grid-pattern"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="mouse-glow" id="mouseGlow"></div>
-    </div>
+    <!-- Premium Background -->
+    <div class="premium-background"></div>
 
     <!-- Loading Screen -->
     <div id="loadingScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; z-index: 9999;">
         <div style="text-align: center;">
-            <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary); margin-bottom: 1rem;"></i>
-            <p style="color: var(--text-secondary);">Loading...</p>
+            <p style="color: var(--text-secondary); font-weight: 600;">Loading...</p>
         </div>
     </div>
 
-    <a href="#main-content" class="skip-to-content">Skip to main content</a>
-    
-    <div class="page-container" id="navbar" style="display: none;">
-        <!-- Left Sidebar - Profile -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <a href="dashboard.html" class="navbar-brand">
-                    <span class="brand-name">Lakshya</span>
-                    <span class="brand-amount">₹100K</span>
-                </a>
+    <!-- Sticky Top Navigation Bar -->
+    <nav class="top-nav" id="navbar" style="display: none;">
+        <div class="nav-container">
+            <a href="dashboard.html" class="nav-brand">
+                <span>Lakshya</span><span class="brand-blue">₹100K</span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="dashboard.html" class="nav-link">Home</a>
+                <a href="add-saving.html" class="nav-link">Add Saving</a>
+                <a href="history.html" class="nav-link">History</a>
+                <a href="analytics.html" class="nav-link">Analytics</a>
+                <a href="gallery.html" class="nav-link">Gallery</a>
+                <a href="achievements.html" class="nav-link active">Achievements</a>
+                <a href="settings.html" class="nav-link">Settings</a>
             </div>
             
-            <div class="profile-section">
-                <div class="avatar-large" id="userAvatar">U</div>
-                <div class="username-display" id="usernameDisplay">@username</div>
-                <a href="profile.html" class="btn btn-outline btn-sm">View Profile</a>
-            </div>
-            
-            <nav class="sidebar-nav">
-                <a href="dashboard.html" class="nav-link">
-                    <i class="fas fa-home"></i> Dashboard
-                </a>
-                <a href="add-saving.html" class="nav-link">
-                    <i class="fas fa-plus-circle"></i> Add Saving
-                </a>
-                <a href="history.html" class="nav-link">
-                    <i class="fas fa-history"></i> History
-                </a>
-                <a href="analytics.html" class="nav-link">
-                    <i class="fas fa-chart-line"></i> Analytics
-                </a>
-                <a href="gallery.html" class="nav-link">
-                    <i class="fas fa-images"></i> Gallery
-                </a>
-                <a href="achievements.html" class="nav-link active">
-                    <i class="fas fa-trophy"></i> Achievements
-                </a>
-                <a href="settings.html" class="nav-link">
-                    <i class="fas fa-cog"></i> Settings
-                </a>
-            </nav>
-            
-            <div class="sidebar-footer">
-                <button class="icon-btn" id="themeToggle" title="Toggle Theme">
-                    <i class="fas fa-moon"></i>
+            <div class="nav-right">
+                <button class="nav-icon-btn" id="themeToggle" title="Toggle Theme">
+                    <i data-lucide="moon"></i>
                 </button>
-                <a href="#" class="icon-btn" title="Notifications">
-                    <i class="fas fa-bell"></i>
-                </a>
-                <a href="#" class="icon-btn logout" id="logoutBtn" title="Logout">
-                    <i class="fas fa-sign-out-alt"></i>
-                </a>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <button class="avatar-btn" id="avatarDropdownToggle">
+                        <div class="avatar-circle" id="userAvatar">U</div>
+                    </button>
+                    <div class="dropdown-menu">
+                        <div style="padding: 12px 16px; font-size: 0.8rem; color: var(--text-secondary); font-weight: 600;" id="usernameDisplay">@username</div>
+                        <div class="dropdown-divider"></div>
+                        <a href="profile.html" class="dropdown-item">
+                            <i data-lucide="user"></i> Profile
+                        </a>
+                        <a href="settings.html" class="dropdown-item">
+                            <i data-lucide="settings"></i> Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item logout" id="logoutBtn">
+                            <i data-lucide="log-out"></i> Logout
+                        </a>
+                    </div>
+                </div>
+                <button class="hamburger" id="mobileMenuBtn">
+                    <i data-lucide="menu"></i>
+                </button>
             </div>
-        </aside>
-
-        <!-- Mobile Menu Toggle -->
-        <div class="mobile-menu-toggle" id="mobileMenuToggle" title="Toggle Menu">
-            <i class="fas fa-bars"></i>
         </div>
-        
+    </nav>
+    
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-header">
+            <a href="dashboard.html" class="nav-brand">
+                <span>Lakshya</span><span class="brand-blue">₹100K</span>
+            </a>
+            <button class="close-btn" id="closeDrawerBtn">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <div class="drawer-links">
+            <a href="dashboard.html" class="drawer-link">Home</a>
+            <a href="add-saving.html" class="drawer-link">Add Saving</a>
+            <a href="history.html" class="drawer-link">History</a>
+            <a href="analytics.html" class="drawer-link">Analytics</a>
+            <a href="gallery.html" class="drawer-link">Gallery</a>
+            <a href="achievements.html" class="drawer-link active">Achievements</a>
+            <a href="settings.html" class="drawer-link">Settings</a>
+            <div class="drawer-divider"></div>
+            <a href="profile.html" class="drawer-link"><i data-lucide="user" style="display:inline; vertical-align:middle; margin-right:8px;"></i>Profile</a>
+            <a href="settings.html" class="drawer-link"><i data-lucide="settings" style="display:inline; vertical-align:middle; margin-right:8px;"></i>Settings</a>
+            <a href="#" class="drawer-link logout" id="drawerLogoutBtn"><i data-lucide="log-out" style="display:inline; vertical-align:middle; margin-right:8px;"></i>Logout</a>
+        </div>
+    </div>
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+
+    <div class="page-container">
         <!-- Main Content -->
         <main class="main-content" id="main-content" style="display: none;">
-        <h1 style="margin-bottom: 2rem; font-family: 'Playfair Display', serif;">Achievements</h1>
-        
-        <!-- Summary Card -->
-        <div class="card achievement-summary" style="margin-bottom: 2rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-                <div>
-                    <h3 style="margin-bottom: 0.5rem; font-family: 'Playfair Display', serif;">Your Progress</h3>
-                    <p style="margin: 0; color: var(--text-secondary);">
-                        <span class="highlight-number" id="unlockedCount">0</span> / <span id="totalCount">10</span> Achievements Unlocked
-                    </p>
-                </div>
-                <div class="progress-ring-container">
-                    <svg class="progress-ring" width="100" height="100">
-                        <circle class="progress-ring-circle-bg" stroke="var(--bg-tertiary)" stroke-width="8" fill="transparent" r="42" cx="50" cy="50"/>
-                        <circle class="progress-ring-circle" id="progressCircle" stroke="var(--primary)" stroke-width="8" fill="transparent" r="42" cx="50" cy="50"/>
-                    </svg>
-                    <div class="progress-percentage" id="progressPercentage">0%</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Milestones Section -->
-        <div class="card" style="margin-bottom: 2rem;">
-            <h3 style="margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">Milestones</h3>
-            <div class="milestones-container" id="milestonesContainer">
-                <!-- Milestones will be loaded here -->
-            </div>
-        </div>
-
-        <!-- Achievements Grid -->
-        <h3 style="margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">Badges</h3>
-        <div class="achievements-grid" id="achievementsGrid">
-            <!-- Achievements will be loaded here -->
-        </div>
-    </main>
-
-    <style>
-        .main-content {
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .achievement-summary {
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--glass-border);
-        }
-
-        .highlight-number {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .progress-ring-container {
-            position: relative;
-            width: 100px;
-            height: 100px;
-        }
-
-        .progress-ring {
-            transform: rotate(-90deg);
-        }
-
-        .progress-ring-circle-bg {
-            stroke: var(--bg-tertiary);
-        }
-
-        .progress-ring-circle {
-            stroke-linecap: round;
-            transition: stroke-dashoffset 0.5s ease;
-        }
-
-        .progress-percentage {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .milestones-container {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .milestone-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            background: var(--bg-tertiary);
-            border-radius: var(--radius-md);
-            transition: all 0.3s ease;
-        }
-
-        .milestone-item.completed {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
-            border: 1px solid var(--success);
-        }
-
-        .milestone-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            background: var(--bg-primary);
-            color: var(--text-tertiary);
-            transition: all 0.3s ease;
-        }
-
-        .milestone-item.completed .milestone-icon {
-            background: var(--success);
-            color: white;
-        }
-
-        .milestone-info {
-            flex: 1;
-        }
-
-        .milestone-title {
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 0.25rem;
-        }
-
-        .milestone-description {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-
-        .milestone-status {
-            font-size: 0.75rem;
-            padding: 0.25rem 0.75rem;
-            border-radius: var(--radius-sm);
-            font-weight: 600;
-        }
-
-        .milestone-item.completed .milestone-status {
-            background: var(--success);
-            color: white;
-        }
-
-        .milestone-item:not(.completed) .milestone-status {
-            background: var(--bg-primary);
-            color: var(--text-tertiary);
-        }
-
-        .achievements-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .achievement-card {
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-lg);
-            padding: 1.5rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .achievement-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--bg-tertiary);
-            transition: background 0.3s ease;
-        }
-
-        .achievement-card.unlocked::before {
-            background: var(--gradient-primary);
-        }
-
-        .achievement-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .achievement-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 1rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            background: var(--bg-tertiary);
-            color: var(--text-tertiary);
-            transition: all 0.3s ease;
-        }
-
-        .achievement-card.unlocked .achievement-icon {
-            background: var(--gradient-primary);
-            color: white;
-            box-shadow: var(--glow-primary);
-        }
-
-        .achievement-title {
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-            font-family: 'Playfair Display', serif;
-        }
-
-        .achievement-description {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.75rem;
-        }
-
-        .achievement-amount {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .achievement-card.locked {
-            opacity: 0.6;
-        }
-
-        .achievement-card.locked .achievement-icon {
-            background: var(--bg-tertiary);
-        }
-
-        .achievement-badge {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            font-size: 0.75rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: var(--radius-sm);
-            font-weight: 600;
-        }
-
-        .achievement-card.unlocked .achievement-badge {
-            background: var(--success);
-            color: white;
-        }
-
-        .achievement-card.locked .achievement-badge {
-            background: var(--bg-tertiary);
-            color: var(--text-tertiary);
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                padding: 1rem;
-            }
+            <h1 style="margin-bottom: 2rem; font-size: 1.75rem; letter-spacing: -0.02em;">Achievements</h1>
             
-            .achievements-grid {
-                grid-template-columns: 1fr;
-            }
+            <!-- Progress Summary Card -->
+            <div class="card" style="margin-bottom: 2rem; padding: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
+                    <div>
+                        <h3 style="margin-bottom: 6px; font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em;">Your Progress</h3>
+                        <p style="margin: 0; color: var(--text-secondary); font-size: 0.95rem; font-weight: 600;">
+                            <span style="font-size: 1.5rem; font-weight: 800; color: var(--primary);" id="unlockedCount">0</span> / <span id="totalCount">10</span> achievements unlocked
+                        </p>
+                    </div>
+                    <div class="progress-ring-container">
+                        <svg class="progress-ring" width="80" height="80">
+                            <circle class="progress-ring-circle-bg" stroke="var(--border-color)" stroke-width="6" fill="transparent" r="34" cx="40" cy="40"/>
+                            <circle class="progress-ring-circle" id="progressCircle" stroke="var(--primary)" stroke-width="6" fill="transparent" r="34" cx="40" cy="40" style="stroke-dasharray: 213.62; stroke-dashoffset: 213.62; stroke-linecap: round; transition: stroke-dashoffset 0.6s ease;"/>
+                        </svg>
+                        <div class="progress-percentage" id="progressPercentage">0%</div>
+                    </div>
+                </div>
+            </div>
 
-            .achievement-summary {
-                flex-direction: column;
-                text-align: center;
-            }
+            <!-- Milestones Section -->
+            <div class="card" style="margin-bottom: 2.5rem; padding: 24px;">
+                <h3 style="margin-bottom: 1.5rem; font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em;">Milestones</h3>
+                <div class="milestones-container" id="milestonesContainer">
+                    <!-- Milestones loaded dynamically -->
+                </div>
+            </div>
 
-            .progress-ring-container {
-                margin: 0 auto;
-            }
-        }
-    </style>
+            <!-- Achievements Grid -->
+            <h3 style="margin-bottom: 1.5rem; font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em;">Badges</h3>
+            <div class="achievements-grid" id="achievementsGrid">
+                <!-- Achievements loaded dynamically -->
+            </div>
+        </main>
+    </div>
 
     <script type="module">
         import { onAuthStateChange, logoutUser, getCurrentUser } from './js/auth.js';
         import { calculateStatistics, getUserAchievements, getUserDocument } from './js/database.js';
-        import { showToast } from './js/utils.js';
 
         const loadingScreen = document.getElementById('loadingScreen');
         const navbar = document.getElementById('navbar');
         const mainContent = document.getElementById('main-content');
 
         const achievements = [
-            { id: 'first_saving', name: 'First Saving', icon: 'fa-crosshairs', threshold: 1, description: 'Add your first saving' },
-            { id: 'hundred', name: '₹100', icon: 'fa-coins', threshold: 100, description: 'Save ₹100' },
-            { id: 'five_hundred', name: '₹500', icon: 'fa-money-bill', threshold: 500, description: 'Save ₹500' },
-            { id: 'thousand', name: '₹1,000', icon: 'fa-gem', threshold: 1000, description: 'Save ₹1,000' },
-            { id: 'five_thousand', name: '₹5,000', icon: 'fa-trophy', threshold: 5000, description: 'Save ₹5,000' },
-            { id: 'ten_thousand', name: '₹10,000', icon: 'fa-star', threshold: 10000, description: 'Save ₹10,000' },
-            { id: 'twenty_five_thousand', name: '₹25,000', icon: 'fa-award', threshold: 25000, description: 'Save ₹25,000' },
-            { id: 'fifty_thousand', name: '₹50,000', icon: 'fa-crown', threshold: 50000, description: 'Save ₹50,000' },
-            { id: 'seventy_five_thousand', name: '₹75,000', icon: 'fa-fire', threshold: 75000, description: 'Save ₹75,000' },
-            { id: 'one_hundred_thousand', name: '₹100,000', icon: 'fa-flag-checkered', threshold: 100000, description: 'Reach your goal!' }
+            { id: 'first_saving', name: 'First Saving', icon: 'target', threshold: 1, description: 'Add your first saving' },
+            { id: 'hundred', name: '₹100', icon: 'coins', threshold: 100, description: 'Save ₹100' },
+            { id: 'five_hundred', name: '₹500', icon: 'banknote', threshold: 500, description: 'Save ₹500' },
+            { id: 'thousand', name: '₹1,000', icon: 'gem', threshold: 1000, description: 'Save ₹1,000' },
+            { id: 'five_thousand', name: '₹5,000', icon: 'trophy', threshold: 5000, description: 'Save ₹5,000' },
+            { id: 'ten_thousand', name: '₹10,000', icon: 'star', threshold: 10000, description: 'Save ₹10,000' },
+            { id: 'twenty_five_thousand', name: '₹25,000', icon: 'award', threshold: 25000, description: 'Save ₹25,000' },
+            { id: 'fifty_thousand', name: '₹50,000', icon: 'crown', threshold: 50000, description: 'Save ₹50,000' },
+            { id: 'seventy_five_thousand', name: '₹75,000', icon: 'flame', threshold: 75000, description: 'Save ₹75,000' },
+            { id: 'one_hundred_thousand', name: '₹100,000', icon: 'flag', threshold: 100000, description: 'Reach your goal!' }
         ];
 
-        // Timeout fallback - if auth doesn't resolve in 5 seconds, show error
+        // Timeout fallback
         const authTimeout = setTimeout(() => {
-            console.error('Auth state timeout - Firebase may not be initialized');
+            console.error('Auth state timeout');
             loadingScreen.innerHTML = `
                 <div style="text-align: center; padding: 2rem;">
-                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: var(--danger); margin-bottom: 1rem;"></i>
-                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">Unable to connect. Please check your internet connection.</p>
+                    <p style="color: var(--danger); font-weight: 700; margin-bottom: 1rem;">Unable to connect. Please check your connection.</p>
                     <button onclick="window.location.reload()" class="btn btn-primary">Retry</button>
                 </div>
             `;
@@ -444,7 +194,6 @@
             }
         }
 
-        // Load achievements
         async function loadAchievements(user) {
             const stats = await calculateStatistics(user.uid);
             const userAchievements = await getUserAchievements(user.uid);
@@ -455,7 +204,6 @@
             
             const totalSaved = stats.success ? stats.data.totalSaved : 0;
             
-            // Update summary
             const unlockedCount = unlockedAchievementIds.length;
             const totalCount = achievements.length;
             const percentage = Math.round((unlockedCount / totalCount) * 100);
@@ -464,45 +212,42 @@
             document.getElementById('totalCount').textContent = totalCount;
             document.getElementById('progressPercentage').textContent = `${percentage}%`;
             
-            // Update progress ring
             const progressCircle = document.getElementById('progressCircle');
-            const radius = 42;
+            const radius = 34;
             const circumference = 2 * Math.PI * radius;
             const offset = circumference - (percentage / 100) * circumference;
-            progressCircle.style.strokeDasharray = circumference;
             progressCircle.style.strokeDashoffset = offset;
             
-            // Render milestones
             renderMilestones(totalSaved);
             
-            // Render achievements
             const achievementsHTML = achievements.map(achievement => {
                 const isUnlocked = unlockedAchievementIds.includes(achievement.id);
                 const progress = Math.min(100, Math.round((totalSaved / achievement.threshold) * 100));
                 
                 return `
-                    <div class="achievement-card ${isUnlocked ? 'unlocked' : 'locked'}">
+                    <div class="card achievement-card ${isUnlocked ? 'unlocked' : 'locked'}">
                         <span class="achievement-badge">${isUnlocked ? 'Unlocked' : 'Locked'}</span>
-                        <div class="achievement-icon"><i class="fas ${achievement.icon}"></i></div>
+                        <div class="achievement-icon"><i data-lucide="${achievement.icon}"></i></div>
                         <div class="achievement-title">${achievement.name}</div>
                         <div class="achievement-description">${achievement.description}</div>
                         <div class="achievement-amount">₹${achievement.threshold.toLocaleString()}</div>
-                        ${!isUnlocked ? `<div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">${progress}% complete</div>` : ''}
+                        ${!isUnlocked ? `<div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 8px; font-weight: 600;">${progress}% complete</div>` : ''}
                     </div>
                 `;
             }).join('');
             
             document.getElementById('achievementsGrid').innerHTML = achievementsHTML;
+            lucide.createIcons();
         }
 
         function renderMilestones(totalSaved) {
             const milestones = [
-                { threshold: 1000, name: 'First ₹1K', icon: 'fa-star', description: 'Save your first ₹1,000' },
-                { threshold: 10000, name: '₹10K Club', icon: 'fa-gem', description: 'Join the ₹10,000 club' },
-                { threshold: 25000, name: 'Quarter Goal', icon: 'fa-award', description: 'Reach 25% of your goal' },
-                { threshold: 50000, name: 'Halfway There', icon: 'fa-trophy', description: 'You\'re halfway to ₹100K!' },
-                { threshold: 75000, name: 'Three Quarters', icon: 'fa-fire', description: '75% of your goal achieved' },
-                { threshold: 100000, name: 'Goal Reached', icon: 'fa-flag-checkered', description: 'Congratulations! You did it!' }
+                { threshold: 1000, name: 'First ₹1K', icon: 'star', description: 'Save your first ₹1,000' },
+                { threshold: 10000, name: '₹10K Club', icon: 'gem', description: 'Join the ₹10,000 club' },
+                { threshold: 25000, name: 'Quarter Goal', icon: 'award', description: 'Reach 25% of your goal' },
+                { threshold: 50000, name: 'Halfway There', icon: 'trophy', description: 'You\'re halfway to ₹100K!' },
+                { threshold: 75000, name: 'Three Quarters', icon: 'flame', description: '75% of your goal achieved' },
+                { threshold: 100000, name: 'Goal Reached', icon: 'flag', description: 'Congratulations! You did it!' }
             ];
 
             const milestonesHTML = milestones.map(milestone => {
@@ -510,7 +255,7 @@
                 return `
                     <div class="milestone-item ${completed ? 'completed' : ''}">
                         <div class="milestone-icon">
-                            <i class="fas ${milestone.icon}"></i>
+                            <i data-lucide="${milestone.icon}"></i>
                         </div>
                         <div class="milestone-info">
                             <div class="milestone-title">${milestone.name}</div>
@@ -524,130 +269,55 @@
             document.getElementById('milestonesContainer').innerHTML = milestonesHTML;
         }
 
-        // Logout handler
+        // Nav Dropdown and Drawer functionality
+        const avatarBtn = document.getElementById('avatarDropdownToggle');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileDrawer = document.getElementById('mobileDrawer');
+        const drawerOverlay = document.getElementById('drawerOverlay');
+        const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+
+        if (avatarBtn && profileDropdown) {
+            avatarBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('open');
+            });
+            document.addEventListener('click', () => {
+                profileDropdown.classList.remove('open');
+            });
+        }
+
+        if (mobileMenuBtn && mobileDrawer && drawerOverlay) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileDrawer.classList.add('open');
+                drawerOverlay.classList.add('open');
+            });
+            
+            const closeDrawer = () => {
+                mobileDrawer.classList.remove('open');
+                drawerOverlay.classList.remove('open');
+            };
+            
+            drawerOverlay.addEventListener('click', closeDrawer);
+            if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', closeDrawer);
+        }
+
         document.getElementById('logoutBtn').addEventListener('click', async (e) => {
             e.preventDefault();
             await logoutUser();
         });
-
-        // Navbar scroll effect
-        if (navbar) {
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 20) {
-                    navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('scrolled');
-                }
-            });
-        }
-
-        // Dropdown menu toggle
-        const menuToggle = document.getElementById('menuToggle');
-        const menuDropdown = document.getElementById('menuDropdown');
         
-        if (menuToggle && menuDropdown) {
-            menuToggle.addEventListener('click', (e) => {
-                e.stopPropagation();
-                menuDropdown.classList.toggle('open');
-            });
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!menuDropdown.contains(e.target)) {
-                    menuDropdown.classList.remove('open');
-                }
-            });
-        }
-
-        // Confetti animation function
-        window.triggerConfetti = function() {
-            const confettiCount = 150;
-            const colors = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
-            
-            for (let i = 0; i < confettiCount; i++) {
-                createConfetti(colors[Math.floor(Math.random() * colors.length)]);
-            }
-        };
-
-        function createConfetti(color) {
-            const confetti = document.createElement('div');
-            confetti.style.cssText = `
-                position: fixed;
-                width: 10px;
-                height: 10px;
-                background: ${color};
-                left: ${Math.random() * 100}vw;
-                top: -10px;
-                border-radius: ${Math.random() > 0.5 ? '50%' : '0'};
-                pointer-events: none;
-                z-index: 9999;
-                animation: confettiFall ${2 + Math.random() * 2}s linear forwards;
-            `;
-            document.body.appendChild(confetti);
-            
-            setTimeout(() => confetti.remove(), 4000);
-        }
-
-        // Add confetti animation keyframes
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes confettiFall {
-                0% {
-                    transform: translateY(0) rotate(0deg);
-                    opacity: 1;
-                }
-                100% {
-                    transform: translateY(100vh) rotate(720deg);
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Check for newly unlocked achievements and trigger confetti
-        async function checkNewAchievements(user) {
-            const userAchievements = await getUserAchievements(user.uid);
-            if (userAchievements.success) {
-                const unlockedCount = userAchievements.data.length;
-                // If this is the first time loading with achievements, trigger confetti
-                if (unlockedCount > 0 && !sessionStorage.getItem('confettiShown')) {
-                    sessionStorage.setItem('confettiShown', 'true');
-                    setTimeout(() => triggerConfetti(), 1000);
-                }
-            }
-        }
-
-        // Call confetti check after loading achievements
-        onAuthStateChange(async (user) => {
-            if (user) {
-                await checkNewAchievements(user);
-            }
+        document.getElementById('drawerLogoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await logoutUser();
         });
-
-        // Mouse glow effect
-        const mouseGlow = document.getElementById('mouseGlow');
-        if (mouseGlow) {
-            document.addEventListener('mousemove', (e) => {
-                mouseGlow.style.left = e.clientX + 'px';
-                mouseGlow.style.top = e.clientY + 'px';
-                mouseGlow.classList.add('active');
-            });
-
-            document.addEventListener('mouseleave', () => {
-                mouseGlow.classList.remove('active');
-            });
-        }
 
         // Theme toggle functionality
         const themeToggle = document.getElementById('themeToggle');
-        const themeIcon = themeToggle.querySelector('i');
-        
-        // Load saved theme preference
         const savedTheme = localStorage.getItem('theme') || 'light';
         if (savedTheme === 'dark') {
             document.documentElement.setAttribute('data-theme', 'dark');
-            themeIcon.classList.remove('fa-moon');
-            themeIcon.classList.add('fa-sun');
+            themeToggle.innerHTML = '<i data-lucide="sun"></i>';
         }
         
         themeToggle.addEventListener('click', () => {
@@ -657,205 +327,214 @@
             document.documentElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             
-            // Update icon
             if (newTheme === 'dark') {
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
+                themeToggle.innerHTML = '<i data-lucide="sun"></i>';
             } else {
-                themeIcon.classList.remove('fa-sun');
-                themeIcon.classList.add('fa-moon');
+                themeToggle.innerHTML = '<i data-lucide="moon"></i>';
             }
+            lucide.createIcons();
         });
 
-        // Mobile menu toggle
-        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-        const sidebar = document.querySelector('.sidebar');
-        
-        if (mobileMenuToggle && sidebar) {
-            mobileMenuToggle.addEventListener('click', (e) => {
-                e.stopPropagation();
-                sidebar.classList.toggle('open');
-            });
-            
-            // Close sidebar when clicking outside
-            document.addEventListener('click', (e) => {
-                if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== mobileMenuToggle) {
-                    sidebar.classList.remove('open');
-                }
-            });
-        }
+        // Confetti effect on load if 100% completed
+        window.triggerConfetti = function() {
+            const confettiCount = 100;
+            const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+            for (let i = 0; i < confettiCount; i++) {
+                const conf = document.createElement('div');
+                conf.style.cssText = `
+                    position: fixed;
+                    width: 8px;
+                    height: 8px;
+                    background: ${colors[Math.floor(Math.random() * colors.length)]};
+                    left: ${Math.random() * 100}vw;
+                    top: -10px;
+                    border-radius: ${Math.random() > 0.5 ? '50%' : '0'};
+                    pointer-events: none;
+                    z-index: 10000;
+                    animation: confettiFall ${2 + Math.random() * 2}s linear forwards;
+                `;
+                document.body.appendChild(conf);
+                setTimeout(() => conf.remove(), 4000);
+            }
+        };
+
+        const confStyle = document.createElement('style');
+        confStyle.textContent = `
+            @keyframes confettiFall {
+                0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+                100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(confStyle);
     </script>
 
     <style>
-        .page-container {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .sidebar {
-            width: 280px;
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border-right: 1px solid var(--glass-border);
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            left: 0;
-            top: 0;
-            height: 100vh;
-            overflow-y: auto;
-            z-index: 100;
-        }
-
-        .sidebar-header {
-            margin-bottom: 2rem;
-        }
-
-        .profile-section {
-            text-align: center;
-            padding: 1.5rem 0;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .avatar-large {
+        .progress-ring-container {
+            position: relative;
             width: 80px;
             height: 80px;
-            border-radius: 50%;
-            background: var(--gradient-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: white;
-            margin: 0 auto 1rem;
-            box-shadow: var(--shadow-lg), var(--glow-primary);
         }
 
-        .profile-section .username-display {
-            display: block;
-            font-size: 1rem;
-            font-weight: 600;
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+
+        .progress-percentage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.1rem;
+            font-weight: 800;
             color: var(--text-primary);
-            margin-bottom: 0.75rem;
         }
 
-        .sidebar-nav {
-            flex: 1;
+        .milestones-container {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 12px;
         }
 
-        .sidebar-nav .nav-link {
+        .milestone-item {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            padding: 0.875rem 1rem;
-            border-radius: var(--radius-md);
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: all var(--transition-normal);
-            font-weight: 500;
-        }
-
-        .sidebar-nav .nav-link:hover {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-        }
-
-        .sidebar-nav .nav-link.active {
-            background: var(--gradient-primary);
-            color: white;
-        }
-
-        .sidebar-nav .nav-link i {
-            width: 20px;
-            text-align: center;
-        }
-
-        .sidebar-footer {
-            display: flex;
-            gap: 0.5rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .sidebar-footer .icon-btn {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.75rem;
-            background: var(--bg-tertiary);
+            gap: 1rem;
+            padding: 12px 16px;
+            background: var(--bg-primary);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
-            color: var(--text-secondary);
-            cursor: pointer;
             transition: all var(--transition-normal);
-            text-decoration: none;
         }
 
-        .sidebar-footer .icon-btn:hover {
-            background: var(--primary);
-            color: white;
+        .milestone-item.completed {
+            background: var(--primary-light);
             border-color: var(--primary);
         }
 
-        .sidebar-footer .icon-btn.logout:hover {
-            background: var(--danger);
-            border-color: var(--danger);
+        .milestone-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--border-color);
+            color: var(--text-secondary);
         }
 
-        .main-content {
+        .milestone-item.completed .milestone-icon {
+            background: var(--primary);
+            color: white;
+        }
+
+        .milestone-info {
             flex: 1;
-            margin-left: 280px;
-            padding: 2rem;
         }
 
-        @media (max-width: 1024px) {
-            .sidebar {
-                width: 240px;
-            }
-
-            .main-content {
-                margin-left: 240px;
-            }
+        .milestone-title {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            margin-bottom: 2px;
         }
 
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-                transition: transform var(--transition-slow);
-            }
+        .milestone-description {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
 
-            .sidebar.open {
-                transform: translateX(0);
-            }
+        .milestone-status {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: var(--radius-xs);
+            font-weight: 700;
+            background: var(--border-color);
+            color: var(--text-secondary);
+        }
 
-            .main-content {
-                margin-left: 0;
-                padding: 1rem;
-            }
+        .milestone-item.completed .milestone-status {
+            background: var(--primary);
+            color: white;
+        }
 
-            .mobile-menu-toggle {
-                display: flex;
-                position: fixed;
-                bottom: 1rem;
-                right: 1rem;
-                width: 56px;
-                height: 56px;
-                background: var(--gradient-primary);
-                border-radius: 50%;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                box-shadow: var(--shadow-lg), var(--glow-primary);
-                z-index: 1000;
-                cursor: pointer;
-            }
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .achievement-card {
+            position: relative;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .achievement-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: var(--radius-xs);
+            font-weight: 700;
+        }
+
+        .achievement-card.unlocked {
+            border-color: var(--success);
+            background: rgba(34, 197, 94, 0.03);
+        }
+
+        .achievement-card.unlocked .achievement-badge {
+            background: var(--success);
+            color: white;
+        }
+
+        .achievement-card.locked .achievement-badge {
+            background: var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .achievement-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .achievement-card.unlocked .achievement-icon {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .achievement-title {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 1.05rem;
+            margin-bottom: 4px;
+        }
+
+        .achievement-description {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .achievement-amount {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--primary);
         }
     </style>
 </body>

@@ -4,340 +4,185 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Analytics - Lakshya ₹100K</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    <!-- Premium Animated Background -->
-    <div class="premium-background">
-        <div class="gradient-blob gradient-blob-1"></div>
-        <div class="gradient-blob gradient-blob-2"></div>
-        <div class="gradient-blob gradient-blob-3"></div>
-        <div class="grid-pattern"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="mouse-glow" id="mouseGlow"></div>
-    </div>
+    <!-- Premium Background -->
+    <div class="premium-background"></div>
 
     <!-- Loading Screen -->
     <div id="loadingScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; z-index: 9999;">
         <div style="text-align: center;">
-            <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary); margin-bottom: 1rem;"></i>
-            <p style="color: var(--text-secondary);">Loading...</p>
+            <p style="color: var(--text-secondary); font-weight: 600;">Loading...</p>
         </div>
     </div>
 
-    <a href="#main-content" class="skip-to-content">Skip to main content</a>
-    
-    <div class="page-container" id="navbar" style="display: none;">
-        <!-- Left Sidebar - Profile -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <a href="dashboard.html" class="navbar-brand">
-                    <span class="brand-name">Lakshya</span>
-                    <span class="brand-amount">₹100K</span>
-                </a>
+    <!-- Sticky Top Navigation Bar -->
+    <nav class="top-nav" id="navbar" style="display: none;">
+        <div class="nav-container">
+            <a href="dashboard.html" class="nav-brand">
+                <span>Lakshya</span><span class="brand-blue">₹100K</span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="dashboard.html" class="nav-link">Home</a>
+                <a href="add-saving.html" class="nav-link">Add Saving</a>
+                <a href="history.html" class="nav-link">History</a>
+                <a href="analytics.html" class="nav-link active">Analytics</a>
+                <a href="gallery.html" class="nav-link">Gallery</a>
+                <a href="achievements.html" class="nav-link">Achievements</a>
+                <a href="settings.html" class="nav-link">Settings</a>
             </div>
             
-            <div class="profile-section">
-                <div class="avatar-large" id="userAvatar">U</div>
-                <div class="username-display" id="usernameDisplay">@username</div>
-                <a href="profile.html" class="btn btn-outline btn-sm">View Profile</a>
-            </div>
-            
-            <nav class="sidebar-nav">
-                <a href="dashboard.html" class="nav-link">
-                    <i class="fas fa-home"></i> Dashboard
-                </a>
-                <a href="add-saving.html" class="nav-link">
-                    <i class="fas fa-plus-circle"></i> Add Saving
-                </a>
-                <a href="history.html" class="nav-link">
-                    <i class="fas fa-history"></i> History
-                </a>
-                <a href="analytics.html" class="nav-link active">
-                    <i class="fas fa-chart-line"></i> Analytics
-                </a>
-                <a href="gallery.html" class="nav-link">
-                    <i class="fas fa-images"></i> Gallery
-                </a>
-                <a href="achievements.html" class="nav-link">
-                    <i class="fas fa-trophy"></i> Achievements
-                </a>
-                <a href="settings.html" class="nav-link">
-                    <i class="fas fa-cog"></i> Settings
-                </a>
-            </nav>
-            
-            <div class="sidebar-footer">
-                <button class="icon-btn" id="themeToggle" title="Toggle Theme">
-                    <i class="fas fa-moon"></i>
+            <div class="nav-right">
+                <button class="nav-icon-btn" id="themeToggle" title="Toggle Theme">
+                    <i data-lucide="moon"></i>
                 </button>
-                <a href="#" class="icon-btn" title="Notifications">
-                    <i class="fas fa-bell"></i>
-                </a>
-                <a href="#" class="icon-btn logout" id="logoutBtn" title="Logout">
-                    <i class="fas fa-sign-out-alt"></i>
-                </a>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <button class="avatar-btn" id="avatarDropdownToggle">
+                        <div class="avatar-circle" id="userAvatar">U</div>
+                    </button>
+                    <div class="dropdown-menu">
+                        <div style="padding: 12px 16px; font-size: 0.8rem; color: var(--text-secondary); font-weight: 600;" id="usernameDisplay">@username</div>
+                        <div class="dropdown-divider"></div>
+                        <a href="profile.html" class="dropdown-item">
+                            <i data-lucide="user"></i> Profile
+                        </a>
+                        <a href="settings.html" class="dropdown-item">
+                            <i data-lucide="settings"></i> Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item logout" id="logoutBtn">
+                            <i data-lucide="log-out"></i> Logout
+                        </a>
+                    </div>
+                </div>
+                <button class="hamburger" id="mobileMenuBtn">
+                    <i data-lucide="menu"></i>
+                </button>
             </div>
-        </aside>
-
-        <!-- Mobile Menu Toggle -->
-        <div class="mobile-menu-toggle" id="mobileMenuToggle" title="Toggle Menu">
-            <i class="fas fa-bars"></i>
         </div>
-        
+    </nav>
+    
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-header">
+            <a href="dashboard.html" class="nav-brand">
+                <span>Lakshya</span><span class="brand-blue">₹100K</span>
+            </a>
+            <button class="close-btn" id="closeDrawerBtn">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <div class="drawer-links">
+            <a href="dashboard.html" class="drawer-link">Home</a>
+            <a href="add-saving.html" class="drawer-link">Add Saving</a>
+            <a href="history.html" class="drawer-link">History</a>
+            <a href="analytics.html" class="drawer-link active">Analytics</a>
+            <a href="gallery.html" class="drawer-link">Gallery</a>
+            <a href="achievements.html" class="drawer-link">Achievements</a>
+            <a href="settings.html" class="drawer-link">Settings</a>
+            <div class="drawer-divider"></div>
+            <a href="profile.html" class="drawer-link"><i data-lucide="user" style="display:inline; vertical-align:middle; margin-right:8px;"></i>Profile</a>
+            <a href="settings.html" class="drawer-link"><i data-lucide="settings" style="display:inline; vertical-align:middle; margin-right:8px;"></i>Settings</a>
+            <a href="#" class="drawer-link logout" id="drawerLogoutBtn"><i data-lucide="log-out" style="display:inline; vertical-align:middle; margin-right:8px;"></i>Logout</a>
+        </div>
+    </div>
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+
+    <div class="page-container">
         <!-- Main Content -->
         <main class="main-content" id="main-content" style="display: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-            <h1>Analytics</h1>
-            <select class="form-input" id="timePeriod" style="width: auto; min-width: 150px;">
-                <option value="week">This Week</option>
-                <option value="month" selected>This Month</option>
-                <option value="year">This Year</option>
-                <option value="all">All Time</option>
-            </select>
-        </div>
-        
-        <div class="grid grid-4" style="margin-bottom: 2rem;">
-            <div class="card stat-card">
-                <div class="icon icon-blue">
-                    <i class="fas fa-wallet"></i>
-                </div>
-                <div>
-                    <div class="label">Total Saved</div>
-                    <div class="value amount" id="totalSaved">₹0</div>
-                </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+                <h1 style="margin: 0; font-size: 1.75rem; letter-spacing: -0.02em;">Analytics</h1>
+                <select class="form-select" id="timePeriod" style="width: auto; min-width: 150px; height: 38px;">
+                    <option value="week">This Week</option>
+                    <option value="month" selected>This Month</option>
+                    <option value="year">This Year</option>
+                    <option value="all">All Time</option>
+                </select>
             </div>
             
-            <div class="card stat-card">
-                <div class="icon icon-green">
-                    <i class="fas fa-chart-line"></i>
+            <div class="dashboard-grid" style="margin-bottom: 2rem;">
+                <div class="card widget-card">
+                    <h3 style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px;">Total Saved</h3>
+                    <div class="amount" id="totalSaved" style="font-size: 1.75rem; font-weight: 800; color: var(--text-primary);">₹0</div>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 14px; font-weight: 600;">Overall ledger balance</p>
                 </div>
-                <div>
-                    <div class="label">Average Saving</div>
-                    <div class="value amount" id="averageSaving">₹0</div>
+                
+                <div class="card widget-card">
+                    <h3 style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px;">Average Saving</h3>
+                    <div class="amount" id="averageSaving" style="font-size: 1.75rem; font-weight: 800; color: var(--text-primary);">₹0</div>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 14px; font-weight: 600;">Mean amount per entry</p>
                 </div>
-            </div>
-            
-            <div class="card stat-card">
-                <div class="icon icon-orange">
-                    <i class="fas fa-trophy"></i>
+                
+                <div class="card widget-card">
+                    <h3 style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px;">Highest Saving</h3>
+                    <div class="amount" id="highestSaving" style="font-size: 1.75rem; font-weight: 800; color: var(--text-primary);">₹0</div>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 14px; font-weight: 600;">Largest single deposit</p>
                 </div>
-                <div>
-                    <div class="label">Highest Saving</div>
-                    <div class="value amount" id="highestSaving">₹0</div>
-                </div>
-            </div>
-            
-            <div class="card stat-card">
-                <div class="icon icon-purple">
-                    <i class="fas fa-calendar-check"></i>
-                </div>
-                <div>
-                    <div class="label">Days Active</div>
-                    <div class="value number" id="daysActive">0</div>
+                
+                <div class="card widget-card">
+                    <h3 style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px;">Days Active</h3>
+                    <div class="amount" id="daysActive" style="font-size: 1.75rem; font-weight: 800; color: var(--text-primary);">0</div>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 14px; font-weight: 600;">Days elapsed since start</p>
                 </div>
             </div>
-        </div>
 
-        <div class="grid grid-2" style="margin-bottom: 2rem;">
-            <div class="card">
-                <h3 style="margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">Goal Prediction</h3>
-                <div class="prediction-container">
-                    <div class="prediction-icon">
-                        <i class="fas fa-bullseye"></i>
+            <div class="dashboard-grid" style="margin-bottom: 2rem;">
+                <div class="card">
+                    <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1.5rem; letter-spacing: -0.02em;">Goal Prediction</h3>
+                    <div class="prediction-container">
+                        <div class="prediction-icon">
+                            <i data-lucide="target"></i>
+                        </div>
+                        <div class="prediction-text" id="predictionText">At your current pace, you'll reach the target in...</div>
+                        <div class="prediction-days" id="predictionDays">Calculating...</div>
                     </div>
-                    <div class="prediction-text" id="predictionText">At your current pace, you'll reach ₹100,000 in...</div>
-                    <div class="prediction-days" id="predictionDays">Calculating...</div>
+                </div>
+                
+                <div class="card">
+                    <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1.5rem; letter-spacing: -0.02em;">Savings Trend</h3>
+                    <div id="savingsTrend" style="height: 200px; display: flex; align-items: flex-end; gap: 0.5rem; padding: 1rem 0;">
+                        <div class="empty-state" style="width: 100%;">
+                            <div class="empty-state-icon">
+                                <i data-lucide="bar-chart-2"></i>
+                            </div>
+                            <h3 class="empty-state-title">No data yet</h3>
+                            <p class="empty-state-text">Add savings to see trend</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
-            <div class="card">
-                <h3 style="margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">Savings Trend</h3>
-                <div id="savingsTrend" style="height: 200px; display: flex; align-items: flex-end; gap: 0.5rem; padding: 1rem 0;">
-                    <div class="empty-state" style="width: 100%;">
+
+            <div class="card" style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1.5rem; letter-spacing: -0.02em;">Category Breakdown</h3>
+                <div id="categoryBreakdown">
+                    <div class="empty-state">
                         <div class="empty-state-icon">
-                            <i class="fas fa-chart-bar"></i>
+                            <i data-lucide="pie-chart"></i>
                         </div>
                         <h3 class="empty-state-title">No data yet</h3>
-                        <p class="empty-state-text">Add savings to see trend</p>
+                        <p class="empty-state-text">Add some savings to see category breakdown</p>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="card" style="margin-bottom: 2rem;">
-            <h3 style="margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">Category Breakdown</h3>
-            <div id="categoryBreakdown">
-                <div class="empty-state">
-                    <div class="empty-state-icon">
-                        <i class="fas fa-chart-pie"></i>
+            <div class="card">
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1.5rem; letter-spacing: -0.02em;">Monthly Overview</h3>
+                <div id="monthlyOverview">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <i data-lucide="calendar"></i>
+                        </div>
+                        <h3 class="empty-state-title">No data yet</h3>
+                        <p class="empty-state-text">Add savings to see monthly overview</p>
                     </div>
-                    <h3 class="empty-state-title">No data yet</h3>
-                    <p class="empty-state-text">Add some savings to see category breakdown</p>
                 </div>
             </div>
-        </div>
-
-        <div class="card">
-            <h3 style="margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">Monthly Overview</h3>
-            <div id="monthlyOverview">
-                <div class="empty-state">
-                    <div class="empty-state-icon">
-                        <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <h3 class="empty-state-title">No data yet</h3>
-                    <p class="empty-state-text">Add savings to see monthly overview</p>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <style>
-        .main-content {
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .prediction-container {
-            text-align: center;
-            padding: 2rem;
-            background: var(--bg-tertiary);
-            border-radius: var(--radius-lg);
-        }
-
-        .prediction-icon {
-            font-size: 3rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-
-        .prediction-text {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .prediction-days {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .trend-bar {
-            flex: 1;
-            background: var(--gradient-primary);
-            border-radius: 4px 4px 0 0;
-            transition: height 0.3s ease;
-            min-height: 4px;
-            position: relative;
-        }
-
-        .trend-bar:hover {
-            opacity: 0.8;
-        }
-
-        .trend-bar::after {
-            content: attr(data-amount);
-            position: absolute;
-            top: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.75rem;
-            color: var(--text-primary);
-            font-weight: 600;
-            white-space: nowrap;
-        }
-
-        .category-bar {
-            margin-bottom: 1.5rem;
-        }
-
-        .category-bar-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-            font-size: 0.875rem;
-        }
-
-        .category-bar-fill {
-            height: 12px;
-            background: var(--bg-tertiary);
-            border-radius: 6px;
-            overflow: hidden;
-        }
-
-        .category-bar-progress {
-            height: 100%;
-            transition: width 0.5s ease;
-            border-radius: 6px;
-        }
-
-        .monthly-bar {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            background: var(--bg-tertiary);
-            border-radius: var(--radius-md);
-            margin-bottom: 0.75rem;
-        }
-
-        .monthly-bar-label {
-            min-width: 80px;
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-
-        .monthly-bar-fill {
-            flex: 1;
-            height: 8px;
-            background: var(--bg-primary);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .monthly-bar-progress {
-            height: 100%;
-            background: var(--gradient-primary);
-            border-radius: 4px;
-            transition: width 0.5s ease;
-        }
-
-        .monthly-bar-value {
-            min-width: 80px;
-            text-align: right;
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                padding: 1rem;
-            }
-            .grid-4 {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .prediction-icon {
-                font-size: 2.5rem;
-            }
-            .prediction-days {
-                font-size: 1.25rem;
-            }
-        }
-    </style>
+        </main>
+    </div>
 
     <script type="module">
         import { onAuthStateChange, logoutUser } from './js/auth.js';
@@ -347,13 +192,12 @@
         const navbar = document.getElementById('navbar');
         const mainContent = document.getElementById('main-content');
 
-        // Timeout fallback - if auth doesn't resolve in 5 seconds, show error
+        // Timeout fallback
         const authTimeout = setTimeout(() => {
-            console.error('Auth state timeout - Firebase may not be initialized');
+            console.error('Auth state timeout');
             loadingScreen.innerHTML = `
                 <div style="text-align: center; padding: 2rem;">
-                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: var(--danger); margin-bottom: 1rem;"></i>
-                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">Unable to connect. Please check your internet connection.</p>
+                    <p style="color: var(--danger); font-weight: 700; margin-bottom: 1rem;">Unable to connect. Please check your connection.</p>
                     <button onclick="window.location.reload()" class="btn btn-primary">Retry</button>
                 </div>
             `;
@@ -422,18 +266,12 @@
             }
             
             if (savings.success && savings.data.length > 0) {
-                // Filter savings based on time period
                 const filteredSavings = filterSavingsByPeriod(savings.data, timePeriod);
-                
-                // Render savings trend
                 renderSavingsTrend(filteredSavings);
-                
-                // Render category breakdown
                 renderCategoryBreakdown(filteredSavings);
-                
-                // Render monthly overview
                 renderMonthlyOverview(savings.data);
             }
+            lucide.createIcons();
         }
 
         function filterSavingsByPeriod(savings, period) {
@@ -464,16 +302,16 @@
                 container.innerHTML = `
                     <div class="empty-state" style="width: 100%;">
                         <div class="empty-state-icon">
-                            <i class="fas fa-chart-bar"></i>
+                            <i data-lucide="bar-chart-2"></i>
                         </div>
                         <h3 class="empty-state-title">No data yet</h3>
                         <p class="empty-state-text">Add savings to see trend</p>
                     </div>
                 `;
+                lucide.createIcons();
                 return;
             }
             
-            // Group by date and sum amounts
             const grouped = {};
             savings.forEach(saving => {
                 const date = saving.date.split('T')[0];
@@ -501,12 +339,13 @@
                 container.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-state-icon">
-                            <i class="fas fa-chart-pie"></i>
+                            <i data-lucide="pie-chart"></i>
                         </div>
                         <h3 class="empty-state-title">No data yet</h3>
                         <p class="empty-state-text">Add some savings to see category breakdown</p>
                     </div>
                 `;
+                lucide.createIcons();
                 return;
             }
             
@@ -535,8 +374,8 @@
                     return `
                         <div class="category-bar">
                             <div class="category-bar-header">
-                                <span>${category}</span>
-                                <span>₹${amount.toLocaleString()} (${percentage}%)</span>
+                                <span style="font-weight:600; color:var(--text-primary);">${category}</span>
+                                <span style="font-weight:700; color:var(--text-primary);">₹${amount.toLocaleString()} (${percentage}%)</span>
                             </div>
                             <div class="category-bar-fill">
                                 <div class="category-bar-progress" style="width: ${percentage}%; background: ${color};"></div>
@@ -555,16 +394,16 @@
                 container.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-state-icon">
-                            <i class="fas fa-calendar-alt"></i>
+                            <i data-lucide="calendar"></i>
                         </div>
                         <h3 class="empty-state-title">No data yet</h3>
                         <p class="empty-state-text">Add savings to see monthly overview</p>
                     </div>
                 `;
+                lucide.createIcons();
                 return;
             }
             
-            // Group by month
             const monthlyData = {};
             savings.forEach(saving => {
                 const date = new Date(saving.date);
@@ -596,7 +435,6 @@
             container.innerHTML = monthlyHTML;
         }
 
-        // Time period change handler
         document.getElementById('timePeriod').addEventListener('change', () => {
             const user = getCurrentUser();
             if (user) {
@@ -604,35 +442,55 @@
             }
         });
 
+        // Nav Dropdown and Drawer functionality
+        const avatarBtn = document.getElementById('avatarDropdownToggle');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileDrawer = document.getElementById('mobileDrawer');
+        const drawerOverlay = document.getElementById('drawerOverlay');
+        const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+
+        if (avatarBtn && profileDropdown) {
+            avatarBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('open');
+            });
+            document.addEventListener('click', () => {
+                profileDropdown.classList.remove('open');
+            });
+        }
+
+        if (mobileMenuBtn && mobileDrawer && drawerOverlay) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileDrawer.classList.add('open');
+                drawerOverlay.classList.add('open');
+            });
+            
+            const closeDrawer = () => {
+                mobileDrawer.classList.remove('open');
+                drawerOverlay.classList.remove('open');
+            };
+            
+            drawerOverlay.addEventListener('click', closeDrawer);
+            if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', closeDrawer);
+        }
+
         document.getElementById('logoutBtn').addEventListener('click', async (e) => {
             e.preventDefault();
             await logoutUser();
         });
-
-        // Mouse glow effect
-        const mouseGlow = document.getElementById('mouseGlow');
-        if (mouseGlow) {
-            document.addEventListener('mousemove', (e) => {
-                mouseGlow.style.left = e.clientX + 'px';
-                mouseGlow.style.top = e.clientY + 'px';
-                mouseGlow.classList.add('active');
-            });
-
-            document.addEventListener('mouseleave', () => {
-                mouseGlow.classList.remove('active');
-            });
-        }
+        
+        document.getElementById('drawerLogoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await logoutUser();
+        });
 
         // Theme toggle functionality
         const themeToggle = document.getElementById('themeToggle');
-        const themeIcon = themeToggle.querySelector('i');
-        
-        // Load saved theme preference
         const savedTheme = localStorage.getItem('theme') || 'light';
         if (savedTheme === 'dark') {
             document.documentElement.setAttribute('data-theme', 'dark');
-            themeIcon.classList.remove('fa-moon');
-            themeIcon.classList.add('fa-sun');
+            themeToggle.innerHTML = '<i data-lucide="sun"></i>';
         }
         
         themeToggle.addEventListener('click', () => {
@@ -642,205 +500,146 @@
             document.documentElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             
-            // Update icon
             if (newTheme === 'dark') {
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
+                themeToggle.innerHTML = '<i data-lucide="sun"></i>';
             } else {
-                themeIcon.classList.remove('fa-sun');
-                themeIcon.classList.add('fa-moon');
+                themeToggle.innerHTML = '<i data-lucide="moon"></i>';
             }
+            lucide.createIcons();
         });
-
-        // Mobile menu toggle
-        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-        const sidebar = document.querySelector('.sidebar');
-        
-        if (mobileMenuToggle && sidebar) {
-            mobileMenuToggle.addEventListener('click', (e) => {
-                e.stopPropagation();
-                sidebar.classList.toggle('open');
-            });
-            
-            // Close sidebar when clicking outside
-            document.addEventListener('click', (e) => {
-                if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== mobileMenuToggle) {
-                    sidebar.classList.remove('open');
-                }
-            });
-        }
     </script>
 
     <style>
-        .page-container {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .sidebar {
-            width: 280px;
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border-right: 1px solid var(--glass-border);
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            left: 0;
-            top: 0;
-            height: 100vh;
-            overflow-y: auto;
-            z-index: 100;
-        }
-
-        .sidebar-header {
-            margin-bottom: 2rem;
-        }
-
-        .profile-section {
+        .prediction-container {
             text-align: center;
-            padding: 1.5rem 0;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .avatar-large {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: var(--gradient-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: white;
-            margin: 0 auto 1rem;
-            box-shadow: var(--shadow-lg), var(--glow-primary);
-        }
-
-        .profile-section .username-display {
-            display: block;
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 0.75rem;
-        }
-
-        .sidebar-nav {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .sidebar-nav .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.875rem 1rem;
-            border-radius: var(--radius-md);
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: all var(--transition-normal);
-            font-weight: 500;
-        }
-
-        .sidebar-nav .nav-link:hover {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-        }
-
-        .sidebar-nav .nav-link.active {
-            background: var(--gradient-primary);
-            color: white;
-        }
-
-        .sidebar-nav .nav-link i {
-            width: 20px;
-            text-align: center;
-        }
-
-        .sidebar-footer {
-            display: flex;
-            gap: 0.5rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .sidebar-footer .icon-btn {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.75rem;
-            background: var(--bg-tertiary);
+            padding: 24px;
+            background: var(--bg-primary);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
+        }
+
+        .prediction-icon {
+            font-size: 2.25rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .prediction-icon svg {
+            width: 44px;
+            height: 44px;
+        }
+
+        .prediction-text {
             color: var(--text-secondary);
-            cursor: pointer;
-            transition: all var(--transition-normal);
-            text-decoration: none;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            font-weight: 600;
         }
 
-        .sidebar-footer .icon-btn:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
+        .prediction-days {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--text-primary);
         }
 
-        .sidebar-footer .icon-btn.logout:hover {
-            background: var(--danger);
-            border-color: var(--danger);
-        }
-
-        .main-content {
+        .trend-bar {
             flex: 1;
-            margin-left: 280px;
-            padding: 2rem;
+            background: var(--primary);
+            border-radius: var(--radius-xs) var(--radius-xs) 0 0;
+            transition: all var(--transition-normal);
+            min-height: 4px;
+            position: relative;
         }
 
-        @media (max-width: 1024px) {
-            .sidebar {
-                width: 240px;
-            }
-
-            .main-content {
-                margin-left: 240px;
-            }
+        .trend-bar:hover {
+            opacity: 0.85;
+            background: var(--primary-hover);
         }
 
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-                transition: transform var(--transition-slow);
-            }
+        .trend-bar::after {
+            content: attr(data-amount);
+            position: absolute;
+            top: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            color: var(--text-primary);
+            font-weight: 700;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition-fast);
+        }
 
-            .sidebar.open {
-                transform: translateX(0);
-            }
+        .trend-bar:hover::after {
+            opacity: 1;
+        }
 
-            .main-content {
-                margin-left: 0;
-                padding: 1rem;
-            }
+        .category-bar {
+            margin-bottom: 1.25rem;
+        }
 
-            .mobile-menu-toggle {
-                display: flex;
-                position: fixed;
-                bottom: 1rem;
-                right: 1rem;
-                width: 56px;
-                height: 56px;
-                background: var(--gradient-primary);
-                border-radius: 50%;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                box-shadow: var(--shadow-lg), var(--glow-primary);
-                z-index: 1000;
-                cursor: pointer;
-            }
+        .category-bar-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+        }
+
+        .category-bar-fill {
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .category-bar-progress {
+            height: 100%;
+            transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 4px;
+        }
+
+        .monthly-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 12px 16px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            margin-bottom: 8px;
+        }
+
+        .monthly-bar-label {
+            min-width: 80px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .monthly-bar-fill {
+            flex: 1;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .monthly-bar-progress {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 4px;
+            transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .monthly-bar-value {
+            min-width: 90px;
+            text-align: right;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-primary);
         }
     </style>
 </body>

@@ -4,103 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Lakshya ₹100K</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    <!-- Premium Animated Background -->
-    <div class="premium-background">
-        <div class="gradient-blob gradient-blob-1"></div>
-        <div class="gradient-blob gradient-blob-2"></div>
-        <div class="gradient-blob gradient-blob-3"></div>
-        <div class="grid-pattern"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="mouse-glow" id="mouseGlow"></div>
-    </div>
+    <!-- Premium Minimalist Background -->
+    <div class="premium-background"></div>
 
     <!-- Loading Screen -->
     <div id="loadingScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; z-index: 9999;">
         <div style="text-align: center;">
-            <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary); margin-bottom: 1rem;"></i>
-            <p style="color: var(--text-secondary);">Loading...</p>
+            <p style="color: var(--text-secondary); font-weight: 600;">Loading...</p>
         </div>
     </div>
 
     <div class="auth-container" id="authContainer" style="display: none;">
-        <div class="auth-split">
-            <div class="auth-left">
-                <div class="auth-brand">
-                    <h1 class="brand-name">Lakshya</h1>
-                    <span class="brand-amount">₹100K</span>
-                </div>
-                <div class="auth-illustration">
-                    <div class="illustration-circle">
-                        <i class="fas fa-piggy-bank"></i>
-                    </div>
-                    <div class="illustration-float">
-                        <i class="fas fa-coins"></i>
-                    </div>
-                    <div class="illustration-float" style="animation-delay: 1s;">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                </div>
-                <div class="auth-message">
-                    <h2>Your journey to financial freedom starts here</h2>
-                    <p>Track your savings, build habits, and achieve your ₹100,000 goal with our premium savings tracker.</p>
-                </div>
+        <div class="auth-card">
+            <div class="auth-brand">
+                <a href="index.html" class="nav-brand">
+                    <span>Lakshya</span><span class="brand-blue">₹100K</span>
+                </a>
             </div>
-            <div class="auth-right">
-                <div class="auth-card">
-                    <div class="auth-header">
-                        <h1>Welcome back</h1>
-                        <p>Sign in to continue your savings journey</p>
-                    </div>
-                    
-                    <form id="loginForm">
-                        <div class="form-group">
-                            <label class="form-label">Email or Username</label>
-                            <input type="text" class="form-input" name="email" required placeholder="you@example.com or username">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Password</label>
-                            <div style="position: relative;">
-                                <input type="password" class="form-input" name="password" id="password" required placeholder="••••••••">
-                                <button type="button" onclick="togglePassword('password')" class="password-toggle">
-                                    <i class="fas fa-eye" id="password-icon"></i>
-                                </button>
-                            </div>
-                            <div style="text-align: right; margin-top: 0.5rem;">
-                                <a href="#" id="forgotPassword" style="font-size: 0.875rem; color: var(--primary); text-decoration: none;">Forgot password?</a>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group" style="display: flex; justify-content: space-between; align-items: center;">
-                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.875rem; color: var(--text-secondary);">
-                                <input type="checkbox" name="remember">
-                                <span>Remember me</span>
-                            </label>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">
-                            Sign in
-                        </button>
-                    </form>
-                    
-                    <div class="auth-footer">
-                        <span style="color: var(--text-secondary);">Don't have an account? </span>
-                        <a href="signup.html" style="color: var(--primary); font-weight: 600;">Sign up</a>
+            <div class="auth-header">
+                <h1>Welcome back</h1>
+                <p>Sign in to continue your savings journey</p>
+            </div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">Email or Username</label>
+                    <div class="input-group">
+                        <i data-lucide="mail"></i>
+                        <input type="text" class="form-input" name="email" required placeholder="you@example.com or username">
                     </div>
                 </div>
+                
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <label class="form-label" style="margin-bottom: 0;">Password</label>
+                        <a href="#" id="forgotPassword" style="font-size: 0.8rem; color: var(--primary); font-weight: 600;">Forgot password?</a>
+                    </div>
+                    <div class="input-group">
+                        <i data-lucide="lock"></i>
+                        <input type="password" class="form-input" name="password" id="password" required placeholder="••••••••" style="padding-right: 44px;">
+                        <button type="button" onclick="togglePassword('password')" class="password-toggle" id="password-icon-btn" title="Toggle password visibility">
+                            <i data-lucide="eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 8px;">
+                    Sign in
+                </button>
+            </form>
+            
+            <div class="auth-footer">
+                <span style="color: var(--text-secondary);">Don't have an account? </span>
+                <a href="signup.html" style="color: var(--primary); font-weight: 600;">Sign up</a>
             </div>
         </div>
     </div>
@@ -112,13 +72,12 @@
         const loadingScreen = document.getElementById('loadingScreen');
         const authContainer = document.getElementById('authContainer');
 
-        // Timeout fallback - if auth doesn't resolve in 5 seconds, show error
+        // Timeout fallback
         const authTimeout = setTimeout(() => {
-            console.error('Auth state timeout - Firebase may not be initialized');
+            console.error('Auth state timeout');
             loadingScreen.innerHTML = `
                 <div style="text-align: center; padding: 2rem;">
-                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: var(--danger); margin-bottom: 1rem;"></i>
-                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">Unable to connect. Please check your internet connection.</p>
+                    <p style="color: var(--danger); font-weight: 700; margin-bottom: 1rem;">Unable to connect. Please check your connection.</p>
                     <button onclick="window.location.reload()" class="btn btn-primary">Retry</button>
                 </div>
             `;
@@ -135,22 +94,22 @@
             } else {
                 // User is not authenticated, show login form
                 authContainer.style.display = 'flex';
+                lucide.createIcons();
             }
         });
 
         function togglePassword(fieldId) {
             const input = document.getElementById(fieldId);
-            const icon = document.getElementById(fieldId + '-icon');
+            const iconBtn = document.getElementById(fieldId + '-icon-btn');
             
             if (input.type === 'password') {
                 input.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
+                iconBtn.innerHTML = '<i data-lucide="eye-off"></i>';
             } else {
                 input.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
+                iconBtn.innerHTML = '<i data-lucide="eye"></i>';
             }
+            lucide.createIcons();
         }
 
         window.togglePassword = togglePassword;
@@ -171,27 +130,12 @@
             }
         });
 
-        // Mouse glow effect
-        const mouseGlow = document.getElementById('mouseGlow');
-        if (mouseGlow) {
-            document.addEventListener('mousemove', (e) => {
-                mouseGlow.style.left = e.clientX + 'px';
-                mouseGlow.style.top = e.clientY + 'px';
-                mouseGlow.classList.add('active');
-            });
-
-            document.addEventListener('mouseleave', () => {
-                mouseGlow.classList.remove('active');
-            });
-        }
-
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const identifier = e.target.email.value.trim();
             const password = e.target.password.value;
             
-            // Client-side validation
             if (!identifier) {
                 showToast('Please enter your email or username', 'error');
                 return;
@@ -199,11 +143,6 @@
             
             if (!password) {
                 showToast('Please enter your password', 'error');
-                return;
-            }
-            
-            if (password.length < 6) {
-                showToast('Password must be at least 6 characters', 'error');
                 return;
             }
             
@@ -216,7 +155,6 @@
             
             if (result.success) {
                 showToast('Login successful! Redirecting...', 'success');
-                // Wait for Firebase to confirm auth state before redirect
                 setTimeout(() => {
                     window.location.href = 'dashboard.html';
                 }, 500);
@@ -234,254 +172,68 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
-        }
-
-        .auth-split {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            max-width: 1200px;
-            width: 100%;
-            align-items: center;
-        }
-
-        .auth-left {
-            display: flex;
-            flex-direction: column;
-            gap: 3rem;
-            animation: fadeInLeft 0.8s ease;
-        }
-
-        .auth-brand {
-            display: flex;
-            align-items: baseline;
-            gap: 0.5rem;
-        }
-
-        .auth-brand .brand-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            letter-spacing: -0.02em;
-        }
-
-        .auth-brand .brand-amount {
-            font-family: 'Inter', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .auth-illustration {
-            position: relative;
-            height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .illustration-circle {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            color: white;
-            animation: pulse 3s ease-in-out infinite;
-            box-shadow: var(--shadow-xl), var(--glow-primary);
-        }
-
-        .illustration-float {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--glass-border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: var(--primary);
-            animation: float 4s ease-in-out infinite;
-            box-shadow: var(--shadow-md);
-        }
-
-        .illustration-float:nth-child(2) {
-            top: 20%;
-            right: 10%;
-        }
-
-        .illustration-float:nth-child(3) {
-            bottom: 20%;
-            left: 10%;
-        }
-
-        .auth-message h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-            letter-spacing: -0.02em;
-        }
-
-        .auth-message p {
-            font-size: 1rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        .auth-right {
-            animation: fadeInRight 0.8s ease;
+            padding: 2rem 1.5rem;
         }
 
         .auth-card {
             width: 100%;
-            max-width: 450px;
-            padding: 2.5rem;
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-xl);
-            box-shadow: var(--glass-shadow);
-            margin: 0 auto;
+            max-width: 440px;
+            padding: 32px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .auth-brand {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .auth-brand .nav-brand {
+            font-size: 1.5rem;
         }
 
         .auth-header {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 24px;
         }
 
         .auth-header h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.75rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-            letter-spacing: -0.02em;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 6px;
         }
 
         .auth-header p {
+            font-size: 0.875rem;
             color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-bottom: 0;
         }
 
-        @keyframes fadeInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes fadeInRight {
-            from {
-                opacity: 0;
-                transform: translateX(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-20px);
-            }
+        .auth-footer {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 0.875rem;
         }
 
         .password-toggle {
             position: absolute;
-            right: 0.75rem;
+            right: 14px;
             top: 50%;
             transform: translateY(-50%);
             background: none;
             border: none;
             cursor: pointer;
-            color: var(--text-tertiary);
-            padding: 0.25rem;
+            color: var(--text-secondary);
             display: flex;
             align-items: center;
-            justify-content: center;
+            padding: 0;
         }
 
-        .password-toggle:hover {
-            color: var(--text-secondary);
-        }
-
-        .auth-footer {
-            margin-top: 1.5rem;
-            text-align: center;
-            font-size: 0.875rem;
-        }
-
-        @media (max-width: 968px) {
-            .auth-split {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .auth-left {
-                text-align: center;
-                align-items: center;
-            }
-
-            .auth-illustration {
-                height: 200px;
-            }
-
-            .illustration-circle {
-                width: 150px;
-                height: 150px;
-                font-size: 3rem;
-            }
-
-            .auth-message h2 {
-                font-size: 1.5rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .auth-container {
-                padding: 1rem;
-            }
-
-            .auth-card {
-                padding: 1.5rem;
-            }
-
-            .auth-brand .brand-name {
-                font-size: 2rem;
-            }
-
-            .auth-brand .brand-amount {
-                font-size: 1.25rem;
-            }
+        .password-toggle svg {
+            width: 18px;
+            height: 18px;
         }
     </style>
 </body>

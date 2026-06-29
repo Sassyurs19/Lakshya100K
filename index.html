@@ -5,57 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lakshya ₹100K - Small Savings. Big Dreams.</title>
     <meta name="description" content="Track every rupee, build lasting habits, and reach your ₹1,00,000 goal with confidence.">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <!-- Loading Screen -->
     <div id="loadingScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; z-index: 9999;">
         <div style="text-align: center;">
-            <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary); margin-bottom: 1rem;"></i>
-            <p style="color: var(--text-secondary);">Loading...</p>
+            <p style="color: var(--text-secondary); font-weight: 600;">Loading...</p>
         </div>
     </div>
 
-    <!-- Premium Animated Background -->
-    <div class="premium-background">
-        <div class="gradient-blob gradient-blob-1"></div>
-        <div class="gradient-blob gradient-blob-2"></div>
-        <div class="gradient-blob gradient-blob-3"></div>
-        <div class="grid-pattern"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="mouse-glow" id="mouseGlow"></div>
-    </div>
+    <!-- Premium Minimalist Background -->
+    <div class="premium-background"></div>
 
+    <!-- Sticky Top Navigation Bar -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <span>Lakshya</span><span class="brand-blue">₹100K</span>
+            </a>
+            <div class="nav-right">
+                <a href="login.html" class="btn btn-secondary btn-sm">Login</a>
+                <a href="signup.html" class="btn btn-primary btn-sm">Create Account</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Spacious Hero Section -->
     <div class="hero-section" id="heroSection" style="display: none;">
-        <!-- Floating currency elements -->
-        <div class="floating-symbol fs-1">₹</div>
-        <div class="floating-symbol fs-2">$</div>
-        <div class="floating-symbol fs-3">€</div>
-        <div class="floating-symbol fs-4"><i class="fas fa-coins"></i></div>
-        <div class="floating-symbol fs-5"><i class="fas fa-chart-line"></i></div>
-        <div class="floating-symbol fs-6"><i class="fas fa-piggy-bank"></i></div>
-        <div class="floating-symbol fs-7">₹</div>
-        
-        <div class="hero-content fade-in">
-            <h1 class="hero-title">Save Today.<br>Achieve Tomorrow.</h1>
-            <p class="hero-subtitle">Track every rupee, build lasting habits, and reach your ₹1,00,000 goal with confidence.</p>
-            <div class="hero-buttons">
-                <a href="signup.html" class="btn btn-primary btn-lg">
-                    Create Account
-                </a>
-                <a href="login.html" class="btn btn-outline btn-lg">
-                    Login
-                </a>
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">Save Today.<br>Achieve Tomorrow.</h1>
+                <p class="hero-subtitle">Track every rupee, build lasting habits, and reach your ₹1,00,000 savings goal with confidence.</p>
+                <div class="hero-buttons">
+                    <a href="signup.html" class="btn btn-primary btn-lg">
+                        Create Account
+                    </a>
+                    <a href="login.html" class="btn btn-secondary btn-lg">
+                        Login
+                    </a>
+                </div>
+            </div>
+            <div class="hero-graphic">
+                <div class="hero-illustration">
+                    <svg viewBox="0 0 500 400" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Background decorative grid/circles -->
+                        <circle cx="250" cy="200" r="180" stroke="var(--border-color)" stroke-width="1.5"/>
+                        <circle cx="250" cy="200" r="120" stroke="var(--border-color)" stroke-width="1.5" stroke-dasharray="6 6"/>
+                        <line x1="70" y1="200" x2="430" y2="200" stroke="var(--border-color)" stroke-width="1"/>
+                        <line x1="250" y1="20" x2="250" y2="380" stroke="var(--border-color)" stroke-width="1"/>
+                        
+                        <!-- Main target/goal concentric elements -->
+                        <rect x="175" y="125" width="150" height="150" rx="18" fill="var(--bg-card)" stroke="var(--border-color)" stroke-width="2" class="hero-svg-card"/>
+                        <circle cx="250" cy="200" r="36" fill="var(--primary-light)"/>
+                        <circle cx="250" cy="200" r="20" fill="var(--primary)" opacity="0.15"/>
+                        <circle cx="250" cy="200" r="8" fill="var(--primary)"/>
+                        
+                        <!-- Data floating cards/nodes -->
+                        <g class="hero-svg-node" transform="translate(60, 60)">
+                            <rect width="150" height="60" rx="12" fill="var(--bg-card)" stroke="var(--border-color)" stroke-width="1.5"/>
+                            <text x="16" y="24" fill="var(--text-primary)" font-family="inherit" font-size="12" font-weight="700">Goal Progress</text>
+                            <rect x="16" y="36" width="118" height="6" rx="3" fill="var(--secondary)"/>
+                            <rect x="16" y="36" width="85" height="6" rx="3" fill="var(--success)"/>
+                        </g>
+                        
+                        <g class="hero-svg-node" transform="translate(310, 290)">
+                            <rect width="130" height="46" rx="23" fill="var(--bg-card)" stroke="var(--border-color)" stroke-width="1.5"/>
+                            <circle cx="23" cy="23" r="11" fill="var(--primary-light)"/>
+                            <path d="M19 23L22 26L27 20" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <text x="42" y="27" fill="var(--text-primary)" font-family="inherit" font-size="11" font-weight="700">Goal: ₹100,000</text>
+                        </g>
+
+                        <!-- Dynamic trend line -->
+                        <path d="M120 300C160 260 200 320 250 250C300 180 330 220 380 140" stroke="var(--primary)" stroke-width="3" stroke-linecap="round" class="hero-svg-line"/>
+                        
+                        <!-- Interactive dots -->
+                        <circle cx="120" cy="300" r="4" fill="var(--primary)"/>
+                        <circle cx="250" cy="250" r="4" fill="var(--primary)"/>
+                        <circle cx="380" cy="140" r="6" fill="var(--primary)" stroke="var(--bg-card)" stroke-width="2"/>
+                    </svg>
+                </div>
             </div>
         </div>
     </div>
@@ -66,13 +95,12 @@
         const loadingScreen = document.getElementById('loadingScreen');
         const heroSection = document.getElementById('heroSection');
 
-        // Timeout fallback - if auth doesn't resolve in 5 seconds, show error
+        // Timeout fallback
         const authTimeout = setTimeout(() => {
-            console.error('Auth state timeout - Firebase may not be initialized');
+            console.error('Auth state timeout');
             loadingScreen.innerHTML = `
                 <div style="text-align: center; padding: 2rem;">
-                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: var(--danger); margin-bottom: 1rem;"></i>
-                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">Unable to connect. Please check your internet connection.</p>
+                    <p style="color: var(--danger); font-weight: 700; margin-bottom: 1rem;">Unable to connect. Please check your internet connection.</p>
                     <button onclick="window.location.reload()" class="btn btn-primary">Retry</button>
                 </div>
             `;
@@ -91,116 +119,77 @@
                 heroSection.style.display = 'flex';
             }
         });
-        // Mouse glow effect
-        const mouseGlow = document.getElementById('mouseGlow');
-        if (mouseGlow) {
-            document.addEventListener('mousemove', (e) => {
-                mouseGlow.style.left = e.clientX + 'px';
-                mouseGlow.style.top = e.clientY + 'px';
-                mouseGlow.classList.add('active');
-            });
-
-            document.addEventListener('mouseleave', () => {
-                mouseGlow.classList.remove('active');
-            });
-        }
     </script>
 
     <style>
         .hero-section {
-            min-height: 100vh;
+            min-height: calc(100vh - var(--navbar-height));
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
+            padding: 3rem 1.5rem;
+        }
+
+        .hero-container {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 4rem;
+            max-width: 1200px;
+            width: 100%;
+            align-items: center;
         }
 
         .hero-content {
-            text-align: center;
-            max-width: 800px;
+            text-align: left;
         }
 
         .hero-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 4rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
+            font-size: 3.75rem;
+            font-weight: 800;
             line-height: 1.1;
-            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
             color: var(--text-primary);
+            letter-spacing: -0.03em;
         }
 
         .hero-subtitle {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 1.25rem;
-            font-weight: 400;
-            margin-bottom: 2.5rem;
+            font-size: 1.15rem;
+            font-weight: 500;
             color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            max-width: 520px;
             line-height: 1.6;
         }
 
         .hero-buttons {
             display: flex;
             gap: 1rem;
+            justify-content: flex-start;
+        }
+
+        .hero-graphic {
+            display: flex;
+            align-items: center;
             justify-content: center;
-            flex-wrap: wrap;
         }
 
-        /* Floating Symbols Animation */
-        .floating-symbol {
-            position: absolute;
-            color: var(--primary);
-            opacity: 0.12;
-            pointer-events: none;
-            user-select: none;
-            z-index: 1;
-            font-weight: 700;
-            animation: floatUp 8s ease-in-out infinite;
-        }
-
-        .fs-1 { font-size: 4rem; top: 15%; left: 10%; animation-duration: 9s; animation-delay: 0s; }
-        .fs-2 { font-size: 3rem; top: 60%; left: 15%; animation-duration: 11s; animation-delay: 1.5s; }
-        .fs-3 { font-size: 2.5rem; top: 25%; right: 12%; animation-duration: 8s; animation-delay: 0.5s; }
-        .fs-4 { font-size: 3.5rem; top: 70%; right: 18%; animation-duration: 12s; animation-delay: 2s; }
-        .fs-5 { font-size: 2rem; top: 40%; left: 45%; animation-duration: 10s; animation-delay: 3s; }
-        .fs-6 { font-size: 3rem; top: 80%; left: 50%; animation-duration: 13s; animation-delay: 1s; }
-        .fs-7 { font-size: 2.2rem; top: 50%; right: 40%; animation-duration: 9.5s; animation-delay: 4.5s; }
-
-        @keyframes floatUp {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 0.05;
+        @media (max-width: 991px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                text-align: center;
             }
-            50% {
-                transform: translateY(-30px) rotate(15deg);
-                opacity: 0.2;
-            }
-            100% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 0.05;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .hero-title {
-                font-size: 2.5rem;
-            }
-            .hero-subtitle {
-                font-size: 1rem;
-            }
-            .hero-buttons {
+            .hero-content {
+                text-align: center;
+                display: flex;
                 flex-direction: column;
                 align-items: center;
             }
-            .hero-buttons .btn {
-                width: 100%;
+            .hero-title {
+                font-size: 2.75rem;
+            }
+            .hero-buttons {
                 justify-content: center;
-            }
-            .floating-symbol {
-                opacity: 0.06;
-            }
-            .fs-5, .fs-6, .fs-7 {
-                display: none;
             }
         }
     </style>
