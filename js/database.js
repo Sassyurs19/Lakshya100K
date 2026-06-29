@@ -506,6 +506,7 @@ export async function addAchievement(achievementData) {
     try {
         await addDoc(collection(db, ACHIEVEMENTS_COLLECTION), {
             ...achievementData,
+            claimed: false,
             achievedAt: serverTimestamp()
         });
         return { success: true };
@@ -537,6 +538,22 @@ export async function getUserAchievements(userId) {
         return { success: true, data: achievements };
     } catch (error) {
         console.error('Error getting achievements:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+/**
+ * Claim an achievement
+ * @param {string} achievementId - Achievement document ID
+ * @returns {Promise}
+ */
+export async function claimAchievement(achievementId) {
+    try {
+        const achievementRef = doc(db, ACHIEVEMENTS_COLLECTION, achievementId);
+        await updateDoc(achievementRef, { claimed: true });
+        return { success: true };
+    } catch (error) {
+        console.error('Error claiming achievement:', error);
         return { success: false, error: error.message };
     }
 }

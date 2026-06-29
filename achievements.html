@@ -135,7 +135,7 @@
 
     <script type="module">
         import { onAuthStateChange, logoutUser, getCurrentUser } from './js/auth.js';
-        import { calculateStatistics, getUserAchievements, getUserDocument } from './js/database.js';
+        import { calculateStatistics, getUserAchievements, getUserDocument, claimAchievement } from './js/database.js';
 
         const loadingScreen = document.getElementById('loadingScreen');
         const navbar = document.getElementById('navbar');
@@ -202,12 +202,12 @@
             const userAchievements = await getUserAchievements(user.uid);
             console.log('[loadAchievements] Stats result:', stats.success ? 'success' : 'failed', 'Achievements result:', userAchievements.success ? 'success' : 'failed', 'Achievements count:', userAchievements.data?.length || 0);
             
-            const unlockedAchievementIds = userAchievements.success 
-                ? userAchievements.data.map(a => a.name)
-                : [];
+            const unlockedAchievements = userAchievements.success ? userAchievements.data : [];
+            const unlockedAchievementIds = unlockedAchievements.map(a => a.name);
+            const claimedAchievementIds = unlockedAchievements.filter(a => a.claimed).map(a => a.name);
             
             const totalSaved = stats.success ? stats.data.totalSaved : 0;
-            console.log('[loadAchievements] Total saved:', totalSaved, 'Unlocked achievements:', unlockedAchievementIds.length);
+            console.log('[loadAchievements] Total saved:', totalSaved, 'Unlocked achievements:', unlockedAchievementIds.length, 'Claimed:', claimedAchievementIds.length);
             
             const unlockedCount = unlockedAchievementIds.length;
             const totalCount = achievements.length;
@@ -226,17 +226,20 @@
             renderMilestones(totalSaved);
             
             const achievementsHTML = achievements.map(achievement => {
-                const isUnlocked = unlockedAchievementIds.includes(achievement.id);
+                const isUnlocked = unlockedAchievementIds.includes(achievement.name);
+                const isClaimed = claimedAchievementIds.includes(achievement.name);
+                const userAchievement = unlockedAchievements.find(a => a.name === achievement.name);
                 const progress = Math.min(100, Math.round((totalSaved / achievement.threshold) * 100));
                 
                 return `
-                    <div class="card achievement-card ${isUnlocked ? 'unlocked' : 'locked'}">
-                        <span class="achievement-badge">${isUnlocked ? 'Unlocked' : 'Locked'}</span>
+                    <div class="card achievement-card ${isUnlocked ? (isClaimed ? 'unlocked claimed' : 'unlocked') : 'locked'}">
+                        <span class="achievement-badge">${isClaimed ? 'Claimed' : isUnlocked ? 'Ready to Claim' : 'Locked'}</span>
                         <div class="achievement-icon"><i data-lucide="${achievement.icon}"></i></div>
                         <div class="achievement-title">${achievement.name}</div>
                         <div class="achievement-description">${achievement.description}</div>
                         <div class="achievement-amount">₹${achievement.threshold.toLocaleString()}</div>
                         ${!isUnlocked ? `<div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 8px; font-weight: 600;">${progress}% complete</div>` : ''}
+                        ${isUnlocked && !isClaimed ? `<button class="btn btn-primary btn-sm" onclick="window.claimAchievement('${userAchievement?.id}')" style="margin-top: 12px; width: 100%;">Claim Achievement</button>` : ''}
                     </div>
                 `;
             }).join('');
@@ -244,6 +247,18 @@
             document.getElementById('achievementsGrid').innerHTML = achievementsHTML;
             lucide.createIcons();
         }
+
+        window.claimAchievement = async (achievementId) => {
+            const result = await claimAchievement(achievementId);
+            if (result.success) {
+                const user = getCurrentUser();
+                if (user) {
+                    await loadAchievements(user);
+                }
+            } else {
+                alert('Failed to claim achievement. Please try again.');
+            }
+        };
 
         function renderMilestones(totalSaved) {
             const milestones = [
@@ -495,6 +510,11 @@
 
         .achievement-card.unlocked .achievement-badge {
             background: var(--success);
+            color: white;
+        }
+
+        .achievement-card.unlocked:not(.claimed) .achievement-badge {
+            background: var(--primary);
             color: white;
         }
 
