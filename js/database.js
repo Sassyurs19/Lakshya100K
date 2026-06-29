@@ -158,6 +158,9 @@ export async function addSaving(savingData) {
         // Calculate running total
         await updateRunningTotals(savingData.userId);
         
+        // Check and unlock achievements
+        await checkAndUnlockAchievements(savingData.userId);
+        
         return { success: true, id: docRef.id };
     } catch (error) {
         console.error('Error adding saving:', error);
@@ -313,7 +316,9 @@ export async function updateSaving(savingId, savingData) {
         // Recalculate running totals
         const savingDoc = await getDoc(docRef);
         if (savingDoc.exists()) {
-            await updateRunningTotals(savingDoc.data().userId);
+            const uid = savingDoc.data().userId;
+            await updateRunningTotals(uid);
+            await checkAndUnlockAchievements(uid);
         }
         
         return { success: true };
@@ -349,6 +354,7 @@ export async function deleteSaving(savingId) {
             
             // Recalculate running totals
             await updateRunningTotals(userId);
+            await checkAndUnlockAchievements(userId);
         }
         
         return { success: true };
@@ -523,5 +529,63 @@ export async function getUserAchievements(userId) {
     } catch (error) {
         console.error('Error getting achievements:', error);
         return { success: false, error: error.message };
+    }
+}
+
+/**
+ * Check and unlock achievements for a user based on savings stats
+ * @param {string} userId - User ID
+ */
+export async function checkAndUnlockAchievements(userId) {
+    try {
+        const statsResult = await calculateStatistics(userId);
+        if (!statsResult.success) return;
+        
+        const { totalSaved } = statsResult.data;
+        
+        // Fetch existing unlocked achievements
+        const existingResult = await getUserAchievements(userId);
+        if (!existingResult.success) return;
+        
+        const unlockedNames = new Set(existingResult.data.map(a => a.name));
+        
+        const achievementsList = [
+            { name: 'First Saving', threshold: 1, type: 'count', description: 'Add your first saving' },
+            { name: '₹100', threshold: 100, type: 'amount', description: 'Save ₹100' },
+            { name: '₹500', threshold: 500, type: 'amount', description: 'Save ₹500' },
+            { name: '₹1,000', threshold: 1000, type: 'amount', description: 'Save ₹1,000' },
+            { name: '₹5,000', threshold: 5000, type: 'amount', description: 'Save ₹5,000' },
+            { name: '₹10,000', threshold: 10000, type: 'amount', description: 'Save ₹10,000' },
+            { name: '₹25,000', threshold: 25000, type: 'amount', description: 'Save ₹25,000' },
+            { name: '₹50,000', threshold: 50000, type: 'amount', description: 'Save ₹50,000' },
+            { name: '₹75,000', threshold: 75000, type: 'amount', description: 'Save ₹75,000' },
+            { name: '₹100,000', threshold: 100000, type: 'amount', description: 'Reach your goal!' }
+        ];
+        
+        // Get total count of savings
+        const savingsResult = await getUserSavings(userId);
+        const totalCount = savingsResult.success ? savingsResult.data.length : 0;
+        
+        for (const ach of achievementsList) {
+            if (unlockedNames.has(ach.name)) continue;
+            
+            let qualifies = false;
+            if (ach.type === 'count' && totalCount >= ach.threshold) {
+                qualifies = true;
+            } else if (ach.type === 'amount' && totalSaved >= ach.threshold) {
+                qualifies = true;
+            }
+            
+            if (qualifies) {
+                await addAchievement({
+                    userId,
+                    name: ach.name,
+                    description: ach.description
+                });
+                console.log(`Unlocked achievement: ${ach.name} for user ${userId}`);
+            }
+        }
+    } catch (error) {
+        console.error('Error checking achievements:', error);
     }
 }
