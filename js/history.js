@@ -1,6 +1,6 @@
-import { onAuthStateChange, logoutUser, getCurrentUser } from './auth.js?v=3';
-import { getUserSavings, getUserSavingsPaginated, deleteSaving, getUserDocument } from './database.js?v=3';
-import { showToast, debounce } from './utils.js?v=3';
+import { onAuthStateChange, logoutUser, getCurrentUser } from './auth.js?v=5';
+import { getUserSavings, getUserSavingsPaginated, deleteSaving, getUserDocument } from './database.js?v=5';
+import { showToast, debounce } from './utils.js?v=5';
 
 let currentPage = 1, lastDoc = null, hasMore = true, allSavings = [];
 const savingsPerPage = 20;
