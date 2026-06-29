@@ -333,7 +333,7 @@
     </style>
 
     <script type="module">
-        import { onAuthStateChange, logoutUser } from './js/auth.js';
+        import { onAuthStateChange, logoutUser, getCurrentUser } from './js/auth.js';
         import { getUserSavings, getUserDocument } from './js/database.js';
 
         const loadingScreen = document.getElementById('loadingScreen');
@@ -492,7 +492,7 @@
                     const result = await deleteSaving(saving.id);
                     if (result.success) {
                         closeModal();
-                        const user = onAuthStateChange._currentUser;
+                        const user = getCurrentUser();
                         if (user) loadGallery(user);
                     }
                 }

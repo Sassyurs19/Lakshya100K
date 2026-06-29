@@ -21,7 +21,8 @@ import {
     orderBy, 
     limit,
     onSnapshot,
-    serverTimestamp
+    serverTimestamp,
+    startAfter
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { db } from './firebase-config.js';
 

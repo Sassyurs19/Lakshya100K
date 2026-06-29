@@ -141,16 +141,31 @@
                     </div>
                 </div>
                 
+                <div id="existingImageContainer" style="display: none; margin-bottom: 1.5rem; position: relative;">
+                    <label class="form-label">Current Image Proof</label>
+                    <img id="existingImage" src="" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                    <button type="button" onclick="removeExistingImage()" style="position: absolute; top: 2rem; right: 0.5rem; background: var(--danger); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--shadow-md);">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
                 <div class="form-group">
-                    <label class="form-label">Image Proof (Optional)</label>
-                    <div class="file-upload" style="opacity: 0.6; cursor: not-allowed;">
+                    <label class="form-label">New Image Proof (Optional)</label>
+                    <div class="file-upload" onclick="document.getElementById('imageInput').click()" style="cursor: pointer;">
                         <div class="file-upload-icon">
                             <i class="fas fa-cloud-upload-alt"></i>
                         </div>
-                        <div class="file-upload-text">Upload proof image - Coming Soon</div>
+                        <div class="file-upload-text" id="uploadText">Click to change or upload new proof</div>
                         <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">
-                            Image upload will be available in a future update
+                            JPEG, PNG, or WebP up to 5MB
                         </div>
+                    </div>
+                    <input type="file" id="imageInput" name="image" accept="image/*" style="display: none;" onchange="previewImage(this)">
+                    <div id="imagePreview" style="display: none; margin-top: 1rem; position: relative;">
+                        <img id="previewImg" src="" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: var(--radius-md);">
+                        <button type="button" onclick="removeNewImage()" style="position: absolute; top: 0.5rem; right: 0.5rem; background: var(--danger); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--shadow-md);">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
                 </div>
                 
@@ -183,7 +198,7 @@
     <script type="module">
         import { onAuthStateChange, logoutUser, getCurrentUser } from './js/auth.js';
         import { getSavingById, updateSaving, getUserDocument } from './js/database.js';
-        // import { uploadSavingImage, deleteSavingImage } from './js/storage.js'; // Disabled for now - coming soon
+        import { uploadSavingImage, deleteSavingImage } from './js/storage.js';
         import { showToast } from './js/utils.js';
 
         const loadingScreen = document.getElementById('loadingScreen');
@@ -251,13 +266,12 @@
                 document.getElementById('timeInput').value = saving.time || '00:00';
                 document.getElementById('category').value = saving.category;
                 document.getElementById('note').value = saving.note || '';
-                // document.getElementById('existingImagePath').value = saving.imagePath || ''; // Disabled for now
+                document.getElementById('existingImagePath').value = saving.imagePath || '';
                 
-                // Image display disabled for now - coming soon
-                // if (saving.imageURL) {
-                //     document.getElementById('existingImage').src = saving.imageURL;
-                //     document.getElementById('existingImageContainer').style.display = 'block';
-                // }
+                if (saving.imageURL) {
+                    document.getElementById('existingImage').src = saving.imageURL;
+                    document.getElementById('existingImageContainer').style.display = 'block';
+                }
                 
                 document.getElementById('loadingMessage').style.display = 'none';
                 document.getElementById('editSavingForm').style.display = 'block';
@@ -267,48 +281,48 @@
             }
         }
 
-        // Preview new image (disabled for now - coming soon)
-        // window.previewImage = function(input) {
-        //     if (input.files && input.files[0]) {
-        //         const file = input.files[0];
-        //         
-        //         // Validate file size (5MB)
-        //         if (file.size > 5 * 1024 * 1024) {
-        //             showToast('Image size must be less than 5 MB', 'error');
-        //             input.value = '';
-        //             return;
-        //         }
-        //         
-        //         // Validate file type
-        //         const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-        //         if (!allowedTypes.includes(file.type)) {
-        //             showToast('Only JPG, PNG, and WebP images are allowed', 'error');
-        //             input.value = '';
-        //             return;
-        //         }
-        //         
-        //         const reader = new FileReader();
-        //         reader.onload = function(e) {
-        //             document.getElementById('previewImg').src = e.target.result;
-        //             document.getElementById('imagePreview').style.display = 'block';
-        //         }
-        //         reader.readAsDataURL(file);
-        //     }
-        // };
+        // Preview new image
+        window.previewImage = function(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                
+                // Validate file size (5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    showToast('Image size must be less than 5 MB', 'error');
+                    input.value = '';
+                    return;
+                }
+                
+                // Validate file type
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+                if (!allowedTypes.includes(file.type)) {
+                    showToast('Only JPG, PNG, and WebP images are allowed', 'error');
+                    input.value = '';
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('previewImg').src = e.target.result;
+                    document.getElementById('imagePreview').style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        };
 
-        // Remove existing image (disabled for now - coming soon)
-        // window.removeExistingImage = function() {
-        //     document.getElementById('existingImagePath').value = '';
-        //     document.getElementById('existingImage').src = '';
-        //     document.getElementById('existingImageContainer').style.display = 'none';
-        // };
+        // Remove existing image
+        window.removeExistingImage = function() {
+            document.getElementById('existingImagePath').value = '';
+            document.getElementById('existingImage').src = '';
+            document.getElementById('existingImageContainer').style.display = 'none';
+        };
 
-        // Remove new image (disabled for now - coming soon)
-        // window.removeNewImage = function() {
-        //     document.getElementById('imageInput').value = '';
-        //     document.getElementById('previewImg').src = '';
-        //     document.getElementById('imagePreview').style.display = 'none';
-        // };
+        // Remove new image
+        window.removeNewImage = function() {
+            document.getElementById('imageInput').value = '';
+            document.getElementById('previewImg').src = '';
+            document.getElementById('imagePreview').style.display = 'none';
+        };
 
         // Cancel edit
         window.cancelEdit = function() {
@@ -331,8 +345,8 @@
             const time = e.target.time.value;
             const category = e.target.category.value;
             const note = e.target.note.value.trim();
-            // const imageFile = e.target.image.files[0]; // Disabled for now - coming soon
-            // const existingImagePath = e.target.existingImagePath.value; // Disabled for now - coming soon
+            const imageFile = e.target.image.files[0];
+            const existingImagePath = e.target.existingImagePath.value;
             
             // Validate amount
             if (isNaN(amount) || amount <= 0) {
@@ -353,33 +367,31 @@
             submitBtn.disabled = true;
             submitBtn.textContent = 'Updating...';
             
-            // Image upload disabled for now - coming soon
-            // let imageURL = null;
-            // let imagePath = existingImagePath;
-            // 
-            // // Handle image changes
-            // if (imageFile) {
-            //     // Delete old image if exists
-            //     if (existingImagePath) {
-            //         await deleteSavingImage(existingImagePath);
-            //     }
-            //     
-            //     // Upload new image
-            //     const uploadResult = await uploadSavingImage(imageFile, user.uid, savingId);
-            //     if (uploadResult.success) {
-            //         imageURL = uploadResult.url;
-            //         imagePath = `proofs/${user.uid}/${savingId}_${Date.now()}.jpg`;
-            //     } else {
-            //         showToast(uploadResult.error, 'error');
-            //         submitBtn.disabled = false;
-            //         submitBtn.textContent = originalText;
-            //         return;
-            //     }
-            // } else if (!existingImagePath) {
-            //     // No image selected and no existing image
-            //     imageURL = null;
-            //     imagePath = null;
-            // }
+            let imageURL = null;
+            let imagePath = existingImagePath || null;
+            
+            // Handle image changes
+            if (imageFile) {
+                // Delete old image if exists
+                if (existingImagePath) {
+                    await deleteSavingImage(existingImagePath);
+                }
+                
+                // Upload new image
+                const uploadResult = await uploadSavingImage(imageFile, user.uid, savingId);
+                if (uploadResult.success) {
+                    imageURL = uploadResult.url;
+                    imagePath = uploadResult.ref.fullPath;
+                } else {
+                    showToast(uploadResult.error, 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                    return;
+                }
+            } else if (existingImagePath) {
+                // Keep existing image details
+                imageURL = document.getElementById('existingImage').src;
+            }
             
             // Update saving in Firestore
             const savingData = {
@@ -388,8 +400,8 @@
                 time,
                 category,
                 note,
-                imageURL: null, // Disabled for now - will be enabled with Storage
-                imagePath: null // Disabled for now - will be enabled with Storage
+                imageURL,
+                imagePath
             };
             
             const result = await updateSaving(savingId, savingData);

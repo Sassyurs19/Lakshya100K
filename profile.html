@@ -344,6 +344,7 @@
     <script type="module">
         import { onAuthStateChange, logoutUser, getCurrentUser } from './js/auth.js';
         import { getUserDocument, updateUserDocument, calculateStatistics, getUserAchievements, getUserByUsername } from './js/database.js';
+        import { uploadProfileImage } from './js/storage.js';
         import { showToast } from './js/utils.js';
 
         const loadingScreen = document.getElementById('loadingScreen');
@@ -401,11 +402,11 @@
                 document.getElementById('fullName').textContent = userData.fullName || 'User';
                 document.getElementById('username').textContent = `@${userData.username || 'user'}`;
                 document.getElementById('email').textContent = user.email;
-                document.getElementById('goalAmount').textContent = `Goal: ₹${(userData.goal || 100000).toLocaleString()}`;
+                document.getElementById('goalAmount').textContent = `Goal: ₹${(userData.goalAmount || userData.goal || 100000).toLocaleString()}`;
                 
                 document.getElementById('fullNameInput').value = userData.fullName || '';
                 document.getElementById('usernameInput').value = userData.username || '';
-                document.getElementById('goalAmountInput').value = userData.goal || 100000;
+                document.getElementById('goalAmountInput').value = userData.goalAmount || userData.goal || 100000;
                 
                 if (userData.createdAt) {
                     const joinDate = new Date(userData.createdAt);
@@ -485,11 +486,33 @@
             submitBtn.disabled = true;
             submitBtn.textContent = 'Updating...';
             
+            // Handle profile image upload if selected
+            const profileImageInput = document.getElementById('profileImageInput');
+            const imageFile = profileImageInput.files[0];
+            let profileImageURL = null;
+            
+            if (imageFile) {
+                const uploadResult = await uploadProfileImage(imageFile, user.uid);
+                if (uploadResult.success) {
+                    profileImageURL = uploadResult.url;
+                } else {
+                    showToast(uploadResult.error, 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                    return;
+                }
+            }
+            
             const updateData = {
                 fullName,
                 username: username.toLowerCase(),
-                goal
+                goal,
+                goalAmount: goal
             };
+            
+            if (profileImageURL) {
+                updateData.profileImage = profileImageURL;
+            }
             
             const result = await updateUserDocument(user.uid, updateData);
             if (result.success) {

@@ -132,7 +132,7 @@
         </div>
 
         <div class="grid grid-4" style="margin-bottom: 2rem;">
-            <div class="stat-card">
+            <div class="stat-card sc-blue">
                 <div class="icon icon-blue">
                     <i class="fas fa-wallet"></i>
                 </div>
@@ -141,7 +141,7 @@
                     <div class="value amount" id="savedAmount">₹0</div>
                 </div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card sc-green">
                 <div class="icon icon-green">
                     <i class="fas fa-bullseye"></i>
                 </div>
@@ -150,7 +150,7 @@
                     <div class="value amount" id="remainingAmount">₹100,000</div>
                 </div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card sc-purple">
                 <div class="icon icon-purple">
                     <i class="fas fa-flag"></i>
                 </div>
@@ -159,7 +159,7 @@
                     <div class="value amount" id="goalAmount">₹100,000</div>
                 </div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card sc-orange">
                 <div class="icon icon-orange">
                     <i class="fas fa-calendar-day"></i>
                 </div>
@@ -171,7 +171,7 @@
         </div>
 
         <div class="grid grid-4" style="margin-bottom: 2rem;">
-            <div class="stat-card">
+            <div class="stat-card sc-blue">
                 <div class="icon icon-blue">
                     <i class="fas fa-calendar-alt"></i>
                 </div>
@@ -180,7 +180,7 @@
                     <div class="value amount" id="monthlySaving">₹0</div>
                 </div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card sc-green">
                 <div class="icon icon-green">
                     <i class="fas fa-chart-bar"></i>
                 </div>
@@ -189,7 +189,7 @@
                     <div class="value amount" id="averageSaving">₹0</div>
                 </div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card sc-purple">
                 <div class="icon icon-purple">
                     <i class="fas fa-fire"></i>
                 </div>
@@ -198,7 +198,7 @@
                     <div class="value number" id="currentStreak">0 days</div>
                 </div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card sc-orange">
                 <div class="icon icon-orange">
                     <i class="fas fa-trophy"></i>
                 </div>
@@ -207,6 +207,22 @@
                     <div class="value number" id="longestStreak">0 days</div>
                 </div>
             </div>
+        </div>
+
+        <!-- Quick Actions Row -->
+        <div class="quick-actions-row">
+            <a href="add-saving.html" class="quick-action-btn">
+                <i class="fas fa-plus"></i> Add Saving
+            </a>
+            <a href="history.html" class="quick-action-btn">
+                <i class="fas fa-history"></i> Savings History
+            </a>
+            <a href="analytics.html" class="quick-action-btn">
+                <i class="fas fa-chart-line"></i> Analytics
+            </a>
+            <a href="achievements.html" class="quick-action-btn">
+                <i class="fas fa-award"></i> Achievements
+            </a>
         </div>
 
         <div class="grid grid-2" style="margin-bottom: 2rem;">
@@ -303,23 +319,42 @@
             z-index: 1;
         }
 
+        /* Dashboard Header Card */
         .dashboard-header {
             margin-bottom: 2.5rem;
+            padding: 2.5rem;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-2xl);
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: var(--spacing-2xl);
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--glass-shadow);
         }
 
-        .dashboard-header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--text-primary);
+        .greeting-section h1 {
+            font-size: 2.25rem;
+            font-weight: 800;
             margin-bottom: 0.5rem;
             font-family: 'Playfair Display', serif;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.03em;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .dashboard-header .subtitle {
-            color: var(--text-secondary);
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
+        .greeting-section .subtitle {
+            font-size: 1.15rem;
+            color: var(--primary);
+            font-weight: 700;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin-bottom: 0.75rem;
         }
 
         .dashboard-header .motivational-text {
@@ -331,53 +366,73 @@
 
         /* Statistics Cards */
         .stat-card {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-lg);
-            box-shadow: var(--shadow-xs);
-            transition: all var(--transition-normal);
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: 120px;
+            align-items: center;
+            gap: 1.25rem;
+            min-height: auto;
+            position: relative;
+            overflow: hidden;
         }
 
         .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-            border-color: var(--border-color-hover);
+            transform: translateY(-5px);
         }
 
         .stat-card .icon {
-            width: 40px;
-            height: 40px;
-            border-radius: var(--radius-md);
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: var(--spacing-md);
             font-size: 1.25rem;
+            margin-bottom: 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: all var(--transition-normal);
         }
 
-        .stat-card .icon-blue {
-            background: rgba(37, 99, 235, 0.1);
-            color: #2563eb;
+        .stat-card:hover .icon {
+            transform: scale(1.1) rotate(5deg);
         }
 
-        .stat-card .icon-green {
-            background: rgba(5, 150, 105, 0.1);
-            color: #059669;
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            transition: background 0.3s ease;
         }
-
-        .stat-card .icon-purple {
-            background: rgba(124, 58, 237, 0.1);
-            color: #7c3aed;
+        
+        .stat-card.sc-blue::after { background: var(--gradient-primary); }
+        .stat-card.sc-green::after { background: linear-gradient(135deg, #059669 0%, #10B981 100%); }
+        .stat-card.sc-purple::after { background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%); }
+        .stat-card.sc-orange::after { background: linear-gradient(135deg, #f97316 0%, #fb923c 100%); }
+        
+        .stat-card.sc-blue:hover {
+            box-shadow: 0 15px 30px rgba(37, 99, 235, 0.12), 0 5px 15px rgba(37, 99, 235, 0.06);
+            border-color: rgba(37, 99, 235, 0.25);
         }
-
-        .stat-card .icon-orange {
-            background: rgba(249, 115, 22, 0.1);
-            color: #f97316;
+        .stat-card.sc-green:hover {
+            box-shadow: 0 15px 30px rgba(5, 150, 105, 0.12), 0 5px 15px rgba(5, 150, 105, 0.06);
+            border-color: rgba(5, 150, 105, 0.25);
+        }
+        .stat-card.sc-purple:hover {
+            box-shadow: 0 15px 30px rgba(124, 58, 237, 0.12), 0 5px 15px rgba(124, 58, 237, 0.06);
+            border-color: rgba(124, 58, 237, 0.25);
+        }
+        .stat-card.sc-orange:hover {
+            box-shadow: 0 15px 30px rgba(249, 115, 22, 0.12), 0 5px 15px rgba(249, 115, 22, 0.06);
+            border-color: rgba(249, 115, 22, 0.25);
         }
 
         .stat-card .label {
@@ -393,6 +448,73 @@
             color: var(--text-primary);
             font-family: 'Playfair Display', serif;
             letter-spacing: -0.02em;
+        }
+
+        /* Override global card for glassmorphism */
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: var(--radius-2xl);
+            padding: 2rem;
+            transition: all var(--transition-normal);
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            border-color: var(--border-color-hover);
+        }
+
+        /* Quick Actions Row */
+        .quick-actions-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .quick-action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: var(--glass-shadow);
+            transition: all var(--transition-normal);
+        }
+        
+        .quick-action-btn:hover {
+            transform: translateY(-3px);
+            background: var(--gradient-primary);
+            border-color: transparent;
+            color: white !important;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.15);
+        }
+
+        .quick-action-btn i {
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 992px) {
+            .quick-actions-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .quick-actions-row {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Progress Ring */
@@ -556,7 +678,7 @@
                 const username = userData.username || 'user';
                 document.getElementById('username').textContent = `@${username}`;
                 document.getElementById('usernameDisplay').textContent = `@${username}`;
-                document.getElementById('goalAmount').textContent = `₹${(userData.goalAmount || 100000).toLocaleString()}`;
+                document.getElementById('goalAmount').textContent = `₹${(userData.goalAmount || userData.goal || 100000).toLocaleString()}`;
                 
                 // Update avatar with user's initial
                 const userInitial = (userData.fullName || userData.username || 'U').charAt(0).toUpperCase();
@@ -566,7 +688,7 @@
             const stats = await calculateStatistics(user.uid);
             if (stats.success) {
                 const data = stats.data;
-                const goal = userDoc.data?.goalAmount || 100000;
+                const goal = userDoc.data?.goalAmount || userDoc.data?.goal || 100000;
 
                 // Animate numbers
                 animateNumber(document.getElementById('savedAmount'), 0, data.totalSaved, 1500);

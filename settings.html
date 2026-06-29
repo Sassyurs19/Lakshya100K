@@ -321,7 +321,7 @@
                 document.getElementById('fullNameInput').value = userData.fullName || '';
                 document.getElementById('usernameInput').value = userData.username || '';
                 document.getElementById('emailInput').value = user.email || '';
-                document.getElementById('goalInput').value = userData.goal || 100000;
+                document.getElementById('goalInput').value = userData.goalAmount || userData.goal || 100000;
                 document.getElementById('currencyInput').value = userData.currency || '₹';
                 document.getElementById('reminderTimeInput').value = userData.settings?.reminderTime || '21:00';
                 document.getElementById('themeInput').value = userData.settings?.theme || 'light';
@@ -339,6 +339,7 @@
                 fullName: e.target.fullName.value,
                 username: e.target.username.value,
                 goal: parseInt(e.target.goal.value),
+                goalAmount: parseInt(e.target.goal.value),
                 currency: e.target.currency.value,
                 settings: {
                     reminderTime: e.target.reminderTime.value,

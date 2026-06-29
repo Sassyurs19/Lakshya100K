@@ -393,7 +393,7 @@
             
             if (stats.success) {
                 const data = stats.data;
-                const goal = userDoc.data?.goal || 100000;
+                const goal = userDoc.data?.goalAmount || userDoc.data?.goal || 100000;
                 
                 document.getElementById('totalSaved').textContent = `₹${data.totalSaved.toLocaleString()}`;
                 document.getElementById('averageSaving').textContent = `₹${data.averageSaving.toLocaleString()}`;

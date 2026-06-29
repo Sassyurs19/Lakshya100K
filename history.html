@@ -523,17 +523,16 @@
         };
 
         window.viewSaving = async function(savingId) {
-            // Get saving details from the card data
-            const card = document.querySelector(`[data-id="${savingId}"]`);
-            if (!card) return;
+            // Get saving details from allSavings array
+            const saving = allSavings.find(s => s.id === savingId);
+            if (!saving) return;
             
-            const amount = card.querySelector('.saving-card > div:first-child > div:first-child > div').textContent;
-            const date = card.querySelector('.saving-card > div:first-child > div:first-child > div:last-child').textContent;
-            const category = card.querySelector('.saving-card > div:first-child > div:last-child').textContent;
-            const note = card.querySelector('.saving-card > div:nth-child(2)')?.textContent || '';
-            const runningTotal = card.querySelector('.saving-card > div:last-child strong').textContent;
-            const img = card.querySelector('.saving-thumbnail');
-            const imageURL = img ? img.src : null;
+            const amount = `₹${saving.amount.toLocaleString()}`;
+            const date = `${new Date(saving.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}${saving.time ? ` at ${saving.time}` : ''}`;
+            const category = saving.category;
+            const note = saving.note || '';
+            const runningTotal = `₹${(saving.runningTotal || 0).toLocaleString()}`;
+            const imageURL = saving.imageURL || null;
             
             const modalHTML = `
                 <div class="modal active" id="savingModal" style="display: flex;">

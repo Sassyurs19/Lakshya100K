@@ -18,7 +18,34 @@
         </div>
     </div>
 
+    <!-- Premium Animated Background -->
+    <div class="premium-background">
+        <div class="gradient-blob gradient-blob-1"></div>
+        <div class="gradient-blob gradient-blob-2"></div>
+        <div class="gradient-blob gradient-blob-3"></div>
+        <div class="grid-pattern"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="mouse-glow" id="mouseGlow"></div>
+    </div>
+
     <div class="hero-section" id="heroSection" style="display: none;">
+        <!-- Floating currency elements -->
+        <div class="floating-symbol fs-1">₹</div>
+        <div class="floating-symbol fs-2">$</div>
+        <div class="floating-symbol fs-3">€</div>
+        <div class="floating-symbol fs-4"><i class="fas fa-coins"></i></div>
+        <div class="floating-symbol fs-5"><i class="fas fa-chart-line"></i></div>
+        <div class="floating-symbol fs-6"><i class="fas fa-piggy-bank"></i></div>
+        <div class="floating-symbol fs-7">₹</div>
+        
         <div class="hero-content fade-in">
             <h1 class="hero-title">Save Today.<br>Achieve Tomorrow.</h1>
             <p class="hero-subtitle">Track every rupee, build lasting habits, and reach your ₹1,00,000 goal with confidence.</p>
@@ -64,6 +91,19 @@
                 heroSection.style.display = 'flex';
             }
         });
+        // Mouse glow effect
+        const mouseGlow = document.getElementById('mouseGlow');
+        if (mouseGlow) {
+            document.addEventListener('mousemove', (e) => {
+                mouseGlow.style.left = e.clientX + 'px';
+                mouseGlow.style.top = e.clientY + 'px';
+                mouseGlow.classList.add('active');
+            });
+
+            document.addEventListener('mouseleave', () => {
+                mouseGlow.classList.remove('active');
+            });
+        }
     </script>
 
     <style>
@@ -106,6 +146,41 @@
             flex-wrap: wrap;
         }
 
+        /* Floating Symbols Animation */
+        .floating-symbol {
+            position: absolute;
+            color: var(--primary);
+            opacity: 0.12;
+            pointer-events: none;
+            user-select: none;
+            z-index: 1;
+            font-weight: 700;
+            animation: floatUp 8s ease-in-out infinite;
+        }
+
+        .fs-1 { font-size: 4rem; top: 15%; left: 10%; animation-duration: 9s; animation-delay: 0s; }
+        .fs-2 { font-size: 3rem; top: 60%; left: 15%; animation-duration: 11s; animation-delay: 1.5s; }
+        .fs-3 { font-size: 2.5rem; top: 25%; right: 12%; animation-duration: 8s; animation-delay: 0.5s; }
+        .fs-4 { font-size: 3.5rem; top: 70%; right: 18%; animation-duration: 12s; animation-delay: 2s; }
+        .fs-5 { font-size: 2rem; top: 40%; left: 45%; animation-duration: 10s; animation-delay: 3s; }
+        .fs-6 { font-size: 3rem; top: 80%; left: 50%; animation-duration: 13s; animation-delay: 1s; }
+        .fs-7 { font-size: 2.2rem; top: 50%; right: 40%; animation-duration: 9.5s; animation-delay: 4.5s; }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.05;
+            }
+            50% {
+                transform: translateY(-30px) rotate(15deg);
+                opacity: 0.2;
+            }
+            100% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.05;
+            }
+        }
+
         @media (max-width: 768px) {
             .hero-title {
                 font-size: 2.5rem;
@@ -120,6 +195,12 @@
             .hero-buttons .btn {
                 width: 100%;
                 justify-content: center;
+            }
+            .floating-symbol {
+                opacity: 0.06;
+            }
+            .fs-5, .fs-6, .fs-7 {
+                display: none;
             }
         }
     </style>
