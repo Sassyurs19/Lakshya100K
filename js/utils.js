@@ -260,21 +260,24 @@ export function showToast(message, type = 'info') {
     toast.className = `toast toast-${type}`;
     
     const icons = {
-        'success': 'fa-check-circle',
-        'error': 'fa-exclamation-circle',
-        'warning': 'fa-exclamation-triangle',
-        'info': 'fa-info-circle'
+        'success': 'check-circle',
+        'error': 'alert-circle',
+        'warning': 'alert-triangle',
+        'info': 'info'
     };
     
     toast.innerHTML = `
-        <i class="fas ${icons[type]}"></i>
+        <i data-lucide="${icons[type]}"></i>
         <span>${message}</span>
         <button class="toast-close">
-            <i class="fas fa-times"></i>
+            <i data-lucide="x"></i>
         </button>
     `;
     
     document.body.appendChild(toast);
+    
+    // Initialize Lucide icons for the toast
+    lucide.createIcons();
     
     // Remove toast after 5 seconds
     setTimeout(() => {
