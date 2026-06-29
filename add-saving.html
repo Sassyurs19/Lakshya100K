@@ -89,6 +89,11 @@
                 </a>
             </div>
         </aside>
+
+        <!-- Mobile Menu Toggle -->
+        <div class="mobile-menu-toggle" id="mobileMenuToggle" title="Toggle Menu">
+            <i class="fas fa-bars"></i>
+        </div>
         
         <!-- Main Content -->
     <main class="main-content" id="main-content" style="display: none;">
@@ -440,6 +445,24 @@
                 themeIcon.classList.add('fa-moon');
             }
         });
+
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const sidebar = document.querySelector('.sidebar');
+        
+        if (mobileMenuToggle && sidebar) {
+            mobileMenuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                sidebar.classList.toggle('open');
+            });
+            
+            // Close sidebar when clicking outside
+            document.addEventListener('click', (e) => {
+                if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== mobileMenuToggle) {
+                    sidebar.classList.remove('open');
+                }
+            });
+        }
     </script>
 
     <style>
