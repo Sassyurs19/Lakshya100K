@@ -237,10 +237,12 @@
         }
 
         async function loadAnalytics(user) {
+            console.log('[loadAnalytics] Loading analytics for user:', user.uid);
             const timePeriod = document.getElementById('timePeriod').value;
             const stats = await calculateStatistics(user.uid);
             const userDoc = await getUserDocument(user.uid);
             const savings = await getUserSavings(user.uid);
+            console.log('[loadAnalytics] Stats result:', stats.success ? 'success' : 'failed', 'Savings result:', savings.success ? 'success' : 'failed', 'Savings count:', savings.data?.length || 0);
             
             if (stats.success) {
                 const data = stats.data;
@@ -268,10 +270,13 @@
             }
             
             if (savings.success && savings.data.length > 0) {
+                console.log('[loadAnalytics] Rendering charts with', savings.data.length, 'savings');
                 const filteredSavings = filterSavingsByPeriod(savings.data, timePeriod);
                 renderSavingsTrend(filteredSavings);
                 renderCategoryBreakdown(filteredSavings);
                 renderMonthlyOverview(savings.data);
+            } else {
+                console.log('[loadAnalytics] No savings to render charts');
             }
             lucide.createIcons();
         }

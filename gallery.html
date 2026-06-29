@@ -199,10 +199,13 @@
         }
 
         async function loadGallery(user) {
+            console.log('[loadGallery] Loading gallery for user:', user.uid);
             const result = await getUserSavings(user.uid);
+            console.log('[loadGallery] Savings result:', result.success ? 'success' : 'failed', 'count:', result.data?.length || 0);
             if (result.success) {
                 const savingsWithImages = result.data.filter(s => s.imageURL);
                 allImages = savingsWithImages;
+                console.log('[loadGallery] Savings with images:', savingsWithImages.length);
                 
                 if (savingsWithImages.length > 0) {
                     const galleryHTML = savingsWithImages.map((saving, index) => {
@@ -224,6 +227,7 @@
                     
                     document.getElementById('galleryGrid').innerHTML = galleryHTML;
                 } else {
+                    console.log('[loadGallery] No images found, showing empty state');
                     document.getElementById('galleryGrid').innerHTML = `
                         <div class="empty-state" style="grid-column: 1 / -1;">
                             <div class="empty-state-icon">

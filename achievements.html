@@ -197,14 +197,17 @@
         }
 
         async function loadAchievements(user) {
+            console.log('[loadAchievements] Loading achievements for user:', user.uid);
             const stats = await calculateStatistics(user.uid);
             const userAchievements = await getUserAchievements(user.uid);
+            console.log('[loadAchievements] Stats result:', stats.success ? 'success' : 'failed', 'Achievements result:', userAchievements.success ? 'success' : 'failed', 'Achievements count:', userAchievements.data?.length || 0);
             
             const unlockedAchievementIds = userAchievements.success 
                 ? userAchievements.data.map(a => a.name)
                 : [];
             
             const totalSaved = stats.success ? stats.data.totalSaved : 0;
+            console.log('[loadAchievements] Total saved:', totalSaved, 'Unlocked achievements:', unlockedAchievementIds.length);
             
             const unlockedCount = unlockedAchievementIds.length;
             const totalCount = achievements.length;
