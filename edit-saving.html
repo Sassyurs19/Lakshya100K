@@ -337,7 +337,7 @@
             const time = e.target.time.value;
             const category = e.target.category.value;
             const note = e.target.note.value.trim();
-            const imageFile = e.target.image.files[0];
+            const imageFile = e.target.image && e.target.image.files ? e.target.image.files[0] : null;
             const existingImagePath = e.target.existingImagePath.value;
             
             if (isNaN(amount) || amount <= 0) {
