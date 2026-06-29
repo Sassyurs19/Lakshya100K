@@ -6,6 +6,7 @@
     <title>Lakshya ₹100K - Small Savings. Big Dreams.</title>
     <meta name="description" content="Track every rupee, build lasting habits, and reach your ₹1,00,000 goal with confidence.">
     <link rel="stylesheet" href="css/style.css?v=2">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
     <!-- Loading Screen -->
@@ -17,6 +18,15 @@
 
     <!-- Premium Minimalist Background -->
     <div class="premium-background"></div>
+    
+    <!-- Animated Background Elements -->
+    <div class="animated-background">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+        <div class="floating-shape shape-4"></div>
+        <div class="floating-shape shape-5"></div>
+    </div>
 
     <!-- Sticky Top Navigation Bar -->
     <nav class="top-nav">
@@ -259,6 +269,7 @@
             } else {
                 // User is not authenticated, show landing page
                 heroSection.style.display = 'flex';
+                lucide.createIcons();
             }
         });
     </script>
@@ -562,6 +573,85 @@
             }
             .footer-links {
                 gap: 2rem;
+            }
+        }
+
+        /* Animated Background */
+        .animated-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape-1 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--success) 100%);
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            top: 60%;
+            right: 10%;
+            animation-delay: -5s;
+        }
+
+        .shape-3 {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, var(--success) 0%, var(--primary) 100%);
+            bottom: 20%;
+            left: 20%;
+            animation-delay: -10s;
+        }
+
+        .shape-4 {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            top: 30%;
+            right: 30%;
+            animation-delay: -15s;
+        }
+
+        .shape-5 {
+            width: 250px;
+            height: 250px;
+            background: linear-gradient(135deg, var(--success) 0%, var(--accent) 100%);
+            bottom: 10%;
+            right: 20%;
+            animation-delay: -7s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(30px, -30px) rotate(90deg);
+            }
+            50% {
+                transform: translate(0, -60px) rotate(180deg);
+            }
+            75% {
+                transform: translate(-30px, -30px) rotate(270deg);
             }
         }
     </style>
