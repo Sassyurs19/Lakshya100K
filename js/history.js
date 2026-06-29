@@ -40,7 +40,7 @@ async function loadSavings(user, reset = false) {
     console.log('[loadSavings] Loading savings for user:', user.uid, 'reset:', reset);
     if (reset) {
         currentPage = 1; lastDoc = null; hasMore = true; allSavings = [];
-        if ($('savingsGrid')) $('savingsGrid').innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;"><p style="color:var(--text-secondary);font-weight:600;">Loading savings...</p></div>`;
+        if ($('savingsGrid')) $('savingsGrid').innerHTML = `<div style="text-align:center;padding:2rem;"><p style="color:var(--text-secondary);font-weight:600;">Loading savings...</p></div>`;
     }
     const result = await getUserSavings(user.uid);
     console.log('[loadSavings] Result:', result);
@@ -48,38 +48,82 @@ async function loadSavings(user, reset = false) {
         const savings = result.data;
         allSavings = savings;
         renderSavingsGrid(allSavings);
+        updateStatistics(allSavings);
         if ($('loadMoreBtn')) $('loadMoreBtn').style.display = 'none';
     } else if (reset) {
         console.log('[loadSavings] No savings found');
-        if ($('savingsGrid')) $('savingsGrid').innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="empty-state-icon"><i data-lucide="receipt"></i></div><h3 class="empty-state-title">No savings recorded yet</h3><p class="empty-state-text">Start your savings journey today by adding your first saving!</p><a href="add-saving.html" class="btn btn-primary">Add Your First Saving</a></div>`;
+        if ($('savingsGrid')) $('savingsGrid').innerHTML = `<div class="empty-state"><div class="empty-state-icon"><i data-lucide="receipt"></i></div><h3 class="empty-state-title">No savings recorded yet</h3><p class="empty-state-text">Start your savings journey today by adding your first saving!</p><a href="add-saving.html" class="btn btn-primary">Add Your First Saving</a></div>`;
         if ($('loadMoreBtn')) $('loadMoreBtn').style.display = 'none';
+        if ($('statsSummary')) $('statsSummary').style.display = 'none';
     }
     lucide.createIcons();
 }
 
 function renderSavingsGrid(savingsList) {
-    $('savingsGrid').innerHTML = savingsList.map(s => `
-        <div class="card saving-card" data-category="${s.category}" data-date="${s.date}" data-amount="${s.amount}" data-note="${s.note||''}" data-id="${s.id}">
-            <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:1rem;">
-                <div>
-                    <div style="font-size:1.5rem;font-weight:800;color:var(--text-primary);">₹${s.amount.toLocaleString()}</div>
-                    <div style="color:var(--text-secondary);font-size:0.8rem;margin-top:4px;font-weight:600;">${new Date(s.date).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}${s.time?` at ${s.time}`:''}</div>
+    const categoryIcons = {
+        'Cash': 'banknote',
+        'Bank': 'landmark',
+        'UPI': 'smartphone',
+        'Wallet': 'wallet',
+        'Investment': 'trending-up',
+        'Other': 'more-horizontal'
+    };
+
+    $('savingsGrid').innerHTML = savingsList.map(s => {
+        const date = new Date(s.date);
+        const formattedDate = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const formattedTime = s.time || date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        
+        return `
+            <div class="history-card" data-category="${s.category}" data-date="${s.date}" data-amount="${s.amount}" data-note="${s.note||''}" data-id="${s.id}" onclick="viewSaving('${s.id}')">
+                <div class="history-card-left">
+                    <div class="history-card-icon">
+                        <i data-lucide="${categoryIcons[s.category] || 'coins'}"></i>
+                    </div>
+                    <div class="history-card-content">
+                        <div class="history-card-amount">₹${s.amount.toLocaleString()}</div>
+                        <div class="history-card-category">${s.category}</div>
+                        <div class="history-card-date">${formattedDate} • ${formattedTime}</div>
+                    </div>
                 </div>
-                <div style="background:var(--primary-light);color:var(--primary);padding:4px 10px;border-radius:var(--radius-sm);font-size:0.8rem;font-weight:700;">${s.category}</div>
-            </div>
-            ${s.note?`<div style="color:var(--text-secondary);margin-bottom:1rem;line-height:1.5;font-size:0.875rem;">${s.note.length>80?s.note.substring(0,80)+'...':s.note}</div>`:''}
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-                ${s.imageURL?`<img src="${s.imageURL}" class="saving-thumbnail" loading="lazy" onclick="openModal('${s.imageURL}')" style="width:44px;height:44px;object-fit:cover;border-radius:var(--radius-md);border:1px solid var(--border-color);cursor:pointer;">`:'<div style="flex:1;"></div>'}
-                <div style="display:flex;gap:0.5rem;">
-                    <button onclick="viewSaving('${s.id}')" class="btn btn-secondary btn-sm" title="View Details" style="height:32px;width:32px;padding:0;justify-content:center;"><i data-lucide="eye" style="width:16px;height:16px;"></i></button>
-                    <button onclick="editSaving('${s.id}')" class="btn btn-secondary btn-sm" title="Edit" style="height:32px;width:32px;padding:0;justify-content:center;"><i data-lucide="edit" style="width:16px;height:16px;"></i></button>
-                    <button onclick="deleteSavingHandler('${s.id}')" class="btn btn-danger btn-sm" title="Delete" style="height:32px;width:32px;padding:0;justify-content:center;"><i data-lucide="trash" style="width:16px;height:16px;"></i></button>
+                <div class="history-card-right">
+                    <div class="history-card-total">
+                        <div class="history-card-total-label">Running Total</div>
+                        <div class="history-card-total-value">₹${(s.runningTotal || 0).toLocaleString()}</div>
+                    </div>
+                    <div class="history-card-menu" onclick="event.stopPropagation();">
+                        <i data-lucide="more-vertical" style="width:16px;height:16px;"></i>
+                    </div>
                 </div>
             </div>
-            <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border-color);color:var(--text-secondary);font-size:0.8rem;font-weight:600;">Running Total: <strong style="color:var(--text-primary);">₹${(s.runningTotal||0).toLocaleString()}</strong></div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
     lucide.createIcons();
+}
+
+function updateStatistics(savingsList) {
+    if (!savingsList || savingsList.length === 0) {
+        if ($('statsSummary')) $('statsSummary').style.display = 'none';
+        return;
+    }
+
+    const totalSaved = savingsList.reduce((sum, s) => sum + s.amount, 0);
+    const entries = savingsList.length;
+    const avgSaving = Math.round(totalSaved / entries);
+
+    const now = new Date();
+    const thisMonth = savingsList.filter(s => {
+        const date = new Date(s.date);
+        return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+    });
+    const thisMonthTotal = thisMonth.reduce((sum, s) => sum + s.amount, 0);
+
+    if ($('statTotalSaved')) $('statTotalSaved').textContent = `₹${totalSaved.toLocaleString()}`;
+    if ($('statEntries')) $('statEntries').textContent = entries;
+    if ($('statThisMonth')) $('statThisMonth').textContent = `₹${thisMonthTotal.toLocaleString()}`;
+    if ($('statAvgSaving')) $('statAvgSaving').textContent = `₹${avgSaving.toLocaleString()}`;
+    
+    if ($('statsSummary')) $('statsSummary').style.display = 'grid';
 }
 
 window.deleteSavingHandler = async id => {

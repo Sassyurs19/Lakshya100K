@@ -99,20 +99,42 @@
     <div class="page-container">
         <!-- Main Content -->
         <main class="main-content" id="main-content" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
-                <h2 style="margin: 0; font-size: 1.75rem; letter-spacing: -0.02em;">Savings History</h2>
-                <button class="btn btn-secondary" id="exportBtn" onclick="exportToCSV()" style="height: 38px;">
-                    <i data-lucide="download" style="width:16px; height:16px;"></i> Export to CSV
+            <!-- Header -->
+            <div class="history-header">
+                <h2 class="history-title">Savings History</h2>
+                <button class="btn btn-secondary btn-sm" id="exportBtn" onclick="exportToCSV()">
+                    <i data-lucide="download" style="width:14px; height:14px;"></i> Export CSV
                 </button>
             </div>
             
-            <div class="card search-filter-bar" style="margin-bottom: 2rem;">
-                <div class="input-group search-input-group" style="flex: 2;">
-                    <i data-lucide="search"></i>
-                    <input type="text" class="form-input" id="searchInput" placeholder="Search by amount, category, or note..." style="padding-left: 38px;">
+            <!-- Statistics Summary -->
+            <div class="stats-summary" id="statsSummary" style="display: none;">
+                <div class="stat-item">
+                    <div class="stat-label">Total Saved</div>
+                    <div class="stat-value" id="statTotalSaved">₹0</div>
                 </div>
-                <select class="form-select" id="categoryFilter" style="flex: 1; min-width: 130px;">
-                    <option value="all">All Categories</option>
+                <div class="stat-item">
+                    <div class="stat-label">Entries</div>
+                    <div class="stat-value" id="statEntries">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">This Month</div>
+                    <div class="stat-value" id="statThisMonth">₹0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Avg Saving</div>
+                    <div class="stat-value" id="statAvgSaving">₹0</div>
+                </div>
+            </div>
+            
+            <!-- Compact Toolbar -->
+            <div class="filter-toolbar">
+                <div class="toolbar-search">
+                    <i data-lucide="search" style="width:16px; height:16px; color: var(--text-tertiary);"></i>
+                    <input type="text" class="toolbar-input" id="searchInput" placeholder="Search...">
+                </div>
+                <select class="toolbar-select" id="categoryFilter">
+                    <option value="all">Category</option>
                     <option value="Cash">Cash</option>
                     <option value="Bank">Bank</option>
                     <option value="UPI">UPI</option>
@@ -120,22 +142,24 @@
                     <option value="Investment">Investment</option>
                     <option value="Other">Other</option>
                 </select>
-                <select class="form-select" id="timeFilter" style="flex: 1; min-width: 120px;">
-                    <option value="all">All Time</option>
+                <select class="toolbar-select" id="timeFilter">
+                    <option value="all">Time</option>
                     <option value="today">Today</option>
                     <option value="week">This Week</option>
                     <option value="month">This Month</option>
                 </select>
-                <select class="form-select" id="sortFilter" style="flex: 1; min-width: 135px;">
-                    <option value="date-desc">Newest First</option>
-                    <option value="date-asc">Oldest First</option>
-                    <option value="amount-desc">Highest Amount</option>
-                    <option value="amount-asc">Lowest Amount</option>
+                <select class="toolbar-select" id="sortFilter">
+                    <option value="date-desc">Sort</option>
+                    <option value="date-desc">Newest</option>
+                    <option value="date-asc">Oldest</option>
+                    <option value="amount-desc">Highest</option>
+                    <option value="amount-asc">Lowest</option>
                 </select>
             </div>
             
-            <div class="savings-cards-grid" id="savingsGrid">
-                <div class="empty-state" style="grid-column: 1 / -1;">
+            <!-- History Cards -->
+            <div class="history-cards" id="savingsGrid">
+                <div class="empty-state">
                     <div class="empty-state-icon">
                         <i data-lucide="receipt"></i>
                     </div>
@@ -145,8 +169,9 @@
                 </div>
             </div>
             
-            <div style="text-align: center; margin-top: 2rem;">
-                <button id="loadMoreBtn" class="btn btn-secondary" onclick="loadMoreSavings()" style="display: none;">
+            <!-- Load More -->
+            <div class="load-more-container">
+                <button id="loadMoreBtn" class="btn btn-secondary btn-sm" onclick="loadMoreSavings()" style="display: none;">
                     Load More
                 </button>
             </div>
@@ -163,6 +188,356 @@
         </div>
     </div>
 
-    <script type="module" src="js/history.js?v=5"></script>
+    <script type="module" src="js/history.js?v=6"></script>
+
+    <style>
+        .main-content {
+            padding: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 0 16px 0;
+            margin-bottom: 20px;
+        }
+
+        .history-title {
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin: 0;
+            color: var(--text-primary);
+        }
+
+        /* Statistics Summary */
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
+            padding: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Filter Toolbar */
+        .filter-toolbar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .toolbar-search {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 0 12px;
+            height: 42px;
+        }
+
+        .toolbar-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            margin-left: 8px;
+            background: transparent;
+            color: var(--text-primary);
+        }
+
+        .toolbar-input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .toolbar-select {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 0 12px;
+            height: 42px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            cursor: pointer;
+            min-width: 100px;
+            outline: none;
+        }
+
+        .toolbar-select:hover {
+            border-color: rgba(37, 99, 235, 0.3);
+        }
+
+        .toolbar-select:focus {
+            border-color: #2563EB;
+        }
+
+        /* History Cards */
+        .history-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .history-card {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .history-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            border-color: rgba(37, 99, 235, 0.2);
+        }
+
+        .history-card-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+        }
+
+        .history-card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #2563EB;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .history-card-icon i {
+            width: 20px;
+            height: 20px;
+        }
+
+        .history-card-content {
+            flex: 1;
+        }
+
+        .history-card-amount {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .history-card-category {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 2px;
+        }
+
+        .history-card-date {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            font-weight: 500;
+        }
+
+        .history-card-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .history-card-total {
+            text-align: right;
+        }
+
+        .history-card-total-label {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .history-card-total-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2563EB;
+        }
+
+        .history-card-menu {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .history-card-menu:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--text-primary);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 24px;
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
+        }
+
+        .empty-state-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            background: rgba(37, 99, 235, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2563EB;
+        }
+
+        .empty-state-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .empty-state-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        /* Load More */
+        .load-more-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 16px;
+            }
+
+            .history-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .history-title {
+                font-size: 24px;
+            }
+
+            .stats-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .filter-toolbar {
+                flex-wrap: wrap;
+            }
+
+            .toolbar-search {
+                flex: 1 1 100%;
+                order: 1;
+            }
+
+            .toolbar-select {
+                flex: 1 1 calc(50% - 4px);
+                min-width: calc(50% - 4px);
+            }
+
+            .history-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .history-card-left {
+                width: 100%;
+            }
+
+            .history-card-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        /* Dark Theme Support */
+        [data-theme="dark"] .stat-item,
+        [data-theme="dark"] .toolbar-search,
+        [data-theme="dark"] .toolbar-select,
+        [data-theme="dark"] .history-card,
+        [data-theme="dark"] .empty-state {
+            background: rgba(30, 30, 30, 0.8);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="dark"] .toolbar-input {
+            color: var(--text-primary);
+        }
+
+        [data-theme="dark"] .history-card-menu:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+    </style>
 </body>
 </html>
