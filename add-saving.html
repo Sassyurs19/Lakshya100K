@@ -286,6 +286,7 @@
             e.preventDefault();
             
             const user = getCurrentUser();
+            console.log('[addSavingForm] Current user:', user ? user.uid : 'null');
             if (!user) {
                 showToast('Please login first', 'error');
                 return;
@@ -363,7 +364,9 @@
                 imagePath
             };
             
+            console.log('[addSavingForm] Saving data being sent:', savingData);
             const result = await addSaving(savingData);
+            console.log('[addSavingForm] Add saving result:', result);
             
             if (result.success) {
                 showToast('Saving added successfully!', 'success');

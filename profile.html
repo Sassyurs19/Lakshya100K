@@ -273,7 +273,9 @@
 
         // Load profile
         async function loadProfile(user) {
+            console.log('[loadProfile] Loading profile for user:', user.uid);
             const userDoc = await getUserDocument(user.uid);
+            console.log('[loadProfile] User document result:', userDoc.success ? 'success' : 'failed');
             if (userDoc.success) {
                 const userData = userDoc.data;
                 document.getElementById('fullName').textContent = userData.fullName || 'User';
@@ -300,6 +302,7 @@
             
             // Load statistics
             const stats = await calculateStatistics(user.uid);
+            console.log('[loadProfile] Statistics result:', stats.success ? 'success' : 'failed', 'data:', stats.data);
             if (stats.success) {
                 document.getElementById('totalSaved').textContent = `₹${stats.data.totalSaved.toLocaleString()}`;
                 document.getElementById('currentStreak').textContent = `${stats.data.currentStreak} days`;
@@ -308,6 +311,7 @@
             
             // Load achievements
             const achievements = await getUserAchievements(user.uid);
+            console.log('[loadProfile] Achievements result:', achievements.success ? 'success' : 'failed', 'count:', achievements.data?.length || 0);
             if (achievements.success) {
                 document.getElementById('achievementCount').textContent = achievements.data.length;
             }

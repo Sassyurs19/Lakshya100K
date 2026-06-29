@@ -218,6 +218,7 @@
         }
 
         async function loadSavings(user, reset = false) {
+            console.log('[loadSavings] Loading savings for user:', user.uid, 'reset:', reset);
             if (reset) {
                 currentPage = 1;
                 lastDoc = null;
@@ -231,6 +232,7 @@
             }
 
             const result = await getUserSavingsPaginated(user.uid, savingsPerPage, lastDoc);
+            console.log('[loadSavings] Query result:', result.success ? 'success' : 'failed', 'count:', result.data?.length || 0);
             
             if (result.success && result.data.length > 0) {
                 const savings = result.data;
@@ -238,6 +240,7 @@
                 hasMore = result.hasMore;
                 
                 allSavings = [...allSavings, ...savings];
+                console.log('[loadSavings] Total savings loaded:', allSavings.length);
                 renderSavingsGrid(reset ? savings : allSavings);
                 
                 const loadMoreBtn = document.getElementById('loadMoreBtn');
@@ -245,6 +248,7 @@
                     loadMoreBtn.style.display = hasMore ? 'inline-block' : 'none';
                 }
             } else if (reset) {
+                console.log('[loadSavings] No savings found, showing empty state');
                 document.getElementById('savingsGrid').innerHTML = `
                     <div class="empty-state" style="grid-column: 1 / -1;">
                         <div class="empty-state-icon">

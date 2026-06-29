@@ -298,6 +298,7 @@
         });
 
         async function loadDashboard(user) {
+            console.log('[loadDashboard] Loading dashboard for user:', user.uid);
             const hour = new Date().getHours();
             const greetingText = hour < 12 ? 'Good Morning' : hour < 18 ? 'Good Afternoon' : 'Good Evening';
             document.getElementById('greeting').textContent = greetingText;
@@ -311,6 +312,7 @@
             }
 
             const userDoc = await getUserDocument(user.uid);
+            console.log('[loadDashboard] User document result:', userDoc.success ? 'success' : 'failed');
             if (userDoc.success) {
                 const userData = userDoc.data;
                 const usernameVal = userData.username || 'user';
@@ -323,6 +325,7 @@
             }
 
             const stats = await calculateStatistics(user.uid);
+            console.log('[loadDashboard] Statistics result:', stats.success ? 'success' : 'failed', 'data:', stats.data);
             if (stats.success) {
                 const data = stats.data;
                 const goal = userDoc.data?.goalAmount || userDoc.data?.goal || 100000;
@@ -356,6 +359,7 @@
             }
 
             const savings = await getUserSavings(user.uid);
+            console.log('[loadDashboard] Savings result:', savings.success ? 'success' : 'failed', 'count:', savings.data?.length || 0);
             if (savings.success && savings.data.length > 0) {
                 const recentSavings = savings.data.slice(0, 5);
                 const categoryIcons = {

@@ -147,6 +147,7 @@ export async function updateUserDocument(userId, userData) {
  */
 export async function addSaving(savingData) {
     try {
+        console.log('[addSaving] Adding saving with userId:', savingData.userId, 'amount:', savingData.amount);
         const docRef = await addDoc(collection(db, SAVINGS_COLLECTION), {
             ...savingData,
             month: new Date(savingData.date).getMonth() + 1,
@@ -154,6 +155,8 @@ export async function addSaving(savingData) {
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp()
         });
+        
+        console.log('[addSaving] Successfully added saving with ID:', docRef.id);
         
         // Calculate running total
         await updateRunningTotals(savingData.userId);
@@ -163,7 +166,7 @@ export async function addSaving(savingData) {
         
         return { success: true, id: docRef.id };
     } catch (error) {
-        console.error('Error adding saving:', error);
+        console.error('[addSaving] Error adding saving:', error);
         return { success: false, error: error.message };
     }
 }
@@ -226,6 +229,7 @@ export async function getSavingById(savingId) {
  */
 export async function getUserSavings(userId) {
     try {
+        console.log('[getUserSavings] Fetching savings for userId:', userId);
         const q = query(
             collection(db, SAVINGS_COLLECTION),
             where('userId', '==', userId),
@@ -239,9 +243,10 @@ export async function getUserSavings(userId) {
             savings.push({ id: doc.id, ...doc.data() });
         });
         
+        console.log('[getUserSavings] Retrieved', savings.length, 'savings');
         return { success: true, data: savings };
     } catch (error) {
-        console.error('Error getting user savings:', error);
+        console.error('[getUserSavings] Error getting user savings:', error);
         return { success: false, error: error.message };
     }
 }
@@ -255,6 +260,7 @@ export async function getUserSavings(userId) {
  */
 export async function getUserSavingsPaginated(userId, limit = 20, lastDoc = null) {
     try {
+        console.log('[getUserSavingsPaginated] Fetching paginated savings for userId:', userId, 'limit:', limit, 'lastDoc:', lastDoc ? 'exists' : 'null');
         let q;
         if (lastDoc) {
             q = query(
@@ -285,6 +291,7 @@ export async function getUserSavingsPaginated(userId, limit = 20, lastDoc = null
             lastVisible = doc;
         });
         
+        console.log('[getUserSavingsPaginated] Retrieved', savings.length, 'savings');
         return { 
             success: true, 
             data: savings,
@@ -292,7 +299,7 @@ export async function getUserSavingsPaginated(userId, limit = 20, lastDoc = null
             hasMore: savings.length === limit
         };
     } catch (error) {
-        console.error('Error getting paginated savings:', error);
+        console.error('[getUserSavingsPaginated] Error getting paginated savings:', error);
         return { success: false, error: error.message };
     }
 }
@@ -371,9 +378,11 @@ export async function deleteSaving(savingId) {
  */
 export async function calculateStatistics(userId) {
     try {
+        console.log('[calculateStatistics] Calculating statistics for userId:', userId);
         const { success, data: savings } = await getUserSavings(userId);
         
         if (!success || !savings.length) {
+            console.log('[calculateStatistics] No savings found, returning zero stats');
             return {
                 success: true,
                 data: {
