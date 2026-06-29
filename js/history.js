@@ -7,21 +7,24 @@ const savingsPerPage = 20;
 
 const $ = id => document.getElementById(id);
 
+const authTimeout = setTimeout(() => {
+    if ($('loadingScreen')) {
+        $('loadingScreen').innerHTML = `<div style="text-align:center;padding:2rem;"><p style="color:var(--danger);font-weight:700;margin-bottom:1rem;">Unable to connect. Please check your connection.</p><button onclick="window.location.reload()" class="btn btn-primary">Retry</button></div>`;
+    }
+}, 5000);
+
 onAuthStateChange(user => {
     clearTimeout(authTimeout);
-    $('loadingScreen').style.display = 'none';
+    if ($('loadingScreen')) $('loadingScreen').style.display = 'none';
     if (!user) window.location.href = 'login.html';
     else {
-        $('navbar').style.display = 'block';
-        $('main-content').style.display = 'block';
+        if ($('navbar')) $('navbar').style.display = 'block';
+        if ($('main-content')) $('main-content').style.display = 'block';
         loadUserInfo(user);
         loadSavings(user, true);
+        setupEventListeners();
     }
 });
-
-const authTimeout = setTimeout(() => {
-    $('loadingScreen').innerHTML = `<div style="text-align:center;padding:2rem;"><p style="color:var(--danger);font-weight:700;margin-bottom:1rem;">Unable to connect. Please check your connection.</p><button onclick="window.location.reload()" class="btn btn-primary">Retry</button></div>`;
-}, 5000);
 
 async function loadUserInfo(user) {
     const userDoc = await getUserDocument(user.uid);
@@ -34,21 +37,24 @@ async function loadUserInfo(user) {
 }
 
 async function loadSavings(user, reset = false) {
+    console.log('[loadSavings] Loading savings for user:', user.uid, 'reset:', reset);
     if (reset) {
         currentPage = 1; lastDoc = null; hasMore = true; allSavings = [];
-        $('savingsGrid').innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;"><p style="color:var(--text-secondary);font-weight:600;">Loading savings...</p></div>`;
+        if ($('savingsGrid')) $('savingsGrid').innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;"><p style="color:var(--text-secondary);font-weight:600;">Loading savings...</p></div>`;
     }
     const result = await getUserSavingsPaginated(user.uid, savingsPerPage, lastDoc);
+    console.log('[loadSavings] Result:', result);
     if (result.success && result.data.length > 0) {
         const savings = result.data;
         lastDoc = result.lastDoc;
         hasMore = result.hasMore;
         allSavings = [...allSavings, ...savings];
         renderSavingsGrid(reset ? savings : allSavings);
-        $('loadMoreBtn').style.display = hasMore ? 'inline-block' : 'none';
+        if ($('loadMoreBtn')) $('loadMoreBtn').style.display = hasMore ? 'inline-block' : 'none';
     } else if (reset) {
-        $('savingsGrid').innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="empty-state-icon"><i data-lucide="receipt"></i></div><h3 class="empty-state-title">No savings recorded yet</h3><p class="empty-state-text">Start your savings journey today by adding your first saving!</p><a href="add-saving.html" class="btn btn-primary">Add Your First Saving</a></div>`;
-        $('loadMoreBtn').style.display = 'none';
+        console.log('[loadSavings] No savings found');
+        if ($('savingsGrid')) $('savingsGrid').innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="empty-state-icon"><i data-lucide="receipt"></i></div><h3 class="empty-state-title">No savings recorded yet</h3><p class="empty-state-text">Start your savings journey today by adding your first saving!</p><a href="add-saving.html" class="btn btn-primary">Add Your First Saving</a></div>`;
+        if ($('loadMoreBtn')) $('loadMoreBtn').style.display = 'none';
     }
     lucide.createIcons();
 }
@@ -119,10 +125,42 @@ const filterSavings = debounce(() => {
     renderSavingsGrid(filtered);
 },150);
 
-$('searchInput').addEventListener('input',filterSavings);
-$('categoryFilter').addEventListener('change',filterSavings);
-$('timeFilter').addEventListener('change',filterSavings);
-$('sortFilter').addEventListener('change',filterSavings);
+function setupEventListeners() {
+    if ($('searchInput')) $('searchInput').addEventListener('input',filterSavings);
+    if ($('categoryFilter')) $('categoryFilter').addEventListener('change',filterSavings);
+    if ($('timeFilter')) $('timeFilter').addEventListener('change',filterSavings);
+    if ($('sortFilter')) $('sortFilter').addEventListener('change',filterSavings);
+    
+    if ($('logoutBtn')) $('logoutBtn').addEventListener('click',async e => { e.preventDefault(); await logoutUser(); });
+    if ($('drawerLogoutBtn')) $('drawerLogoutBtn').addEventListener('click',async e => { e.preventDefault(); await logoutUser(); });
+    
+    const avatarBtn = $('avatarDropdownToggle'), profileDropdown = $('profileDropdown');
+    if (avatarBtn && profileDropdown) {
+        avatarBtn.addEventListener('click',e => { e.stopPropagation(); profileDropdown.classList.toggle('open'); });
+        document.addEventListener('click',() => profileDropdown.classList.remove('open'));
+    }
+    
+    const mobileMenuBtn = $('mobileMenuBtn'), mobileDrawer = $('mobileDrawer'), drawerOverlay = $('drawerOverlay'), closeDrawerBtn = $('closeDrawerBtn');
+    if (mobileMenuBtn && mobileDrawer && drawerOverlay) {
+        mobileMenuBtn.addEventListener('click',() => { mobileDrawer.classList.add('open'); drawerOverlay.classList.add('open'); });
+        const closeDrawer = () => { mobileDrawer.classList.remove('open'); drawerOverlay.classList.remove('open'); };
+        drawerOverlay.addEventListener('click',closeDrawer);
+        if (closeDrawerBtn) closeDrawerBtn.addEventListener('click',closeDrawer);
+    }
+    
+    const themeToggle = $('themeToggle');
+    if (themeToggle) {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') { document.documentElement.setAttribute('data-theme','dark'); themeToggle.innerHTML = '<i data-lucide="sun"></i>'; }
+        themeToggle.addEventListener('click',() => {
+            const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme',newTheme);
+            localStorage.setItem('theme',newTheme);
+            themeToggle.innerHTML = newTheme === 'dark' ? '<i data-lucide="sun"></i>' : '<i data-lucide="moon"></i>';
+            lucide.createIcons();
+        });
+    }
+}
 
 window.exportToCSV = () => {
     if (allSavings.length === 0) { showToast('No savings to export','error'); return; }
@@ -173,31 +211,3 @@ window.editSaving = id => window.location.href = `edit-saving.html?id=${id}`;
 window.openModal = src => { $('modalImage').src = src; $('imageModal').classList.add('active'); };
 window.closeModal = () => $('imageModal').classList.remove('active');
 document.addEventListener('keydown',e => { if (e.key === 'Escape') closeModal(); });
-
-const avatarBtn = $('avatarDropdownToggle'), profileDropdown = $('profileDropdown');
-if (avatarBtn && profileDropdown) {
-    avatarBtn.addEventListener('click',e => { e.stopPropagation(); profileDropdown.classList.toggle('open'); });
-    document.addEventListener('click',() => profileDropdown.classList.remove('open'));
-}
-
-const mobileMenuBtn = $('mobileMenuBtn'), mobileDrawer = $('mobileDrawer'), drawerOverlay = $('drawerOverlay'), closeDrawerBtn = $('closeDrawerBtn');
-if (mobileMenuBtn && mobileDrawer && drawerOverlay) {
-    mobileMenuBtn.addEventListener('click',() => { mobileDrawer.classList.add('open'); drawerOverlay.classList.add('open'); });
-    const closeDrawer = () => { mobileDrawer.classList.remove('open'); drawerOverlay.classList.remove('open'); };
-    drawerOverlay.addEventListener('click',closeDrawer);
-    if (closeDrawerBtn) closeDrawerBtn.addEventListener('click',closeDrawer);
-}
-
-$('logoutBtn').addEventListener('click',async e => { e.preventDefault(); await logoutUser(); });
-$('drawerLogoutBtn').addEventListener('click',async e => { e.preventDefault(); await logoutUser(); });
-
-const themeToggle = $('themeToggle');
-const savedTheme = localStorage.getItem('theme') || 'light';
-if (savedTheme === 'dark') { document.documentElement.setAttribute('data-theme','dark'); themeToggle.innerHTML = '<i data-lucide="sun"></i>'; }
-themeToggle.addEventListener('click',() => {
-    const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme',newTheme);
-    localStorage.setItem('theme',newTheme);
-    themeToggle.innerHTML = newTheme === 'dark' ? '<i data-lucide="sun"></i>' : '<i data-lucide="moon"></i>';
-    lucide.createIcons();
-});

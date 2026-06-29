@@ -258,9 +258,9 @@ export async function getUserSavings(userId) {
  * @param {Object} lastDoc - Last document from previous page (for pagination)
  * @returns {Promise} Array of savings with pagination info
  */
-export async function getUserSavingsPaginated(userId, limit = 20, lastDoc = null) {
+export async function getUserSavingsPaginated(userId, pageSize = 20, lastDoc = null) {
     try {
-        console.log('[getUserSavingsPaginated] Fetching paginated savings for userId:', userId, 'limit:', limit, 'lastDoc:', lastDoc ? 'exists' : 'null');
+        console.log('[getUserSavingsPaginated] Fetching paginated savings for userId:', userId, 'pageSize:', pageSize, 'lastDoc:', lastDoc ? 'exists' : 'null');
         let q;
         if (lastDoc) {
             q = query(
@@ -269,7 +269,7 @@ export async function getUserSavingsPaginated(userId, limit = 20, lastDoc = null
                 orderBy('date', 'desc'),
                 orderBy('time', 'desc'),
                 startAfter(lastDoc),
-                limit(limit)
+                limit(pageSize)
             );
         } else {
             q = query(
@@ -277,7 +277,7 @@ export async function getUserSavingsPaginated(userId, limit = 20, lastDoc = null
                 where('userId', '==', userId),
                 orderBy('date', 'desc'),
                 orderBy('time', 'desc'),
-                limit(limit)
+                limit(pageSize)
             );
         }
         
@@ -296,7 +296,7 @@ export async function getUserSavingsPaginated(userId, limit = 20, lastDoc = null
             success: true, 
             data: savings,
             lastDoc: lastVisible,
-            hasMore: savings.length === limit
+            hasMore: savings.length === pageSize
         };
     } catch (error) {
         console.error('[getUserSavingsPaginated] Error getting paginated savings:', error);
